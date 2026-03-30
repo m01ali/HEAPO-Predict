@@ -1,0 +1,25 @@
+# config/params.yaml
+# Central configuration for the HEAPO-Predict pipeline.
+# All hardcoded values live here. Never scatter magic numbers across scripts.
+
+data:
+  dataset_path: "./heapo_data/"       # path to extracted HEAPO dataset
+  zenodo_record_id: 15056919           # pinned release — results tied to this version
+  min_days_threshold: 180              # min days per household to include in modeling
+                                       # justified in Phase 6.1: requires seasonal coverage
+
+splits:
+  train_end: "2023-05-31"              # training: all data up to and including this date
+  val_end: "2023-11-30"                # validation: 2023-06-01 to this date
+  test_end: "2024-03-21"               # test: 2023-12-01 to dataset end
+
+modeling:
+  random_seed: 42
+  xgboost_early_stopping_rounds: 50
+  ann_early_stopping_patience: 15
+  shap_background_samples: 200         # background dataset size for KernelExplainer (ANN)
+  optuna_n_trials: 80
+
+evaluation:
+  mape_floor_kwh: 0.5                  # exclude days below this threshold from MAPE/sMAPE
+                                       # avoids division by near-zero values inflating %error

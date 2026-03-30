@@ -1,0 +1,50 @@
+HEAPO-Predict/
+│
+├── config/
+│   └── params.yaml          All hardcoded values (paths, seeds, thresholds, split dates).
+│                             Every script reads from here — nothing is hardcoded in code.
+│
+├── data/
+│   ├── raw/                 Placeholder only. A README.txt explains that the actual
+│   │                         raw data lives in heapo_data/ at the project root.
+│   └── processed/           Parquet files written by the pipeline (after cleaning +
+│                             feature engineering). These are gitignored — regenerate
+│                             from scripts if needed.
+│
+├── heapo_data/              The extracted HEAPO dataset (gitignored, ~large).
+│   ├── meta_data/           Household metadata (13 survey variables, 1,358 households).
+│   ├── reports/             410 on-site inspection protocols (80+ variables).
+│   ├── smart_meter_data/    Smart meter CSVs — daily/, 15min/, monthly/, and overview/
+│   │                         files that list which households have data.
+│   └── weather_data/        Daily and hourly readings from 8 weather stations.
+│
+├── heapo/                   Cloned official HEAPO Python dataloader (gitignored).
+│                             Provides the HEAPO class for loading and visualising data.
+│
+├── scripts/                 Numbered pipeline scripts, run in order.
+│   └── 00_smoke_test.py     Phase 0: confirms the environment is fully working.
+│                             Phases 1–10 scripts will follow (01_data_loading.py, etc.)
+│
+├── src/                     Importable Python package (installed via pip install -e .).
+│   ├── __init__.py
+│   ├── data_loader.py       Reusable loading utilities (Phase 1).
+│   ├── preprocessing.py     Cleaning, feature engineering, splitting (Phases 2–6).
+│   ├── models.py            Model definitions and training wrappers (Phases 7–8).
+│   ├── evaluation.py        Metrics (RMSE, MAE, R², sMAPE) and diagnostic plots (Phase 9).
+│   └── interpretability.py  SHAP and permutation importance (Phase 10).
+│
+├── outputs/                 All generated artefacts (gitignored — regenerate from scripts).
+│   ├── figures/             Every plot saved here as PNG/PDF.
+│   ├── tables/              Metrics tables as CSV files.
+│   └── models/              Saved model files (XGBoost .json, torch .pt, sklearn .pkl).
+│
+├── docs/                    Project documentation (gitignored from git, but kept locally).
+│   ├── HEAPO-Project-Plan.md
+│   ├── HEAPO-Dataset-Paper.md
+│   └── Phase-0-Environment-Setup-Spec.md
+│
+├── .venv/                   Python 3.14 virtual environment (gitignored).
+├── requirements.txt         All pip dependencies for the project.
+├── pyproject.toml           Makes src/ and heapo/ importable via pip install -e .
+├── .gitignore
+└── README.md
