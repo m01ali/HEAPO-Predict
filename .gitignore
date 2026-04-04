@@ -78,6 +78,5 @@ heapo_data/
 # HEAPO official dataloader (cloned external repo)
 heapo/
 
-# Processed data and outputs
+# Processed data
 data/processed/
-outputs/

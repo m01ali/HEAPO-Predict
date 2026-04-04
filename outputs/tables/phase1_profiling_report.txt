@@ -1,0 +1,564 @@
+======================================================================
+DATASET: HOUSEHOLDS (master mapping)
+======================================================================
+Shape          : 1,408 rows × 11 columns
+Memory usage   : 0.07 MB
+
+--- Dtypes ---
+  Household_ID                                            int64
+  Group                                                   str
+  Weather_ID                                              str
+  Installation_HasPVSystem                                boolean
+  Protocols_Available                                     bool
+  Protocols_HasMultipleVisits                             bool
+  Protocols_ReportIDs                                     str
+  MetaData_Available                                      bool
+  SmartMeterData_Available_15min                          bool
+  SmartMeterData_Available_Daily                          bool
+  SmartMeterData_Available_Monthly                        bool
+
+--- Missing Values (2 columns with >0 missing) ---
+  Protocols_ReportIDs                                        1,194  (84.8%)
+  Installation_HasPVSystem                                     758  (53.8%)
+
+--- Numeric Distributions ---
+       Household_ID
+count  1.408000e+03
+mean   2.160068e+06
+std    2.961407e+06
+min    1.060000e+03
+1%     1.007243e+05
+25%    4.121108e+05
+50%    8.184965e+05
+75%    1.189835e+06
+99%    9.766701e+06
+max    9.981041e+06
+
+--- Categorical Cardinality ---
+  Group: 2 unique — top 5: {'control': 1194, 'treatment': 214}
+  Weather_ID: 8 unique — top 5: {'8jB': 637, 'Hg': 477, 'z6I': 68, 'wDD': 55, 'HbsbG': 47}
+  Protocols_ReportIDs: 214 unique — top 5: {'[29]': 1, '[32]': 1, '[40]': 1, '[137]': 1, '[138]': 1}
+
+--- Dataset-Specific Notes ---
+Group (treatment/control):
+Group
+control      1194
+treatment     214
+
+Installation_HasPVSystem:
+Installation_HasPVSystem
+True     516
+False    134
+
+SmartMeterData_Available_Daily:
+SmartMeterData_Available_Daily
+True     1298
+False     110
+
+SmartMeterData_Available_15min:
+SmartMeterData_Available_15min
+True     1407
+False       1
+
+MetaData_Available:
+MetaData_Available
+True     1358
+False      50
+
+Protocols_Available:
+Protocols_Available
+False    1194
+True      214
+
+
+======================================================================
+DATASET: SMD DAILY
+======================================================================
+Shape          : 936,026 rows × 15 columns
+Memory usage   : 122.85 MB
+
+--- Dtypes ---
+  Household_ID                                            int64
+  Group                                                   str
+  AffectsTimePoint                                        str
+  Timestamp                                               datetime64[us, UTC]
+  kWh_received_Total                                      float64
+  kWh_received_HeatPump                                   float64
+  kWh_received_Other                                      float64
+  kWh_returned_Total                                      float64
+  kvarh_received_capacitive_Total                         float64
+  kvarh_received_capacitive_HeatPump                      float64
+  kvarh_received_capacitive_Other                         float64
+  kvarh_received_inductive_Total                          float64
+  kvarh_received_inductive_HeatPump                       float64
+  kvarh_received_inductive_Other                          float64
+  Weather_ID                                              str
+
+--- Missing Values (10 columns with >0 missing) ---
+  kvarh_received_capacitive_HeatPump                       922,193  (98.5%)
+  kvarh_received_inductive_Other                           917,652  (98.0%)
+  kvarh_received_capacitive_Other                          913,651  (97.6%)
+  kvarh_received_inductive_HeatPump                        912,486  (97.5%)
+  kWh_received_Other                                       906,951  (96.9%)
+  kWh_received_HeatPump                                    900,332  (96.2%)
+  kWh_returned_Total                                       705,624  (75.4%)
+  kvarh_received_inductive_Total                           414,369  (44.3%)
+  kvarh_received_capacitive_Total                          333,005  (35.6%)
+  kWh_received_Total                                        19,219  (2.0%)
+
+--- Numeric Distributions ---
+       Household_ID  kWh_received_Total  kWh_received_HeatPump  kWh_received_Other  kWh_returned_Total  kvarh_received_capacitive_Total  kvarh_received_capacitive_HeatPump  kvarh_received_capacitive_Other  kvarh_received_inductive_Total  kvarh_received_inductive_HeatPump  kvarh_received_inductive_Other
+count  9.360260e+05       916807.000000           35694.000000        29075.000000       230402.000000                    603021.000000                        13833.000000                     22375.000000                   521657.000000                       23540.000000                    18374.000000
+mean   2.220011e+06           27.785552              21.378717           20.821304           17.992046                         5.115960                            1.517721                         3.560128                        8.405545                          13.248057                        0.846493
+std    3.011586e+06           23.272086              29.524287           20.726929           21.587601                         6.993384                            2.202428                         2.770830                       11.706036                          23.925477                        1.344976
+min    1.060000e+03            0.010000               0.010000            0.300000            0.010000                         0.010000                            0.000000                         0.010000                        0.010000                           0.000000                        0.000000
+1%     1.007780e+05            0.340000               0.110000            2.910000            0.010000                         0.060000                            0.010000                         0.110000                        0.010000                           0.010000                        0.010000
+25%    4.190750e+05           12.600000               5.560000            9.300000            1.270000                         1.380000                            0.080000                         1.190000                        0.510000                           0.430000                        0.060000
+50%    8.267800e+05           22.480000              13.850000           14.950000           10.180000                         3.050000                            0.470000                         2.660000                        3.720000                           5.905000                        0.440000
+75%    1.194677e+06           37.090000              28.080000           23.630000           27.700000                         6.200000                            2.230000                         5.810000                       12.710000                          17.560000                        1.070000
+99%    9.770887e+06          105.939400             147.855900          116.380400           93.069700                        42.840000                            9.630000                        10.340000                       48.530000                         135.050500                        6.792700
+max    9.981041e+06         4689.980000             401.960000          171.970000          223.360000                       378.390000                           11.710000                        17.690000                      280.190000                         278.530000                       20.190000
+
+--- Categorical Cardinality ---
+  Group: 2 unique — top 5: {'control': 847235, 'treatment': 88791}
+  AffectsTimePoint: 4 unique — top 5: {'unknown': 847251, 'before visit': 65364, 'after visit': 23355, 'during visit': 56}
+  Weather_ID: 8 unique — top 5: {'8jB': 475761, 'Hg': 289104, 'z6I': 43803, 'wDD': 33295, 'HbsbG': 28208}
+
+--- Dataset-Specific Notes ---
+Total rows            : 936,026
+Unique households     : 1,298
+Days per household    : min=2, median=698, max=1966
+Households below 180-day threshold: 148
+
+AffectsTimePoint distribution:
+AffectsTimePoint
+unknown         847251
+before visit     65364
+after visit      23355
+during visit        56
+
+Group distribution:
+Group
+control      847235
+treatment     88791
+
+Households with kWh_returned_Total > 0 (PV proxy): 504
+Dual-meter households (non-null kWh_received_HeatPump): 59
+
+
+======================================================================
+DATASET: METADATA (survey)
+======================================================================
+Shape          : 1,358 rows × 13 columns
+Memory usage   : 0.43 MB
+
+--- Dtypes ---
+  Household_ID                                            int64
+  Survey_Building_Type                                    str
+  Survey_Building_LivingArea                              float64
+  Survey_Building_Residents                               float64
+  Survey_HeatPump_Installation_Type                       str
+  Survey_HeatDistribution_System_FloorHeating             object
+  Survey_HeatDistribution_System_Radiator                 object
+  Survey_DHW_Production_ByHeatPump                        object
+  Survey_DHW_Production_ByElectricWaterHeater             object
+  Survey_DHW_Production_BySolar                           object
+  Survey_Installation_HasDryer                            object
+  Survey_Installation_HasFreezer                          object
+  Survey_Installation_HasElectricVehicle                  object
+
+--- Missing Values (12 columns with >0 missing) ---
+  Survey_DHW_Production_BySolar                              1,288  (94.8%)
+  Survey_DHW_Production_ByElectricWaterHeater                  934  (68.8%)
+  Survey_DHW_Production_ByHeatPump                             507  (37.3%)
+  Survey_Installation_HasElectricVehicle                       171  (12.6%)
+  Survey_HeatDistribution_System_FloorHeating                   48  (3.5%)
+  Survey_HeatDistribution_System_Radiator                       48  (3.5%)
+  Survey_Building_LivingArea                                    19  (1.4%)
+  Survey_Building_Residents                                     10  (0.7%)
+  Survey_Installation_HasDryer                                   9  (0.7%)
+  Survey_Installation_HasFreezer                                 9  (0.7%)
+  Survey_HeatPump_Installation_Type                              4  (0.3%)
+  Survey_Building_Type                                           2  (0.1%)
+
+--- Numeric Distributions ---
+       Household_ID  Survey_Building_LivingArea  Survey_Building_Residents
+count  1.358000e+03                 1339.000000                1348.000000
+mean   2.155706e+06                  193.283794                   2.871662
+std    2.962641e+06                   71.649653                   1.098963
+min    1.060000e+03                   36.000000                   1.000000
+1%     1.007478e+05                   95.000000                   1.000000
+25%    4.119102e+05                  150.000000                   2.000000
+50%    8.193525e+05                  180.000000                   2.000000
+75%    1.186350e+06                  220.000000                   4.000000
+99%    9.773348e+06                  450.000000                   6.000000
+max    9.981041e+06                 1116.000000                   7.000000
+
+--- Categorical Cardinality ---
+  Survey_Building_Type: 2 unique — top 5: {'house': 1347, 'appartment': 9}
+  Survey_HeatPump_Installation_Type: 2 unique — top 5: {'air-source': 778, 'ground-source': 576}
+  Survey_HeatDistribution_System_FloorHeating: 2 unique — top 5: {True: 1062, False: 248}
+  Survey_HeatDistribution_System_Radiator: 2 unique — top 5: {False: 916, True: 394}
+  Survey_DHW_Production_ByHeatPump: 1 unique — top 5: {True: 851}
+  Survey_DHW_Production_ByElectricWaterHeater: 1 unique — top 5: {True: 424}
+  Survey_DHW_Production_BySolar: 1 unique — top 5: {True: 70}
+  Survey_Installation_HasDryer: 2 unique — top 5: {True: 1081, False: 268}
+  Survey_Installation_HasFreezer: 2 unique — top 5: {True: 1233, False: 116}
+  Survey_Installation_HasElectricVehicle: 2 unique — top 5: {False: 844, True: 343}
+
+--- Dataset-Specific Notes ---
+SMD households with metadata: 1284 / 1298 (98.9%)
+
+Survey_Building_Type values (note 'appartment' typo):
+Survey_Building_Type
+house         1347
+appartment       9
+
+Survey_HeatPump_Installation_Type:
+Survey_HeatPump_Installation_Type
+air-source       778
+ground-source    576
+
+
+======================================================================
+DATASET: PROTOCOLS (inspection)
+======================================================================
+Shape          : 410 rows × 108 columns
+Memory usage   : 0.66 MB
+
+--- Dtypes ---
+  Report_ID                                               int64
+  Household_ID                                            float64
+  Visit_Year                                              int64
+  Visit_Date                                              datetime64[us]
+  Building_Type                                           str
+  Building_HousingUnits                                   float64
+  Building_ConstructionYear                               float64
+  Building_ConstructionYear_Interval                      str
+  Building_Renovated_Windows                              bool
+  Building_Renovated_Roof                                 bool
+  Building_Renovated_Walls                                bool
+  Building_Renovated_Floor                                bool
+  Building_FloorAreaHeated_Total                          float64
+  Building_FloorAreaHeated_Basement                       float64
+  Building_FloorAreaHeated_GroundFloor                    float64
+  Building_FloorAreaHeated_FirstFloor                     float64
+  Building_FloorAreaHeated_SecondFloor                    float64
+  Building_FloorAreaHeated_TopFloor                       float64
+  Building_FloorAreaHeated_AdditionalAreasPlanned         object
+  Building_FloorAreaHeated_AdditionalAreasPlannedSize     float64
+  Building_Residents                                      int64
+  Building_PVSystem_Available                             object
+  Building_PVSystem_Size                                  float64
+  Building_ElectricVehicle_Available                      object
+  HeatPump_Installation_Type                              str
+  HeatPump_Installation_Year                              float64
+  HeatPump_Installation_Manufacturer                      str
+  HeatPump_Installation_Model                             str
+  HeatPump_Installation_HeatingCapacity                   float64
+  HeatPump_Installation_Refrigerant_Type                  str
+  HeatPump_Installation_Refrigerant_Content               float64
+  HeatPump_Installation_Normpoint                         str
+  HeatPump_Installation_Normpoint_COP                     float64
+  HeatPump_Installation_Normpoint_ElectricPower           float64
+  HeatPump_Installation_Normpoint_HeatingPower            str
+  HeatPump_Installation_Location                          str
+  HeatPump_Installation_InternetConnection                object
+  HeatPump_Installation_ControllerNotAccessible           float64
+  HeatDistribution_System_Radiators                       object
+  HeatDistribution_System_FloorHeating                    object
+  HeatDistribution_System_ThermostaticValve               object
+  HeatDistribution_System_BufferTankAvailable             object
+  DHW_Production_ByHeatPump                               bool
+  DHW_Production_ByElectricWaterHeater                    bool
+  DHW_Production_BySolar                                  bool
+  DHW_Production_ByHeatPumpBoiler                         object
+  DHW_ByHeatPump_TimeInterval                             str
+  DHW_Production_TypeOfHeating                            str
+  DHW_Production_Residents                                int64
+  DHW_Circulation_NotInUse                                bool
+  DHW_Circulation_ByTraceHeating                          bool
+  DHW_Circulation_ByCirculationPump                       bool
+  DHW_Circulation_SwitchedByTimer                         bool
+  DHW_Sterilization_Available                             object
+  DHW_Sterilization_Active                                object
+  HeatPump_Clean                                          object
+  HeatPump_BasicFunctionsOkay                             object
+  HeatPump_TechnicallyOkay                                object
+  HeatPump_ElectricityConsumption_YearlyEstimated         float64
+  HeatPump_ElectricityConsumption_Categorization          str
+  HeatPump_Installation_CorrectlyPlanned                  object
+  HeatPump_Installation_IncorrectlyPlanned_Categorization str
+  HeatPump_AirSource_AirDuctsDistanceOkay                 object
+  HeatPump_AirSource_AirDuctsFree                         object
+  HeatPump_AirSource_AirDuctsCleaningRequired             object
+  HeatPump_AirSource_AirDuctsDrainOkay                    object
+  HeatPump_AirSource_EvaporatorClean                      object
+  HeatPump_GroundSource_BrineCircuit_Length               float64
+  HeatPump_GroundSource_BrineCircuit_Depth                float64
+  HeatPump_GroundSource_BrineCircuit_NumberOfHoles        float64
+  HeatPump_GroundSource_BrineCircuit_CoolingCapacity      float64
+  HeatPump_GroundSource_BrineCircuit_AntiFreezeExists     object
+  HeatPump_GroundSource_CurrentPressure                   float64
+  HeatPump_GroundSource_CurrentPressure_Okay              object
+  HeatPump_GroundSource_CurrentTemperature                float64
+  HeatPump_GroundSource_CurrentTemperature_Okay           object
+  HeatPump_HeatingCurveSetting_TooHigh_BeforeVisit        object
+  HeatPump_HeatingCurveSetting_Changed                    object
+  HeatPump_HeatingCurveSetting_Outside20_BeforeVisit      float64
+  HeatPump_HeatingCurveSetting_Outside0_BeforeVisit       float64
+  HeatPump_HeatingCurveSetting_OutsideMinus8_BeforeVisit  float64
+  HeatPump_HeatingCurveSetting_Outside20_AfterVisit       float64
+  HeatPump_HeatingCurveSetting_Outside0_AfterVisit        float64
+  HeatPump_HeatingCurveSetting_OutsideMinus8_AfterVisit   float64
+  HeatPump_HeatingLimitSetting_TooHigh_BeforeVisit        object
+  HeatPump_HeatingLimitSetting_Changed                    object
+  HeatPump_HeatingLimitSetting_BeforeVisit                float64
+  HeatPump_HeatingLimitSetting_AfterVisit                 float64
+  HeatPump_NightSetbackSetting_Activated_BeforeVisit      object
+  HeatPump_NightSetbackSetting_Activated_AfterVisit       object
+  DHW_TemperatureSetting_Categorization                   str
+  DHW_TemperatureSetting_Changed                          object
+  DHW_TemperatureSetting_BeforeVisit                      float64
+  DHW_TemperatureSetting_AfterVisit                       float64
+  DHW_Storage_LastDescaling_TooLongAgo                    bool
+  DHW_Storage_LastDescaling_Year                          float64
+  HeatDistribution_ExpansionTank_Pressure_Categorization  str
+  HeatDistribution_ExpansionTank_Pressure_Actual          float64
+  HeatDistribution_ExpansionTank_Pressure_Target          float64
+  HeatDistribution_ExpansionTank_SystemHeight             float64
+  HeatDistribution_Circulation_PumpStagePosition_Changed  object
+  HeatDistribution_Circulation_PumpStagePosition_BeforeVisit float64
+  HeatDistribution_Circulation_PumpStagePosition_AfterVisit float64
+  HeatDistribution_Recommendation_InsulatePipes           bool
+  HeatDistribution_Recommendation_InstallThermostaticValve bool
+  HeatDistribution_Recommendation_InstallRPMValve         bool
+  is_orphan                                               bool
+  visit_number                                            Int64
+
+--- Missing Values (85 columns with >0 missing) ---
+  HeatPump_GroundSource_CurrentPressure                        402  (98.0%)
+  HeatPump_GroundSource_BrineCircuit_CoolingCapacity           401  (97.8%)
+  HeatPump_GroundSource_BrineCircuit_Length                    398  (97.1%)
+  HeatPump_GroundSource_BrineCircuit_NumberOfHoles             397  (96.8%)
+  Building_FloorAreaHeated_AdditionalAreasPlannedSize          394  (96.1%)
+  HeatPump_GroundSource_CurrentTemperature                     389  (94.9%)
+  HeatDistribution_Circulation_PumpStagePosition_BeforeVisit      388  (94.6%)
+  HeatDistribution_Circulation_PumpStagePosition_AfterVisit      385  (93.9%)
+  Building_PVSystem_Size                                       385  (93.9%)
+  HeatPump_GroundSource_CurrentTemperature_Okay                384  (93.7%)
+  DHW_TemperatureSetting_AfterVisit                            378  (92.2%)
+  HeatPump_Installation_IncorrectlyPlanned_Categorization      378  (92.2%)
+  HeatPump_GroundSource_BrineCircuit_Depth                     377  (92.0%)
+  Building_ElectricVehicle_Available                           373  (91.0%)
+  DHW_Sterilization_Active                                     367  (89.5%)
+  Building_FloorAreaHeated_SecondFloor                         362  (88.3%)
+  HeatPump_HeatingCurveSetting_Outside0_AfterVisit             354  (86.3%)
+  HeatPump_HeatingCurveSetting_Outside20_AfterVisit            352  (85.8%)
+  Building_FloorAreaHeated_TopFloor                            347  (84.6%)
+  HeatPump_Installation_ControllerNotAccessible                347  (84.6%)
+  HeatPump_HeatingCurveSetting_OutsideMinus8_AfterVisit        345  (84.2%)
+  HeatPump_Installation_Normpoint                              345  (84.2%)
+  HeatPump_Installation_Normpoint_COP                          339  (82.7%)
+  HeatPump_Installation_Normpoint_HeatingPower                 339  (82.7%)
+  HeatDistribution_System_BufferTankAvailable                  334  (81.5%)
+  HeatPump_Installation_Normpoint_ElectricPower                325  (79.3%)
+  HeatPump_HeatingLimitSetting_AfterVisit                      315  (76.8%)
+  HeatPump_HeatingLimitSetting_Changed                         300  (73.2%)
+  HeatPump_HeatingLimitSetting_BeforeVisit                     294  (71.7%)
+  Building_FloorAreaHeated_Basement                            270  (65.8%)
+  HeatPump_Installation_Year                                   260  (63.4%)
+  HeatPump_Installation_InternetConnection                     256  (62.4%)
+  HeatPump_GroundSource_CurrentPressure_Okay                   246  (60.0%)
+  HeatPump_GroundSource_BrineCircuit_AntiFreezeExists          245  (59.8%)
+  Building_FloorAreaHeated_AdditionalAreasPlanned              230  (56.1%)
+  HeatPump_AirSource_AirDuctsCleaningRequired                  222  (54.1%)
+  Building_PVSystem_Available                                  206  (50.2%)
+  Household_ID                                                 193  (47.1%)
+  visit_number                                                 193  (47.1%)
+  Building_HousingUnits                                        193  (47.1%)
+  DHW_Sterilization_Available                                  188  (45.9%)
+  DHW_Storage_LastDescaling_Year                               155  (37.8%)
+  HeatPump_AirSource_AirDuctsDrainOkay                         147  (35.9%)
+  HeatPump_AirSource_AirDuctsDistanceOkay                      147  (35.9%)
+  HeatPump_AirSource_EvaporatorClean                           145  (35.4%)
+  HeatPump_AirSource_AirDuctsFree                              145  (35.4%)
+  HeatPump_HeatingCurveSetting_Changed                         141  (34.4%)
+  DHW_TemperatureSetting_Changed                               129  (31.5%)
+  HeatPump_Installation_Location                               125  (30.5%)
+  Visit_Date                                                   106  (25.9%)
+  Building_FloorAreaHeated_FirstFloor                           90  (21.9%)
+  HeatDistribution_ExpansionTank_Pressure_Actual                59  (14.4%)
+  HeatDistribution_ExpansionTank_Pressure_Target                56  (13.7%)
+  HeatDistribution_Circulation_PumpStagePosition_Changed        53  (12.9%)
+  HeatPump_NightSetbackSetting_Activated_AfterVisit             48  (11.7%)
+  Building_FloorAreaHeated_GroundFloor                          44  (10.7%)
+  HeatPump_HeatingCurveSetting_TooHigh_BeforeVisit              35  (8.5%)
+  HeatPump_Installation_Model                                   33  (8.1%)
+  Building_ConstructionYear                                     28  (6.8%)
+  HeatPump_HeatingLimitSetting_TooHigh_BeforeVisit              27  (6.6%)
+  HeatPump_Installation_Refrigerant_Content                     25  (6.1%)
+  HeatPump_NightSetbackSetting_Activated_BeforeVisit            23  (5.6%)
+  HeatPump_Installation_HeatingCapacity                         19  (4.6%)
+  DHW_TemperatureSetting_Categorization                         16  (3.9%)
+  DHW_TemperatureSetting_BeforeVisit                            14  (3.4%)
+  HeatPump_HeatingCurveSetting_Outside0_BeforeVisit             10  (2.4%)
+  HeatPump_Installation_Manufacturer                             8  (1.9%)
+  HeatPump_HeatingCurveSetting_OutsideMinus8_BeforeVisit         8  (1.9%)
+  HeatDistribution_ExpansionTank_Pressure_Categorization         7  (1.7%)
+  HeatPump_HeatingCurveSetting_Outside20_BeforeVisit             6  (1.5%)
+  HeatPump_TechnicallyOkay                                       5  (1.2%)
+  HeatDistribution_System_ThermostaticValve                      4  (1.0%)
+  HeatPump_ElectricityConsumption_Categorization                 4  (1.0%)
+  HeatPump_Installation_CorrectlyPlanned                         4  (1.0%)
+  HeatPump_BasicFunctionsOkay                                    3  (0.7%)
+  Building_ConstructionYear_Interval                             2  (0.5%)
+  Building_FloorAreaHeated_Total                                 2  (0.5%)
+  HeatPump_Clean                                                 2  (0.5%)
+  HeatPump_ElectricityConsumption_YearlyEstimated                1  (0.2%)
+  HeatDistribution_System_Radiators                              1  (0.2%)
+  HeatDistribution_System_FloorHeating                           1  (0.2%)
+  DHW_Production_ByHeatPumpBoiler                                1  (0.2%)
+  DHW_ByHeatPump_TimeInterval                                    1  (0.2%)
+  HeatDistribution_ExpansionTank_SystemHeight                    1  (0.2%)
+  Building_Type                                                  1  (0.2%)
+
+--- Numeric Distributions ---
+        Report_ID  Household_ID   Visit_Year  Building_HousingUnits  Building_ConstructionYear  Building_FloorAreaHeated_Total  Building_FloorAreaHeated_Basement  Building_FloorAreaHeated_GroundFloor  Building_FloorAreaHeated_FirstFloor  Building_FloorAreaHeated_SecondFloor  Building_FloorAreaHeated_TopFloor  Building_FloorAreaHeated_AdditionalAreasPlannedSize  Building_Residents  Building_PVSystem_Size  HeatPump_Installation_Year  HeatPump_Installation_HeatingCapacity  HeatPump_Installation_Refrigerant_Content  HeatPump_Installation_Normpoint_COP  HeatPump_Installation_Normpoint_ElectricPower  HeatPump_Installation_ControllerNotAccessible  DHW_Production_Residents  HeatPump_ElectricityConsumption_YearlyEstimated  HeatPump_GroundSource_BrineCircuit_Length  HeatPump_GroundSource_BrineCircuit_Depth  HeatPump_GroundSource_BrineCircuit_NumberOfHoles  HeatPump_GroundSource_BrineCircuit_CoolingCapacity  HeatPump_GroundSource_CurrentPressure  HeatPump_GroundSource_CurrentTemperature  HeatPump_HeatingCurveSetting_Outside20_BeforeVisit  HeatPump_HeatingCurveSetting_Outside0_BeforeVisit  HeatPump_HeatingCurveSetting_OutsideMinus8_BeforeVisit  HeatPump_HeatingCurveSetting_Outside20_AfterVisit  HeatPump_HeatingCurveSetting_Outside0_AfterVisit  HeatPump_HeatingCurveSetting_OutsideMinus8_AfterVisit  HeatPump_HeatingLimitSetting_BeforeVisit  HeatPump_HeatingLimitSetting_AfterVisit  DHW_TemperatureSetting_BeforeVisit  DHW_TemperatureSetting_AfterVisit  DHW_Storage_LastDescaling_Year  HeatDistribution_ExpansionTank_Pressure_Actual  HeatDistribution_ExpansionTank_Pressure_Target  HeatDistribution_ExpansionTank_SystemHeight  HeatDistribution_Circulation_PumpStagePosition_BeforeVisit  HeatDistribution_Circulation_PumpStagePosition_AfterVisit  visit_number
+count  410.000000  2.170000e+02   410.000000             217.000000                 382.000000                      408.000000                         140.000000                            366.000000                           320.000000                             48.000000                          63.000000                                            16.000000          410.000000               25.000000                  150.000000                             391.000000                                 385.000000                            71.000000                                      85.000000                                      63.000000                410.000000                                       409.000000                                  12.000000                                 33.000000                                         13.000000                                            9.000000                               8.000000                                 21.000000                                          404.000000                                         400.000000                                              402.000000                                          58.000000                                         56.000000                                              65.000000                                116.000000                                95.000000                          396.000000                          32.000000                      255.000000                                      351.000000                                      354.000000                                   409.000000                                                   22.000000                                                  25.000000         217.0
+mean   204.500000  2.243512e+06  2019.734146               1.285714                1978.403141                      231.417892                          47.514286                            103.284153                            94.759375                             76.333333                          71.428571                                           183.562500            3.121951               10.839200                 2011.960000                              11.815476                                   4.964675                             3.901408                                       2.949976                                      -1.777778                  3.104878                                      6971.347188                                 197.083333                                161.121212                                          1.307692                                            6.855556                               1.425000                                  6.904762                                           20.762129                                          35.426250                                               41.357960                                          20.905172                                         34.039286                                              38.530769                                 17.991379                                16.715789                           55.013889                          51.843750                     2015.027451                                        1.259117                                        0.963701                                     6.736675                                                    2.772727                                                   1.920000      1.013825
+std    118.501055  3.014655e+06     2.850823               0.887896                  64.277816                      127.083013                          34.578289                             50.294746                            46.364948                             44.346956                          43.922481                                            44.917656            1.871092                5.178972                    7.739795                               5.168062                                  12.133332                             0.695036                                       1.570935                                       0.419079                  1.768020                                      3718.213421                                  74.907772                                 60.064422                                          0.480384                                            1.444049                               0.477344                                  4.924071                                            2.628320                                           6.180545                                                7.980681                                           1.931859                                          6.504339                                               8.173833                                  1.821350                                 0.941515                            5.013570                           3.038563                        4.828071                                        0.280438                                        0.150975                                     1.665634                                                    0.428932                                                   0.493288      0.117034
+min      0.000000  2.461100e+04  2015.000000               1.000000                1047.000000                       70.000000                           5.000000                             10.000000                            30.000000                             30.000000                          15.000000                                           120.000000            1.000000                5.600000                 1980.000000                               2.750000                                   0.850000                             2.210000                                       0.480000                                      -2.000000                  1.000000                                      1980.000000                                 100.000000                                 70.000000                                          1.000000                                            3.700000                               0.500000                                 -3.000000                                           10.000000                                          22.000000                                               24.000000                                          18.000000                                         25.300000                                              28.000000                                 14.000000                                15.000000                           40.500000                          45.000000                     1996.000000                                        0.600000                                        0.400000                                     1.000000                                                    2.000000                                                   1.000000           1.0
+1%       4.090000  1.001192e+05  2015.000000               1.000000                1769.440000                      112.560000                           6.000000                             34.650000                            40.000000                             34.700000                          18.100000                                           121.500000            1.000000                5.696000                 1987.410000                               4.900000                                   0.900000                             2.210000                                       0.580800                                      -2.000000                  1.000000                                      2208.000000                                 103.300000                                 71.600000                                          1.000000                                            3.884000                               0.535000                                 -2.400000                                           16.000000                                          24.990000                                               27.010000                                          18.000000                                         25.685000                                              28.000000                                 15.000000                                15.000000                           45.000000                          45.000000                     2001.620000                                        0.800000                                        0.600000                                     3.000000                                                    2.000000                                                   1.000000           1.0
+25%    102.250000  4.610890e+05  2017.000000               1.000000                1977.000000                      160.000000                          20.000000                             70.000000                            70.000000                             50.000000                          45.000000                                           157.500000            2.000000                7.280000                 2007.000000                               8.625000                                   2.100000                             3.400000                                       1.920000                                      -2.000000                  2.000000                                      4600.000000                                 147.500000                                110.000000                                          1.000000                                            6.100000                               1.300000                                  4.000000                                           20.000000                                          31.000000                                               35.000000                                          20.000000                                         28.900000                                              32.000000                                 17.000000                                16.000000                           51.000000                          50.000000                     2012.500000                                        1.000000                                        0.900000                                     6.000000                                                    3.000000                                                   2.000000           1.0
+50%    204.500000  8.010310e+05  2020.000000               1.000000                1988.000000                      200.000000                          39.000000                             90.000000                            81.500000                             60.000000                          63.000000                                           180.000000            3.000000                8.400000                 2013.000000                              10.600000                                   3.000000                             4.000000                                       2.860000                                      -2.000000                  3.000000                                      6000.000000                                 180.000000                                165.000000                                          1.000000                                            7.100000                               1.500000                                  8.000000                                           20.000000                                          35.000000                                               40.000000                                          20.000000                                         32.500000                                              36.000000                                 18.000000                                16.000000                           55.000000                          52.000000                     2015.000000                                        1.200000                                        0.900000                                     6.000000                                                    3.000000                                                   2.000000           1.0
+75%    306.750000  1.211151e+06  2022.000000               1.000000                2003.000000                      250.000000                          61.000000                            120.000000                           100.000000                             90.000000                          80.000000                                           205.250000            4.000000               12.000000                 2018.000000                              13.850000                                   4.200000                             4.500000                                       3.600000                                      -2.000000                  4.000000                                      8000.000000                                 231.250000                                215.000000                                          2.000000                                            8.000000                               1.725000                                  9.100000                                           21.000000                                          39.000000                                               46.000000                                          21.000000                                         38.250000                                              45.000000                                 19.000000                                17.000000                           60.000000                          52.000000                     2019.000000                                        1.500000                                        1.000000                                     7.500000                                                    3.000000                                                   2.000000           1.0
+99%    404.910000  9.887783e+06  2024.000000               5.840000                2019.000000                      790.880000                         156.100000                            294.150000                           271.050000                            227.840000                         208.820000                                           291.000000           11.730000               24.000000                 2022.510000                              33.200000                                  27.560000                             4.860000                                       8.656000                                      -1.000000                  9.910000                                     19920.000000                                 353.400000                                275.200000                                          2.000000                                            8.284000                               1.986000                                 18.580000                                           28.000000                                          54.010000                                               65.000000                                          26.860000                                         50.250000                                              60.080000                                 22.700000                                19.000000                           65.000000                          59.380000                     2023.000000                                        2.000000                                        1.447000                                    12.000000                                                    3.000000                                                   3.000000          1.84
+max    409.000000  9.981041e+06  2024.000000               8.000000                2020.000000                     1420.000000                         160.000000                            400.000000                           400.000000                            241.000000                         264.000000                                           300.000000           17.000000               24.000000                 2023.000000                              40.000000                                 155.000000                             4.860000                                       8.950000                                      -1.000000                 16.000000                                     28000.000000                                 360.000000                                280.000000                                          2.000000                                            8.300000                               2.000000                                 20.300000                                           55.000000                                          60.000000                                               75.000000                                          28.000000                                         53.000000                                              62.000000                                 29.000000                                19.000000                           70.000000                          60.000000                     2023.000000                                        2.000000                                        1.900000                                    16.000000                                                    3.000000                                                   3.000000           2.0
+
+--- Categorical Cardinality ---
+  Building_Type: 3 unique — top 5: {'single family house': 379, 'multi family house': 18, 'other': 12}
+  Building_ConstructionYear_Interval: 8 unique — top 5: {'< 1975': 96, '2000 - 10': 87, '1981 - 85': 48, '1976 - 80': 45, '> 2010': 34}
+  Building_FloorAreaHeated_AdditionalAreasPlanned: 2 unique — top 5: {False: 164, True: 16}
+  Building_PVSystem_Available: 2 unique — top 5: {False: 154, True: 50}
+  Building_ElectricVehicle_Available: 1 unique — top 5: {True: 37}
+  HeatPump_Installation_Type: 3 unique — top 5: {'air-source': 240, 'ground-source': 167, 'water-source': 3}
+  HeatPump_Installation_Manufacturer: 59 unique — top 5: {'Alpha Innotec': 58, 'Stiebel Eltron': 57, 'Hoval': 42, 'Dimplex': 34, 'CTA': 22}
+  HeatPump_Installation_Model: 348 unique — top 5: {'Vitocal 300-G': 4, 'WPL 18': 4, 'LWCV 122R3': 4, 'Vitocal 300': 3, 'LI10P': 3}
+  HeatPump_Installation_Refrigerant_Type: 14 unique — top 5: {'R407c': 139, 'R410a': 125, 'R404a': 58, 'R290': 26, 'R22': 21}
+  HeatPump_Installation_Normpoint: 8 unique — top 5: {'A2/W35': 41, 'B0/W35': 13, 'A7/W35': 6, 'A-7/W35': 1, 'A20': 1}
+  HeatPump_Installation_Normpoint_HeatingPower: 59 unique — top 5: {'12': 3, '6.4': 2, '13.7': 2, '5.9': 2, '11.6': 2}
+  HeatPump_Installation_Location: 3 unique — top 5: {'inside': 177, 'outside': 67, 'split': 41}
+  HeatPump_Installation_InternetConnection: 2 unique — top 5: {False: 112, True: 42}
+  HeatDistribution_System_Radiators: 2 unique — top 5: {False: 250, True: 159}
+  HeatDistribution_System_FloorHeating: 2 unique — top 5: {True: 319, False: 90}
+  HeatDistribution_System_ThermostaticValve: 2 unique — top 5: {True: 246, False: 160}
+  HeatDistribution_System_BufferTankAvailable: 2 unique — top 5: {True: 50, False: 26}
+  DHW_Production_ByHeatPumpBoiler: 2 unique — top 5: {False: 368, True: 41}
+  DHW_ByHeatPump_TimeInterval: 3 unique — top 5: {'whole year': 207, 'independent': 165, 'half year': 37}
+  DHW_Production_TypeOfHeating: 2 unique — top 5: {'central': 404, 'decentral': 6}
+  DHW_Sterilization_Available: 2 unique — top 5: {True: 201, False: 21}
+  DHW_Sterilization_Active: 2 unique — top 5: {True: 36, False: 7}
+  HeatPump_Clean: 2 unique — top 5: {True: 395, False: 13}
+  HeatPump_BasicFunctionsOkay: 2 unique — top 5: {True: 401, False: 6}
+  HeatPump_TechnicallyOkay: 2 unique — top 5: {True: 399, False: 6}
+  HeatPump_ElectricityConsumption_Categorization: 3 unique — top 5: {'normal': 313, 'rather high': 55, 'rather low': 38}
+  HeatPump_Installation_CorrectlyPlanned: 2 unique — top 5: {True: 365, False: 41}
+  HeatPump_Installation_IncorrectlyPlanned_Categorization: 2 unique — top 5: {'oversized': 21, 'undersized': 11}
+  HeatPump_AirSource_AirDuctsDistanceOkay: 2 unique — top 5: {True: 223, False: 40}
+  HeatPump_AirSource_AirDuctsFree: 2 unique — top 5: {True: 226, False: 39}
+  HeatPump_AirSource_AirDuctsCleaningRequired: 2 unique — top 5: {False: 180, True: 8}
+  HeatPump_AirSource_AirDuctsDrainOkay: 2 unique — top 5: {True: 225, False: 38}
+  HeatPump_AirSource_EvaporatorClean: 2 unique — top 5: {True: 231, False: 34}
+  HeatPump_GroundSource_BrineCircuit_AntiFreezeExists: 2 unique — top 5: {True: 158, False: 7}
+  HeatPump_GroundSource_CurrentPressure_Okay: 2 unique — top 5: {True: 152, False: 12}
+  HeatPump_GroundSource_CurrentTemperature_Okay: 2 unique — top 5: {True: 16, False: 10}
+  HeatPump_HeatingCurveSetting_TooHigh_BeforeVisit: 2 unique — top 5: {False: 207, True: 168}
+  HeatPump_HeatingCurveSetting_Changed: 2 unique — top 5: {True: 192, False: 77}
+  HeatPump_HeatingLimitSetting_TooHigh_BeforeVisit: 2 unique — top 5: {False: 278, True: 105}
+  HeatPump_HeatingLimitSetting_Changed: 2 unique — top 5: {True: 79, False: 31}
+  HeatPump_NightSetbackSetting_Activated_BeforeVisit: 2 unique — top 5: {False: 215, True: 172}
+  HeatPump_NightSetbackSetting_Activated_AfterVisit: 2 unique — top 5: {False: 335, True: 27}
+  DHW_TemperatureSetting_Categorization: 3 unique — top 5: {'normal': 362, 'too low': 19, 'too high': 13}
+  DHW_TemperatureSetting_Changed: 2 unique — top 5: {False: 247, True: 34}
+  HeatDistribution_ExpansionTank_Pressure_Categorization: 3 unique — top 5: {'okay': 348, 'too high': 43, 'too low': 12}
+  HeatDistribution_Circulation_PumpStagePosition_Changed: 2 unique — top 5: {False: 331, True: 26}
+
+--- Dataset-Specific Notes ---
+Orphan reports (no Household_ID) : 193
+Linked reports                   : 217
+
+Visit_Year distribution:
+Visit_Year
+2015    28
+2016    53
+2017    55
+2018    11
+2019    29
+2020    38
+2021    38
+2022    74
+2023    63
+2024    21
+
+Multiple-visit household IDs: [111119.0, 120912.0, 8087988.0]
+
+
+======================================================================
+DATASET: WEATHER DAILY
+======================================================================
+Shape          : 15,083 rows × 11 columns
+Memory usage   : 1.78 MB
+
+--- Dtypes ---
+  Weather_ID                                              str
+  Timestamp                                               object
+  Temperature_max_daily                                   float64
+  Temperature_min_daily                                   float64
+  Temperature_avg_daily                                   float64
+  HeatingDegree_SIA_daily                                 float64
+  HeatingDegree_US_daily                                  float64
+  CoolingDegree_US_daily                                  float64
+  Humidity_avg_daily                                      float64
+  Precipitation_total_daily                               float64
+  Sunshine_duration_daily                                 float64
+
+--- Missing Values (9 columns with >0 missing) ---
+  Sunshine_duration_daily                                    5,658  (37.5%)
+  Precipitation_total_daily                                    111  (0.7%)
+  Temperature_max_daily                                         43  (0.3%)
+  Temperature_min_daily                                         43  (0.3%)
+  Temperature_avg_daily                                         41  (0.3%)
+  HeatingDegree_SIA_daily                                       41  (0.3%)
+  HeatingDegree_US_daily                                        41  (0.3%)
+  CoolingDegree_US_daily                                        41  (0.3%)
+  Humidity_avg_daily                                            41  (0.3%)
+
+--- Numeric Distributions ---
+       Temperature_max_daily  Temperature_min_daily  Temperature_avg_daily  HeatingDegree_SIA_daily  HeatingDegree_US_daily  CoolingDegree_US_daily  Humidity_avg_daily  Precipitation_total_daily  Sunshine_duration_daily
+count           15040.000000           15040.000000           15042.000000             15042.000000            15042.000000            15042.000000        15042.000000               14972.000000              9425.000000
+mean               15.051283               5.643059              10.254108                 8.803690                8.523780                0.477889           78.141584                   2.981966                 4.965740
+std                 8.777269               6.517583               7.366345                 8.039023                6.651829                1.367050           11.935965                   6.475148                 4.628541
+min                -8.800000             -17.700000             -11.300000                 0.000000                0.000000                0.000000           34.000000                   0.000000                 0.000000
+1%                 -1.800000              -8.561000              -4.400000                 0.000000                0.000000                0.000000           48.900000                   0.000000                 0.000000
+25%                 8.200000               0.300000               4.400000                 0.000000                1.900000                0.000000           70.100000                   0.000000                 0.400000
+50%                14.700000               5.500000              10.000000                10.000000                8.300000                0.000000           79.800000                   0.000000                 3.900000
+75%                22.100000              11.100000              16.400000                15.600000               13.900000                0.000000           87.500000                   3.100000                 8.700000
+99%                33.400000              18.100000              25.100000                24.400000               22.700000                6.800000           98.300000                  30.629000                14.500000
+max                37.300000              22.100000              28.900000                31.300000               29.600000               10.600000          100.000000                  79.600000                15.000000
+
+--- Categorical Cardinality ---
+  Weather_ID: 8 unique — top 5: {'HbsbG': 1886, 'ceOxS': 1886, 'sV3mR': 1886, '8jB': 1885, 'Hg': 1885}
+  Timestamp: 1886 unique — top 5: {datetime.date(2019, 1, 1): 8, datetime.date(2019, 1, 2): 8, datetime.date(2019, 1, 3): 8, datetime.date(2019, 1, 4): 8, datetime.date(2019, 1, 5): 8}
+
+--- Dataset-Specific Notes ---
+  8jB: 1,885 days, 2019-01-01 to 2024-02-28, 0 missing values
+  Hg: 1,885 days, 2019-01-01 to 2024-02-28, 3 missing values
+  wDD: 1,885 days, 2019-01-01 to 2024-02-28, 3 missing values
+  z6I: 1,885 days, 2019-01-01 to 2024-02-28, 0 missing values
+  HbsbG: 1,886 days, 2019-01-01 to 2024-02-29, 2148 missing values
+  ceOxS: 1,886 days, 2019-01-01 to 2024-02-29, 1938 missing values
+  sV3mR: 1,886 days, 2019-01-01 to 2024-02-29, 1965 missing values
+  MqO: 1,885 days, 2019-01-01 to 2024-02-28, 3 missing values
+
+Temperature_avg_daily range: -11.3°C to 28.9°C
