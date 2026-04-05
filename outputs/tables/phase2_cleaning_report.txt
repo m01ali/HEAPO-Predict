@@ -1,0 +1,58 @@
+======================================================================
+SMD DAILY CLEANING
+======================================================================
+  Input rows                                         936,026
+  Input households                                   1,298
+  Exact duplicate rows removed                       0
+  (Household_ID, Date) duplicate rows removed        0
+  Null target rows removed                           19219
+  Households dropped entirely (null target)          26
+    → Dropped household IDs                          [104104, 110115, 111841, 115116, 173737, 411389, 589839, 652122, 701006, 716811, 727467, 727665, 743973, 747511, 768498, 801211, 816910, 847511, 867110, 984635, 996610, 1038174, 1065698, 1068884, 7911575, 8011310]
+  Non-positive target rows removed                   0
+  Hard cap (>500 kWh) rows removed                   7
+  IQR outlier flags added (rows retained)            3614
+  'during visit' rows excluded                       54
+  post_intervention=1 rows                           22246
+  Households below 180-day threshold (flagged)       144
+  PV households identified (has_pv=1)                504
+  Output rows                                        913,620
+  Output households                                  1,272
+  New columns added                                  Date, post_intervention, is_iqr_outlier,
+                                                     below_min_days_threshold, has_pv, has_reactive_energy
+
+======================================================================
+METADATA CLEANING
+======================================================================
+  Input rows                                         1,358
+  'appartment' → 'apartment' typo fixes              9
+  Binary object columns → 'boolean' dtype            8
+  Checkbox NaN → False fills                         (see per-column log)
+  Living area extreme flags (>1000 m²)               1
+  Residents above 10 (flags)                         0
+  HP type NaN → 'unknown'                            4
+  New column added                                   living_area_extreme_flag
+
+======================================================================
+PROTOCOL CLEANING
+======================================================================
+  Input rows                                         410
+  Target proxy column renamed                        True
+  Construction year errors → NaN                     17
+  HP install year errors → NaN                       0
+  Heating curve range flags                          3
+  Heating curve non-monotonic flags                  6
+  EV checkbox NaN → False                            373
+  HeatingPower non-numeric → NaN                     1
+  HP capacity out-of-range flags                     0
+  COP out-of-range flags                             0
+
+======================================================================
+WEATHER DAILY CLEANING
+======================================================================
+  Input rows                                         15,083
+  Timestamp dtype                                    object → datetime64
+  No-sunshine station-days flagged                   5658
+    (stations: HbsbG, ceOxS, sV3mR — 107 SMD households) 
+  Scattered gaps interpolated (temp/precip)          133
+  Cross-station temperature flags (>5°C dev)         20
+  New columns added                                  sunshine_available, interpolated_flag, temp_cross_station_flag
