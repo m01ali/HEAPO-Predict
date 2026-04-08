@@ -1,0 +1,174 @@
+======================================================================
+PHASE 3 MERGE REPORT
+HEAPO-Predict — Daily HP Electricity Consumption
+======================================================================
+
+======================================================================
+TRACK A — FULL-SAMPLE MERGE (SMD + Weather + Metadata)
+======================================================================
+  Input SMD rows                                   913,620
+  Input SMD households                               1,272
+  Weather join null rows (expected 0)                26835
+  Households with hh_no_sunshine=True                  105
+  Households without metadata                           14
+  Output rows                                      913,620
+  Output columns                                        47
+
+======================================================================
+TRACK B — PROTOCOL-ENRICHED MERGE (treatment group + Protocol data)
+======================================================================
+  Base: treatment SMD rows                          84,367
+  Base: treatment households                           152
+  Households with protocol features                    152
+  Multiple-visit HHs (first visit used)         3 [111119, 120912, 8087988]
+  Output rows                                       84,367
+  Output columns                                       110
+
+======================================================================
+MISSING VALUE SUMMARY — TRACK A (key columns)
+======================================================================
+  Column                                              Null rows    Null HHs    %HHs
+  --------------------------------------------------------------------------------
+  Survey_Building_Type                                   10,123          14    1.1%
+  Survey_Building_LivingArea                             22,337          28    2.2%
+  Survey_Building_Residents                              14,454          21    1.7%
+  Survey_HeatPump_Installation_Type                       9,523          13    1.0%
+  Sunshine_duration_daily                                99,550         106    8.3%
+  kvarh_received_capacitive_Total                       313,442         391   30.7%
+  kvarh_received_inductive_Total                        394,921         387   30.4%
+  kWh_received_HeatPump                                 893,732       1,239   97.4%
+
+======================================================================
+MISSING VALUE SUMMARY — TRACK B (selected protocol columns)
+======================================================================
+  Column                                                   Null rows    Null HHs    %HHs
+  -------------------------------------------------------------------------------------
+  Visit_Year                                                       0           0    0.0%
+  Building_ConstructionYear                                    4,915           6    3.9%
+  Building_FloorAreaHeated_Total                                   0           0    0.0%
+  HeatPump_Installation_Year                                  30,594          47   30.9%
+  HeatPump_Installation_HeatingCapacity                        3,423           5    3.3%
+  HeatPump_Installation_Normpoint_COP                         49,222         104   68.4%
+  HeatPump_HeatingCurveSetting_Outside20_BeforeVisit           1,001           2    1.3%
+  HeatPump_HeatingCurveSetting_TooHigh_BeforeVisit            11,589          18   11.8%
+  HeatPump_NightSetbackSetting_Activated_BeforeVisit          12,621          16   10.5%
+  HeatPump_HeatingLimitSetting_TooHigh_BeforeVisit            13,162          18   11.8%
+  HeatPump_GroundSource_CurrentPressure                       80,081         146   96.1%
+
+======================================================================
+COLUMN INVENTORY
+======================================================================
+  Track A columns (47):
+    Household_ID                                            int64
+    Group                                                   str
+    AffectsTimePoint                                        str
+    Timestamp                                               datetime64[us, Europe/Zurich]
+    kWh_received_Total                                      float64
+    kWh_received_HeatPump                                   float64
+    kWh_received_Other                                      float64
+    kWh_returned_Total                                      float64
+    kvarh_received_capacitive_Total                         float64
+    kvarh_received_capacitive_HeatPump                      float64
+    kvarh_received_capacitive_Other                         float64
+    kvarh_received_inductive_Total                          float64
+    kvarh_received_inductive_HeatPump                       float64
+    kvarh_received_inductive_Other                          float64
+    Weather_ID                                              str
+    Date                                                    datetime64[us, Europe/Zurich]
+    is_iqr_outlier                                          bool
+    post_intervention                                       int64
+    below_min_days_threshold                                bool
+    has_pv                                                  int64
+    has_reactive_energy                                     int64
+    Temperature_max_daily                                   float64
+    Temperature_min_daily                                   float64
+    Temperature_avg_daily                                   float64
+    HeatingDegree_SIA_daily                                 float64
+    HeatingDegree_US_daily                                  float64
+    CoolingDegree_US_daily                                  float64
+    Humidity_avg_daily                                      float64
+    Precipitation_total_daily                               float64
+    Sunshine_duration_daily                                 float64
+    sunshine_available                                      object
+    interpolated_flag                                       object
+    temp_cross_station_flag                                 object
+    hh_no_sunshine                                          bool
+    Survey_Building_Type                                    str
+    Survey_Building_LivingArea                              float64
+    Survey_Building_Residents                               float64
+    Survey_HeatPump_Installation_Type                       str
+    Survey_HeatDistribution_System_FloorHeating             boolean
+    Survey_HeatDistribution_System_Radiator                 boolean
+    Survey_DHW_Production_ByHeatPump                        boolean
+    Survey_DHW_Production_ByElectricWaterHeater             boolean
+    Survey_DHW_Production_BySolar                           boolean
+    Survey_Installation_HasDryer                            boolean
+    Survey_Installation_HasFreezer                          boolean
+    Survey_Installation_HasElectricVehicle                  boolean
+    living_area_extreme_flag                                object
+
+  Protocol-only columns in Track B (63):
+    Visit_Year                                              int64
+    Building_ConstructionYear                               float64
+    Building_HousingUnits                                   float64
+    Building_Residents                                      int64
+    Building_FloorAreaHeated_Total                          float64
+    Building_FloorAreaHeated_Basement                       float64
+    Building_FloorAreaHeated_GroundFloor                    float64
+    Building_FloorAreaHeated_FirstFloor                     float64
+    Building_FloorAreaHeated_SecondFloor                    float64
+    Building_FloorAreaHeated_TopFloor                       float64
+    Building_FloorAreaHeated_AdditionalAreasPlanned         boolean
+    Building_Renovated_Windows                              bool
+    Building_Renovated_Roof                                 bool
+    Building_Renovated_Walls                                bool
+    Building_Renovated_Floor                                bool
+    Building_PVSystem_Available                             boolean
+    Building_PVSystem_Size                                  float64
+    Building_ElectricVehicle_Available                      boolean
+    HeatPump_Installation_Type                              str
+    HeatPump_Installation_Year                              float64
+    HeatPump_Installation_Manufacturer                      str
+    HeatPump_Installation_Model                             str
+    HeatPump_Installation_HeatingCapacity                   float64
+    HeatPump_Installation_Normpoint_COP                     float64
+    HeatPump_Installation_Normpoint_HeatingPower            float64
+    HeatPump_Installation_Normpoint_ElectricPower           float64
+    HeatPump_Installation_Location                          str
+    HeatPump_Installation_InternetConnection                boolean
+    HeatPump_Installation_Refrigerant_Type                  str
+    HeatPump_Installation_CorrectlyPlanned                  boolean
+    HeatDistribution_System_FloorHeating                    boolean
+    HeatDistribution_System_Radiators                       boolean
+    HeatDistribution_System_ThermostaticValve               boolean
+    HeatDistribution_System_BufferTankAvailable             boolean
+    HeatPump_HeatingCurveSetting_Outside20_BeforeVisit      float64
+    HeatPump_HeatingCurveSetting_Outside0_BeforeVisit       float64
+    HeatPump_HeatingCurveSetting_OutsideMinus8_BeforeVisit  float64
+    HeatPump_HeatingCurveSetting_TooHigh_BeforeVisit        boolean
+    HeatPump_HeatingLimitSetting_TooHigh_BeforeVisit        boolean
+    HeatPump_NightSetbackSetting_Activated_BeforeVisit      boolean
+    HeatPump_HeatingLimitSetting_BeforeVisit                float64
+    HeatPump_NightSetbackSetting_Activated_AfterVisit       boolean
+    DHW_Production_ByHeatPump                               bool
+    DHW_Production_ByElectricWaterHeater                    bool
+    DHW_Production_BySolar                                  bool
+    DHW_Production_ByHeatPumpBoiler                         boolean
+    DHW_TemperatureSetting_BeforeVisit                      float64
+    DHW_TemperatureSetting_AfterVisit                       float64
+    DHW_Storage_LastDescaling_TooLongAgo                    bool
+    DHW_Sterilization_Available                             boolean
+    DHW_Sterilization_Active                                boolean
+    HeatPump_Clean                                          boolean
+    HeatPump_BasicFunctionsOkay                             boolean
+    HeatPump_TechnicallyOkay                                boolean
+    HeatDistribution_Recommendation_InsulatePipes           bool
+    HeatDistribution_Recommendation_InstallThermostaticValve bool
+    HeatDistribution_Recommendation_InstallRPMValve         bool
+    HeatDistribution_ExpansionTank_Pressure_Categorization  str
+    HeatPump_GroundSource_BrineCircuit_AntiFreezeExists     boolean
+    HeatPump_GroundSource_CurrentPressure_Okay              boolean
+    HeatPump_GroundSource_CurrentTemperature_Okay           boolean
+    HeatPump_GroundSource_CurrentPressure                   float64
+    HeatPump_GroundSource_CurrentTemperature                float64
+
