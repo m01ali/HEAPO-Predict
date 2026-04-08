@@ -1,0 +1,245 @@
+======================================================================
+PHASE 4 FEATURE ENGINEERING REPORT
+HEAPO-Predict — Daily HP Electricity Consumption
+======================================================================
+
+======================================================================
+ENGINEERING SUMMARY
+======================================================================
+  Track A (features_full)     :   913,620 rows  |   1272 households  |    85 cols
+  Track B (features_protocol) :    84,367 rows  |    152 households  |   171 cols
+
+  Phase 3 cols (Track A) :   47   →  New cols added: 38
+  Phase 3 cols (Track B) :  110   →  New cols added: 61
+
+  NOTE: 26,835 rows (SMD > 2024-02-29) have null weather features.
+        These rows are retained; Phase 6 will exclude them from training/evaluation.
+
+======================================================================
+FEATURE CATALOG
+======================================================================
+  Feature                                             Trk   Dtype          Miss-A%   Miss-B%  Note
+  ----------------------------------------------------------------------------------------------------
+  AffectsTimePoint                                    Both  str               0.0%      0.0%  admin/flag — not a model input
+  Building_ConstructionYear                           B     float64            N/A      5.8%  
+  Building_ElectricVehicle_Available                  B     boolean            N/A      0.0%  
+  Building_FloorAreaHeated_AdditionalAreasPlanned     B     boolean            N/A     14.6%  
+  Building_FloorAreaHeated_Basement                   B     float64            N/A     65.2%  
+  Building_FloorAreaHeated_FirstFloor                 B     float64            N/A     29.5%  
+  Building_FloorAreaHeated_GroundFloor                B     float64            N/A     15.0%  
+  Building_FloorAreaHeated_SecondFloor                B     float64            N/A     91.8%  
+  Building_FloorAreaHeated_TopFloor                   B     float64            N/A     88.9%  
+  Building_FloorAreaHeated_Total                      B     float64            N/A      0.0%  
+  Building_HousingUnits                               B     float64            N/A     18.0%  
+  Building_PVSystem_Available                         B     boolean            N/A      0.2%  
+  Building_PVSystem_Size                              B     float64            N/A     87.4%  
+  Building_Renovated_Floor                            B     bool               N/A      0.0%  
+  Building_Renovated_Roof                             B     bool               N/A      0.0%  
+  Building_Renovated_Walls                            B     bool               N/A      0.0%  
+  Building_Renovated_Windows                          B     bool               N/A      0.0%  
+  Building_Residents                                  B     int64              N/A      0.0%  
+  CDD_US_daily                                        Both  float64           2.9%      4.2%  
+  CoolingDegree_US_daily                              Both  float64           2.9%      4.2%  
+  DHW_Production_ByElectricWaterHeater                B     bool               N/A      0.0%  
+  DHW_Production_ByHeatPump                           B     bool               N/A      0.0%  
+  DHW_Production_ByHeatPumpBoiler                     B     boolean            N/A      0.0%  
+  DHW_Production_BySolar                              B     bool               N/A      0.0%  
+  DHW_Sterilization_Active                            B     boolean            N/A     70.9%  
+  DHW_Sterilization_Available                         B     boolean            N/A     14.1%  
+  DHW_Storage_LastDescaling_TooLongAgo                B     bool               N/A      0.0%  
+  DHW_TemperatureSetting_AfterVisit                   B     float64            N/A     88.7%  
+  DHW_TemperatureSetting_BeforeVisit                  B     float64            N/A      6.7%  
+  Date                                                Both  datetime64[u      0.0%      0.0%  admin/flag — not a model input
+  Group                                               Both  str               0.0%      0.0%  admin/flag — not a model input
+  HDD_SIA_daily                                       Both  float64           2.9%      4.2%  
+  HDD_SIA_rolling_7d                                  Both  float64           2.4%      3.7%  
+  HDD_US_daily                                        Both  float64           2.9%      4.2%  
+  HeatDistribution_ExpansionTank_Pressure_Categorization  B     str                N/A      4.8%  
+  HeatDistribution_Recommendation_InstallRPMValve     B     bool               N/A      0.0%  
+  HeatDistribution_Recommendation_InstallThermostaticValve  B     bool               N/A      0.0%  
+  HeatDistribution_Recommendation_InsulatePipes       B     bool               N/A      0.0%  
+  HeatDistribution_System_BufferTankAvailable         B     boolean            N/A     56.3%  
+  HeatDistribution_System_FloorHeating                B     boolean            N/A      0.0%  
+  HeatDistribution_System_Radiators                   B     boolean            N/A      0.0%  
+  HeatDistribution_System_ThermostaticValve           B     boolean            N/A      0.8%  
+  HeatPump_BasicFunctionsOkay                         B     boolean            N/A      0.0%  
+  HeatPump_Clean                                      B     boolean            N/A      0.0%  
+  HeatPump_GroundSource_BrineCircuit_AntiFreezeExists  B     boolean            N/A     61.4%  
+  HeatPump_GroundSource_CurrentPressure               B     float64            N/A     94.9%  
+  HeatPump_GroundSource_CurrentPressure_Okay          B     boolean            N/A     61.4%  
+  HeatPump_GroundSource_CurrentTemperature            B     float64            N/A     89.3%  
+  HeatPump_GroundSource_CurrentTemperature_Okay       B     boolean            N/A     88.3%  
+  HeatPump_HeatingCurveSetting_Outside0_BeforeVisit   B     float64            N/A      2.2%  
+  HeatPump_HeatingCurveSetting_Outside20_BeforeVisit  B     float64            N/A      1.2%  
+  HeatPump_HeatingCurveSetting_OutsideMinus8_BeforeVisit  B     float64            N/A      1.5%  
+  HeatPump_HeatingCurveSetting_TooHigh_BeforeVisit    B     boolean            N/A     13.7%  
+  HeatPump_HeatingLimitSetting_BeforeVisit            B     float64            N/A     64.2%  
+  HeatPump_HeatingLimitSetting_TooHigh_BeforeVisit    B     boolean            N/A     15.6%  
+  HeatPump_Installation_CorrectlyPlanned              B     boolean            N/A      0.0%  
+  HeatPump_Installation_HeatingCapacity               B     float64            N/A      4.1%  
+  HeatPump_Installation_InternetConnection            B     boolean            N/A     24.2%  
+  HeatPump_Installation_Location                      B     str                N/A     37.7%  
+  HeatPump_Installation_Manufacturer                  B     str                N/A      0.3%  
+  HeatPump_Installation_Model                         B     str                N/A      7.0%  
+  HeatPump_Installation_Normpoint_COP                 B     float64            N/A     58.3%  
+  HeatPump_Installation_Normpoint_ElectricPower       B     float64            N/A     53.2%  
+  HeatPump_Installation_Normpoint_HeatingPower        B     float64            N/A     59.8%  
+  HeatPump_Installation_Refrigerant_Type              B     str                N/A      0.0%  
+  HeatPump_Installation_Type                          B     str                N/A      0.0%  
+  HeatPump_Installation_Year                          B     float64            N/A     36.3%  
+  HeatPump_NightSetbackSetting_Activated_AfterVisit   B     boolean            N/A     20.9%  
+  HeatPump_NightSetbackSetting_Activated_BeforeVisit  B     boolean            N/A     15.0%  
+  HeatPump_TechnicallyOkay                            B     boolean            N/A      0.0%  
+  HeatingDegree_SIA_daily                             Both  float64           2.9%      4.2%  
+  HeatingDegree_US_daily                              Both  float64           2.9%      4.2%  
+  Household_ID                                        Both  int64             0.0%      0.0%  admin/flag — not a model input
+  Humidity_avg_daily                                  Both  float64           2.9%      4.2%  
+  Precipitation_total_daily                           Both  float64           2.9%      4.2%  
+  Sunshine_duration_daily                             Both  float64          10.9%     13.8%  
+  Survey_Building_LivingArea                          Both  float64           2.4%     13.5%  
+  Survey_Building_Residents                           Both  float64           1.6%     13.8%  
+  Survey_Building_Type                                Both  str               1.1%     11.3%  
+  Survey_DHW_Production_ByElectricWaterHeater         Both  boolean           1.0%     11.3%  
+  Survey_DHW_Production_ByHeatPump                    Both  boolean           1.0%     11.3%  
+  Survey_DHW_Production_BySolar                       Both  boolean           1.0%     11.3%  
+  Survey_HeatDistribution_System_FloorHeating         Both  boolean           3.2%     17.4%  
+  Survey_HeatDistribution_System_Radiator             Both  boolean           3.2%     17.4%  
+  Survey_HeatPump_Installation_Type                   Both  str               1.0%     11.3%  
+  Survey_Installation_HasDryer                        Both  boolean           1.0%     11.3%  
+  Survey_Installation_HasElectricVehicle              Both  boolean           1.0%     11.3%  
+  Survey_Installation_HasFreezer                      Both  boolean           1.0%     11.3%  
+  Temperature_avg_daily                               Both  float64           2.9%      4.2%  
+  Temperature_max_daily                               Both  float64           2.9%      4.2%  
+  Temperature_min_daily                               Both  float64           2.9%      4.2%  
+  Timestamp                                           Both  datetime64[u      0.0%      0.0%  admin/flag — not a model input
+  Visit_Year                                          B     int64              N/A      0.0%  
+  Weather_ID                                          Both  str               0.0%      0.0%  admin/flag — not a model input
+  below_min_days_threshold                            Both  bool              0.0%      0.0%  admin/flag — not a model input
+  building_age                                        B     float64            N/A      5.8%  
+  building_age_bucket                                 B     object             N/A      5.8%  
+  building_age_bucket_encoded                         B     float64            N/A      5.8%  
+  building_age_error_flag                             B     bool               N/A      0.0%  
+  building_type_apartment                             Both  float64           1.1%     11.3%  
+  building_type_house                                 Both  float64           1.1%     11.3%  
+  day_of_week                                         Both  int8              0.0%      0.0%  
+  day_of_year                                         Both  int16             0.0%      0.0%  
+  descaling_needed                                    B     float64            N/A      0.0%  
+  dhw_combined                                        Both  float64           0.0%      0.0%  
+  dhw_ewh                                             Both  float64           0.0%      0.0%  
+  dhw_hp                                              Both  float64           0.0%      0.0%  
+  dhw_solar                                           Both  float64           0.0%      0.0%  
+  dhw_source                                          Both  str               0.0%      0.0%  
+  dhw_unknown                                         Both  float64           0.0%      0.0%  
+  has_buffer_tank                                     B     float64            N/A     56.3%  
+  has_dryer                                           Both  int8              0.0%      0.0%  
+  has_ev                                              Both  int8              0.0%      0.0%  
+  has_freezer                                         Both  int8              0.0%      0.0%  
+  has_pv                                              Both  int64             0.0%      0.0%  
+  has_reactive_energy                                 Both  int64             0.0%      0.0%  admin/flag — not a model input
+  heat_dist_both                                      Both  float64           0.0%      0.0%  
+  heat_dist_floor                                     Both  float64           0.0%      0.0%  
+  heat_dist_radiator                                  Both  float64           0.0%      0.0%  
+  heat_dist_unknown                                   Both  float64           0.0%      0.0%  
+  heat_distribution                                   Both  str               0.0%      0.0%  
+  heating_curve_gradient_full                         B     float64            N/A      2.2%  
+  heating_curve_gradient_lower                        B     float64            N/A      2.2%  
+  heating_curve_gradient_upper                        B     float64            N/A      2.2%  
+  heating_curve_nonlinearity                          B     float64            N/A      2.2%  
+  heating_curve_too_high                              B     float64            N/A     13.7%  
+  heating_limit_too_high                              B     float64            N/A     15.6%  
+  hh_no_sunshine                                      Both  bool              0.0%      0.0%  admin/flag — not a model input
+  hp_age                                              B     float64            N/A     36.3%  
+  hp_capacity_per_area                                B     float64            N/A      4.1%  
+  hp_correctly_planned                                B     float64            N/A      0.0%  
+  hp_internet_connection                              B     float64            N/A     24.2%  
+  hp_location_inside                                  B     float64            N/A     37.7%  
+  hp_location_outside                                 B     float64            N/A     37.7%  
+  hp_location_split                                   B     float64            N/A     37.7%  
+  hp_type_air_source                                  Both  float64           1.0%     11.3%  
+  hp_type_ground_source                               Both  float64           1.0%     11.3%  
+  hp_type_unknown                                     Both  float64           1.0%     11.3%  
+  humidity_x_temp                                     Both  float64           2.9%      4.2%  
+  interpolated_flag                                   Both  object            2.9%      4.2%  admin/flag — not a model input
+  is_heating_season                                   Both  int8              0.0%      0.0%  
+  is_iqr_outlier                                      Both  bool              0.0%      0.0%  admin/flag — not a model input
+  is_weekend                                          Both  int8              0.0%      0.0%  
+  kWh_received_HeatPump                               Both  float64          97.8%     96.1%  admin/flag — not a model input
+  kWh_received_Other                                  Both  float64          97.8%     96.1%  admin/flag — not a model input
+  kWh_received_Total                                  Both  float64           0.0%      0.0%  
+  kWh_returned_Total                                  Both  float64          74.8%     83.2%  
+  kvarh_received_capacitive_HeatPump                  Both  float64          99.5%     99.4%  admin/flag — not a model input
+  kvarh_received_capacitive_Other                     Both  float64          98.4%     99.2%  admin/flag — not a model input
+  kvarh_received_capacitive_Total                     Both  float64          34.3%     41.1%  
+  kvarh_received_inductive_HeatPump                   Both  float64          98.5%     99.3%  admin/flag — not a model input
+  kvarh_received_inductive_Other                      Both  float64          98.8%     99.3%  admin/flag — not a model input
+  kvarh_received_inductive_Total                      Both  float64          43.2%     48.5%  
+  living_area_bucket                                  Both  object            2.4%     13.5%  
+  living_area_bucket_encoded                          Both  float64           2.4%     13.5%  
+  living_area_extreme_flag                            Both  object            1.0%     11.3%  admin/flag — not a model input
+  month                                               Both  int8              0.0%      0.0%  
+  night_setback_active_after                          B     float64            N/A     20.9%  
+  night_setback_active_before                         B     float64            N/A     15.0%  
+  pipes_not_insulated                                 B     float64            N/A      0.0%  
+  post_intervention                                   Both  int64             0.0%      0.0%  
+  power_factor_proxy                                  Both  float64          45.3%     49.7%  
+  renovation_score                                    B     int64              N/A      0.0%  
+  season                                              Both  str               0.0%      0.0%  
+  season_encoded                                      Both  int8              0.0%      0.0%  
+  sunshine_available                                  Both  object            2.9%      4.2%  admin/flag — not a model input
+  temp_avg_lag_1d                                     Both  float64           3.0%      4.3%  
+  temp_avg_rolling_3d                                 Both  float64           2.8%      4.0%  
+  temp_avg_rolling_7d                                 Both  float64           2.4%      3.7%  
+  temp_cross_station_flag                             Both  object            2.9%      4.2%  admin/flag — not a model input
+  temp_range_daily                                    Both  float64           2.9%      4.2%  
+
+======================================================================
+MISSING VALUE DETAIL — KEY ENGINEERED FEATURES
+======================================================================
+  Track A  (n = 913,620)
+  Column                                                 Null rows         %
+  ---------------------------------------------------------------------------
+  temp_range_daily                                          26,835      2.9%
+  temp_avg_lag_1d                                           27,276      3.0%
+  temp_avg_rolling_3d                                       25,175      2.8%
+  temp_avg_rolling_7d                                       21,855      2.4%
+  HDD_SIA_rolling_7d                                        21,855      2.4%
+  humidity_x_temp                                           26,835      2.9%
+  building_type_house                                       10,123      1.1%
+  building_type_apartment                                   10,123      1.1%
+  hp_type_air_source                                         9,523      1.0%
+  hp_type_ground_source                                      9,523      1.0%
+  hp_type_unknown                                            9,523      1.0%
+  dhw_source                                                     0      0.0%
+  heat_distribution                                              0      0.0%
+  has_ev                                                         0      0.0%
+  has_dryer                                                      0      0.0%
+  has_freezer                                                    0      0.0%
+  power_factor_proxy                                       413,478     45.3%
+  living_area_bucket                                        22,337      2.4%
+
+  Track B  (n = 84,367)
+  Column                                                 Null rows         %
+  ---------------------------------------------------------------------------
+  building_age                                               4,915      5.8%
+  hp_age                                                    30,594     36.3%
+  hp_capacity_per_area                                       3,423      4.1%
+  heating_curve_gradient_full                                1,840      2.2%
+  heating_curve_nonlinearity                                 1,840      2.2%
+  heating_curve_too_high                                    11,589     13.7%
+  heating_limit_too_high                                    13,162     15.6%
+  night_setback_active_before                               12,621     15.0%
+  renovation_score                                               0      0.0%
+
+======================================================================
+EXCLUDED VARIABLES
+======================================================================
+  HeatPump_ElectricityConsumption_YearlyEstimated
+  Reason : Near-direct proxy for the target (consultant's own annual kWh estimate).
+           Inclusion would constitute data leakage. Renamed with EXCLUDED_ prefix
+           in Phase 2 and absent from all Phase 3/4 outputs.
+
+  kWh_received_HeatPump
+  Reason : Null for 97.4% of rows (1,239/1,272 households). Only dual-meter
+           households have a dedicated HP meter. Not usable as a general feature.
+           Retained in parquet for dual-meter subgroup analysis if needed.
+
