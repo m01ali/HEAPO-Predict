@@ -23,3 +23,24 @@ modeling:
 evaluation:
   mape_floor_kwh: 0.5                  # exclude days below this threshold from MAPE/sMAPE
                                        # avoids division by near-zero values inflating %error
+
+cleaning:
+  smd_hard_cap_kwh: 500                # any day above this is a meter error (99th pct = 106 kWh)
+  null_fraction_threshold: 0.30        # drop household entirely if ≥30% of target rows are null
+  iqr_multiplier: 3.0                  # per-household IQR flag threshold (rows retained, not dropped)
+  construction_year_min: 1900          # plausible building construction year range
+  construction_year_max: 2025
+  hp_install_year_min: 1980            # plausible HP installation year range
+  hp_install_year_max: 2025
+  hp_capacity_min_kw: 2.0              # plausible HP heating capacity range
+  hp_capacity_max_kw: 60.0
+  cop_min: 2.0                         # plausible normpoint COP range
+  cop_max: 6.0
+  heating_curve_temp_min: 15           # plausible HP supply temperature range (°C)
+  heating_curve_temp_max: 70
+  weather_cross_station_temp_threshold: 5.0   # flag station-days deviating >5°C from network mean
+  living_area_flag_threshold_m2: 1000  # flag households with living area above this
+  no_sunshine_stations:                # stations with no sunshine sensor (structural absence)
+    - HbsbG
+    - ceOxS
+    - sV3mR
