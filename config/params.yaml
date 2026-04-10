@@ -44,3 +44,12 @@ cleaning:
     - HbsbG
     - ceOxS
     - sV3mR
+
+feature_engineering:
+  include_reactive_energy: true        # Task 4.5 — power_factor_proxy feature
+  include_autoregressive: false        # Task 4.6 — lag/rolling kWh features (off by default;
+                                       # enabling requires strictly temporal split in Phase 6)
+  living_area_buckets: [0, 100, 150, 200, 300, 10000]   # m² bins for Survey_Building_LivingArea
+  building_age_year_bins: [0, 1970, 1990, 2010, 9999]   # construction year bins for building_age_bucket
+  rolling_windows_days: [3, 7]         # rolling average windows for temperature features
+  lag_days: [1]                        # lag days for temperature lag features
