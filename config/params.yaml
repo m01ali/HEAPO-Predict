@@ -23,3 +23,13 @@ modeling:
 evaluation:
   mape_floor_kwh: 0.5                  # exclude days below this threshold from MAPE/sMAPE
                                        # avoids division by near-zero values inflating %error
+
+eda:
+  scatter_sample_size: 50000           # rows sampled for target-vs-temperature scatter (Task 5.1.5)
+  bivariate_sample_size: 20000         # rows sampled for bivariate scatter plots (Task 5.4.1)
+  protocol_scatter_sample_size: 10000  # rows sampled for Track B scatter plots (Task 5.9)
+  lowess_frac: 0.1                     # fraction of data used by lowess smoother
+  correlation_high_threshold: 0.85     # |r| above this → multicollinearity flag
+  vif_high_threshold: 10.0             # VIF above this → flag
+  figure_dpi: 150
+  figure_format: "png"
