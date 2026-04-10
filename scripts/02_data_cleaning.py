@@ -92,12 +92,16 @@ def _save_parquet(df: pd.DataFrame, out_dir: Path, filename: str) -> None:
 
 def main() -> None:
     # ── 1. Config ────────────────────────────────────────────────────────────
-    cfg = load_config("config/params.yaml")
+    # Resolve all paths relative to the project root (parent of scripts/).
+    # This makes the script runnable from any working directory.
+    PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-    processed_dir = Path("data/processed")
-    out_dir = Path("data/processed")
-    report_dir = Path("outputs/tables")
-    log_path = Path("outputs/logs/phase2_run.log")
+    cfg = load_config(str(PROJECT_ROOT / "config/params.yaml"))
+
+    processed_dir = PROJECT_ROOT / "data/processed"
+    out_dir = PROJECT_ROOT / "data/processed"
+    report_dir = PROJECT_ROOT / "outputs/tables"
+    log_path = PROJECT_ROOT / "outputs/logs/phase2_run.log"
 
     out_dir.mkdir(parents=True, exist_ok=True)
     report_dir.mkdir(parents=True, exist_ok=True)
