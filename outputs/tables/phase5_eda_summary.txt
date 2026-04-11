@@ -1,0 +1,227 @@
+================================================================
+HEAPO-Predict Phase 5 EDA Summary
+Generated: 2026-04-10 16:31:42
+================================================================
+
+SECTION 1 — DATASET OVERVIEW
+  Track A :    913,620 rows  |  1,272 HH  |  85 cols
+  Track B :     84,367 rows  |  152 HH  |  171 cols
+  Wx-valid:    886,785 rows  (97.1% of Track A)
+  IQR outlier rows : 3,614 (0.40%)
+  Below 180d HH    : 12,953
+
+SECTION 2 — TARGET VARIABLE (kWh_received_Total)
+  mean     : 27.700 kWh/day
+  median   : 22.450 kWh/day
+  std      : 22.585 kWh/day
+  min/max  : 0.01 / 499.01
+  p25/p75  : 12.58 / 37.03
+  p99      : 104.75
+  skewness : 2.958 (raw)  /  -0.787 (log1p)
+  [FLAG] log1p skewness < 0.5 — consider log-transform for linear models in Phase 7
+
+SECTION 3 — TOP CORRELATED FEATURES (|Pearson r| with target)
+   1. temp_avg_rolling_3d                       r = -0.5153
+   2. temp_avg_lag_1d                           r = -0.5139
+   3. HDD_SIA_rolling_7d                        r = +0.5130
+   4. HDD_US_daily                              r = +0.5087
+   5. temp_avg_rolling_7d                       r = -0.5080
+   6. HDD_SIA_daily                             r = +0.4990
+   7. Temperature_avg_daily                     r = -0.4985
+   8. humidity_x_temp                           r = -0.4968
+   9. Temperature_max_daily                     r = -0.4865
+  10. Temperature_min_daily                     r = -0.4766
+
+SECTION 4 — MULTICOLLINEARITY FLAGS (|r| > 0.85)
+  temp_avg_rolling_3d                 ↔ temp_avg_lag_1d                      r=0.991  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ HDD_SIA_rolling_7d                   r=-0.940  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ HDD_US_daily                         r=-0.960  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ temp_avg_rolling_7d                  r=0.973  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ HDD_SIA_daily                        r=-0.925  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ Temperature_avg_daily                r=0.974  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ humidity_x_temp                      r=0.942  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ Temperature_max_daily                r=0.942  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_3d                 ↔ Temperature_min_daily                r=0.934  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ HDD_SIA_rolling_7d                   r=-0.923  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ HDD_US_daily                         r=-0.944  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ temp_avg_rolling_7d                  r=0.956  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ HDD_SIA_daily                        r=-0.909  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ Temperature_avg_daily                r=0.957  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ humidity_x_temp                      r=0.929  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ Temperature_max_daily                r=0.921  [drop one for linear models; both ok for trees]
+  temp_avg_lag_1d                     ↔ Temperature_min_daily                r=0.925  [drop one for linear models; both ok for trees]
+  HDD_SIA_rolling_7d                  ↔ HDD_US_daily                         r=0.925  [drop one for linear models; both ok for trees]
+  HDD_SIA_rolling_7d                  ↔ temp_avg_rolling_7d                  r=-0.965  [drop one for linear models; both ok for trees]
+  HDD_SIA_rolling_7d                  ↔ HDD_SIA_daily                        r=0.928  [drop one for linear models; both ok for trees]
+  HDD_SIA_rolling_7d                  ↔ Temperature_avg_daily                r=-0.908  [drop one for linear models; both ok for trees]
+  HDD_SIA_rolling_7d                  ↔ humidity_x_temp                      r=-0.905  [drop one for linear models; both ok for trees]
+  HDD_SIA_rolling_7d                  ↔ Temperature_max_daily                r=-0.882  [drop one for linear models; both ok for trees]
+  HDD_SIA_rolling_7d                  ↔ Temperature_min_daily                r=-0.876  [drop one for linear models; both ok for trees]
+  HDD_US_daily                        ↔ temp_avg_rolling_7d                  r=-0.927  [drop one for linear models; both ok for trees]
+  HDD_US_daily                        ↔ HDD_SIA_daily                        r=0.973  [drop one for linear models; both ok for trees]
+  HDD_US_daily                        ↔ Temperature_avg_daily                r=-0.984  [drop one for linear models; both ok for trees]
+  HDD_US_daily                        ↔ humidity_x_temp                      r=-0.966  [drop one for linear models; both ok for trees]
+  HDD_US_daily                        ↔ Temperature_max_daily                r=-0.956  [drop one for linear models; both ok for trees]
+  HDD_US_daily                        ↔ Temperature_min_daily                r=-0.936  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_7d                 ↔ HDD_SIA_daily                        r=-0.900  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_7d                 ↔ Temperature_avg_daily                r=0.938  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_7d                 ↔ humidity_x_temp                      r=0.911  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_7d                 ↔ Temperature_max_daily                r=0.909  [drop one for linear models; both ok for trees]
+  temp_avg_rolling_7d                 ↔ Temperature_min_daily                r=0.900  [drop one for linear models; both ok for trees]
+  HDD_SIA_daily                       ↔ Temperature_avg_daily                r=-0.947  [drop one for linear models; both ok for trees]
+  HDD_SIA_daily                       ↔ humidity_x_temp                      r=-0.943  [drop one for linear models; both ok for trees]
+  HDD_SIA_daily                       ↔ Temperature_max_daily                r=-0.918  [drop one for linear models; both ok for trees]
+  HDD_SIA_daily                       ↔ Temperature_min_daily                r=-0.909  [drop one for linear models; both ok for trees]
+  Temperature_avg_daily               ↔ humidity_x_temp                      r=0.957  [drop one for linear models; both ok for trees]
+  Temperature_avg_daily               ↔ Temperature_max_daily                r=0.975  [drop one for linear models; both ok for trees]
+  Temperature_avg_daily               ↔ Temperature_min_daily                r=0.942  [drop one for linear models; both ok for trees]
+  humidity_x_temp                     ↔ Temperature_max_daily                r=0.913  [drop one for linear models; both ok for trees]
+  humidity_x_temp                     ↔ Temperature_min_daily                r=0.952  [drop one for linear models; both ok for trees]
+  Temperature_max_daily               ↔ Temperature_min_daily                r=0.862  [drop one for linear models; both ok for trees]
+  month                               ↔ day_of_year                          r=0.997  [drop one for linear models; both ok for trees]
+  dhw_ewh                             ↔ dhw_hp                               r=-0.873  [drop one for linear models; both ok for trees]
+  hp_type_ground_source               ↔ hp_type_air_source                   r=-0.998  [drop one for linear models; both ok for trees]
+  building_type_apartment             ↔ building_type_house                  r=-1.000  [drop one for linear models; both ok for trees]
+
+SECTION 5 — HIGH-VIF FEATURES (VIF > 10.0)
+  Temperature_avg_daily                     VIF=inf
+  Temperature_min_daily                     VIF=inf
+  temp_range_daily                          VIF=inf
+  HDD_US_daily                              VIF=inf
+  CDD_US_daily                              VIF=inf
+  building_type_apartment                   VIF=inf
+  building_type_house                       VIF=inf
+  Temperature_max_daily                     VIF=inf
+  hp_type_ground_source                     VIF=550.7
+  hp_type_air_source                        VIF=550.4
+  temp_avg_rolling_3d                       VIF=185.0
+  month                                     VIF=152.1
+  day_of_year                               VIF=151.9
+  temp_avg_lag_1d                           VIF=75.0
+  humidity_x_temp                           VIF=58.1
+  temp_avg_rolling_7d                       VIF=44.6
+  HDD_SIA_rolling_7d                        VIF=27.5
+  HDD_SIA_daily                             VIF=25.7
+  dhw_hp                                    VIF=24.0
+  dhw_ewh                                   VIF=22.5
+
+SECTION 6 — MISSING DATA FLAGS
+  [DROP] kvarh_received_capacitive_HeatPump                  99.5% null
+  [DROP] kvarh_received_inductive_Other                      98.8% null
+  [DROP] kvarh_received_inductive_HeatPump                   98.5% null
+  [DROP] kvarh_received_capacitive_Other                     98.4% null
+  [DROP] kWh_received_HeatPump                               97.8% null
+  [DROP] kWh_received_Other                                  97.8% null
+  [DROP] kWh_returned_Total                                  74.8% null
+  [WARN] power_factor_proxy                                  45.3% null
+  [WARN] kvarh_received_inductive_Total                      43.2% null
+  [WARN] kvarh_received_capacitive_Total                     34.3% null
+  [OK]   Sunshine_duration_daily                             10.9% null
+  [OK]   Survey_HeatDistribution_System_FloorHeating         3.2% null
+  [OK]   Survey_HeatDistribution_System_Radiator             3.2% null
+  [OK]   temp_avg_lag_1d                                     3.0% null
+  [OK]   Precipitation_total_daily                           2.9% null
+  [OK]   Humidity_avg_daily                                  2.9% null
+  [OK]   CoolingDegree_US_daily                              2.9% null
+  [OK]   sunshine_available                                  2.9% null
+  [OK]   HeatingDegree_US_daily                              2.9% null
+  [OK]   HeatingDegree_SIA_daily                             2.9% null
+  [OK]   Temperature_avg_daily                               2.9% null
+  [OK]   Temperature_min_daily                               2.9% null
+  [OK]   Temperature_max_daily                               2.9% null
+  [OK]   humidity_x_temp                                     2.9% null
+  [OK]   temp_cross_station_flag                             2.9% null
+  [OK]   CDD_US_daily                                        2.9% null
+  [OK]   HDD_US_daily                                        2.9% null
+  [OK]   HDD_SIA_daily                                       2.9% null
+  [OK]   temp_range_daily                                    2.9% null
+  [OK]   interpolated_flag                                   2.9% null
+  [OK]   temp_avg_rolling_3d                                 2.8% null
+  [OK]   Survey_Building_LivingArea                          2.4% null
+  [OK]   living_area_bucket_encoded                          2.4% null
+  [OK]   living_area_bucket                                  2.4% null
+  [OK]   temp_avg_rolling_7d                                 2.4% null
+  [OK]   HDD_SIA_rolling_7d                                  2.4% null
+  [OK]   Survey_Building_Residents                           1.6% null
+  [OK]   Survey_Building_Type                                1.1% null
+  [OK]   building_type_house                                 1.1% null
+  [OK]   building_type_apartment                             1.1% null
+  [OK]   Survey_Installation_HasElectricVehicle              1.0% null
+  [OK]   hp_type_air_source                                  1.0% null
+  [OK]   hp_type_ground_source                               1.0% null
+  [OK]   hp_type_unknown                                     1.0% null
+  [OK]   living_area_extreme_flag                            1.0% null
+  [OK]   Survey_DHW_Production_BySolar                       1.0% null
+  [OK]   Survey_Installation_HasFreezer                      1.0% null
+  [OK]   Survey_Installation_HasDryer                        1.0% null
+  [OK]   Survey_HeatPump_Installation_Type                   1.0% null
+  [OK]   Survey_DHW_Production_ByElectricWaterHeater         1.0% null
+  [OK]   Survey_DHW_Production_ByHeatPump                    1.0% null
+
+SECTION 7 — SUBGROUP ANOVA/KW RESULTS
+  Survey_Building_Type                           F=1854.6  p=0  [significant]
+  Survey_HeatPump_Installation_Type              F=1826.2  p=0  [significant]
+  dhw_source                                     F=1826.8  p=0  [significant]
+  heat_distribution                              F=677.1  p=0  [significant]
+  has_pv                                         F=13409.9  p=0  [significant]
+  has_ev                                         F=4741.3  p=0  [significant]
+  season                                         F=71374.1  p=0  [significant]
+  is_heating_season                              F=179616.8  p=0  [significant]
+
+SECTION 8 — TREATMENT EFFECT (TRACK B PRE/POST)
+  Households with before+after data: 54
+  Mean before  : 28.472 kWh/day
+  Mean after   : 35.096 kWh/day
+  Mean delta   : +6.624 kWh/day
+  Frac reduced : 27.8%
+  Paired t-test p = 1  [NOT significant]
+
+SECTION 9 — PHASE 6 RECOMMENDATIONS
+  1. [TARGET TRANSFORM]    log1p transform recommended for linear regression and ANN.
+  2. [OUTLIER STRATEGY]    3,614 IQR-outlier rows (0.4%) retained. Consider winsorizing at p99 for linear models in Phase 7.
+  3. [MULTICOLLINEAR]      Drop one from each pair for linear models: temp_avg_rolling_3d↔temp_avg_lag_1d; temp_avg_rolling_3d↔HDD_SIA_rolling_7d; temp_avg_rolling_3d↔HDD_US_daily
+  4. [IMPUTATION]          Weather nulls (2.9%): median impute per station. power_factor_proxy (45.3% null): impute=0 + has_reactive_energy flag. cop_rated (68%+ null in Track B): exclude from pooled Track B models.
+  5. [DROP CANDIDATES]     kWh_received_HeatPump (97.4% null), Sunshine_duration_daily (structural missing at 3 stations). Already excluded from features.
+  6. [SCALING NOTE]        Standardize all numeric features for LR and ANN. Tree models (RF, XGBoost) do not require scaling.
+  7. [SEASONAL SHIFT]      Test set mean=37.29 kWh vs. train=28.71 kWh (+30%). Test covers heating season only — expect higher MAPE at test time due to distributional shift.
+
+SECTION 10 — OUTPUT FIGURES
+  05_affects_timepoint_bar.png
+  05_bivariate_area_bucket_vs_target.png
+  05_bivariate_categorical_vs_target.png
+  05_bivariate_numeric_vs_target.png
+  05_categorical_feature_distributions.png
+  05_correlation_heatmap.png
+  05_group_breakdown.png
+  05_household_coverage_heatmap.png
+  05_household_numeric_distributions.png
+  05_missing_data_track_a.png
+  05_missing_data_track_b.png
+  05_protocol_building_age.png
+  05_protocol_building_age_vs_target.png
+  05_protocol_heating_curve.png
+  05_protocol_hp_age.png
+  05_protocol_hp_capacity.png
+  05_protocol_issue_flags.png
+  05_protocol_pre_post_intervention.png
+  05_reactive_energy_distribution.png
+  05_rolling_weather_distributions.png
+  05_subgroup_building_type.png
+  05_subgroup_ev.png
+  05_subgroup_hp_type.png
+  05_subgroup_min_days_threshold.png
+  05_subgroup_pv.png
+  05_subgroup_treatment_vs_control.png
+  05_target_histogram_all.png
+  05_target_histogram_outliers.png
+  05_target_log_histogram.png
+  05_target_monthly_boxplot.png
+  05_target_per_household_mean.png
+  05_target_vs_temperature.png
+  05_temporal_coverage.png
+  05_temporal_day_of_week.png
+  05_temporal_feature_distributions.png
+  05_temporal_year_overlay.png
+  05_weather_feature_distributions.png
+
+================================================================

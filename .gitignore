@@ -80,3 +80,15 @@ heapo/
 
 # Processed data
 data/processed/
+
+# Model binaries (large — RF alone is 5+ GB)
+outputs/models/*.pkl
+outputs/models/*.json
+outputs/models/*.txt
+outputs/models/optuna_studies/
+
+# Output figures (reproducible, not tracked)
+outputs/figures/
+
+# Output logs
+outputs/logs/

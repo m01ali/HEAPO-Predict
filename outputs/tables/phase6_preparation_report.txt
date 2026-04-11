@@ -1,0 +1,83 @@
+================================================================
+HEAPO-Predict Phase 6 — Data Preparation Report
+Generated: 2026-04-10 17:04:15
+================================================================
+
+SECTION 1 — INPUT SHAPES (Phase 4 artifacts)
+  Track A features_full:     913,620 rows × 85 cols
+  Track B features_protocol: 84,367 rows × 171 cols
+
+SECTION 2 — ROW FILTERING SUMMARY
+  [Track A]
+    Step 1: Weather-null rows removed: 26,835 rows
+    Step 2: Below-180d households removed: 12,565 rows, 143 households
+    After filtering: 874,220 rows, 1128 households
+  [Track B]
+    Step 1: Weather-null rows removed: 3,529 rows
+    Step 2: Below-threshold rows removed: 3446 rows
+    After filtering: 77,392 rows, 111 households
+
+SECTION 3 — TEMPORAL SPLIT SIZES
+  Train : 646,258 rows,  1119 HH, 2019-01-01 → 2023-05-31
+  Val   : 153,594 rows,   856 HH, 2023-06-01 → 2023-11-30
+  Test  :  74,368 rows,   826 HH, 2023-12-01 → 2024-02-29
+  Target mean (train/val/test): 28.37 / 17.51 / 39.10 kWh/day
+  Log-target mean (train): 3.1056  std: 0.7940
+
+SECTION 4 — IMPUTATION APPLIED
+  Survey_Building_LivingArea: strategy=median, value=180.0000, rows imputed (train): 17,035
+  Survey_Building_Residents: strategy=median, value=2.0000, rows imputed (train): 10,677
+  power_factor_proxy: strategy=zero_for_all_nulls, value=0.0000, rows imputed (train): 310,055
+  [Track B] hp_age: strategy=median, value=7.0000, rows imputed (train): 21,603
+  [Track B] building_age: strategy=median, value=40.0000, rows imputed (train): 3,855
+  [Track B] hp_capacity_per_area: strategy=median, value=0.0533, rows imputed (train): 2,547
+  [Track B] heating_curve_gradient_*: median per col, rows imputed (train): 960
+  [Track B] hp_internet_connection: strategy=mode, value=0.0000, rows imputed (train): 13,985
+
+SECTION 5 — FEATURE SETS
+  FEATURES_TREES    :  45 features  (DT, RF, XGBoost)
+  FEATURES_LINEAR   :  30 features  (OLS, Ridge, Lasso, ElasticNet, ANN)
+  FEATURES_TREES_B  :  75 features  (Track B tree models)
+  FEATURES_LINEAR_B :  46 features  (Track B linear models)
+  Feature lists saved → outputs/tables/phase6_feature_lists.json
+
+SECTION 6 — SCALING SUMMARY
+  Scaler type: StandardScaler (fit on train only)
+  FEATURES_LINEAR  : fitted on 646,258 rows
+    Feature means range:  [0.0023, 190.6119]
+    Feature scales range: [0.0483, 67.8978]
+  Scalers saved → outputs/models/scaler_linear_A.pkl
+                  outputs/models/scaler_linear_B.pkl
+
+SECTION 7 — OUTPUT PARQUET SHAPES
+  train_full.parquet          : 646,258 rows ×  89 cols
+  val_full.parquet            : 153,594 rows ×  88 cols
+  test_full.parquet           :  74,368 rows ×  88 cols
+  train_protocol.parquet      :  60,636 rows × 180 cols
+  val_protocol.parquet        :  11,281 rows × 179 cols
+  test_protocol.parquet       :   5,475 rows × 179 cols
+
+SECTION 8 — CROSS-VALIDATION FOLD SUMMARY
+  Strategy: GroupKFold(n_splits=5) grouped by Household_ID on train_full
+  Fold    Households      Rows
+  -----   ----------    ------
+  0              223   129,228
+  1              224   129,258
+  2              224   129,263
+  3              224   129,261
+  4              224   129,248
+  Max/min HH ratio: 1.00 [OK]
+
+SECTION 9 — PHASE 7 READINESS CHECKLIST
+  [x] train_full.parquet exists
+  [x] val_full.parquet exists
+  [x] test_full.parquet exists
+  [x] kWh_log1p column present in all Track A splits
+  [x] scaler_linear_A.pkl exists
+  [x] phase6_feature_lists.json exists
+  [x] No nulls in FEATURES_TREES on train
+  [x] No nulls in FEATURES_LINEAR on train
+  [x] cv_fold column present in train_full
+  [x] train_protocol.parquet exists
+
+================================================================

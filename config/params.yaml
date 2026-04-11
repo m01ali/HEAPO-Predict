@@ -24,6 +24,21 @@ evaluation:
   mape_floor_kwh: 0.5                  # exclude days below this threshold from MAPE/sMAPE
                                        # avoids division by near-zero values inflating %error
 
+tuning:
+  n_trials_linear:  30
+  n_trials_dt:      40
+  n_trials_rf:      60
+  n_trials_xgb:     80
+  n_trials_lgbm:    80
+  n_trials_ann:     60
+  n_trials_xgb_b:   40
+  rf_n_estimators_search: 150          # capped during search; final refit uses 500
+  rf_n_estimators_final:  500
+  early_stopping_rounds:  50
+  ann_patience_search:    10
+  ann_patience_final:     20
+  study_dir: "outputs/models/optuna_studies"
+
 cleaning:
   smd_hard_cap_kwh: 500                # any day above this is a meter error (99th pct = 106 kWh)
   null_fraction_threshold: 0.30        # drop household entirely if ≥30% of target rows are null

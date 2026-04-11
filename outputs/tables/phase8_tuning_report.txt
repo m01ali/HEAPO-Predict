@@ -1,0 +1,119 @@
+======================================================================
+HEAPO-Predict  Phase 8 — Hyperparameter Tuning Report
+Generated: 2026-04-12 01:52:41
+======================================================================
+
+SECTION 1 — TUNING BUDGET AND WALL-CLOCK TIME
+  ElasticNet  :  30 trials       0s
+  DT          :  40 trials       0s
+  XGBoost_B   :  40 trials       0s
+  XGBoost     :  80 trials       0s
+  LightGBM    :  80 trials       0s
+  ANN         :  60 trials       0s
+  RF          :  60 trials       0s
+
+SECTION 2 — BEST HYPERPARAMETERS
+
+  [ElasticNet]
+    alpha                     = 0.0025149739891355267
+    l1_ratio                  = 0.6196133032279139
+
+  [DT]
+    max_depth                 = 19
+    min_samples_split         = 92
+    min_samples_leaf          = 5
+    max_features              = None
+
+  [XGBoost_B]
+    max_depth                 = 6
+    learning_rate             = 0.022541362056228517
+    subsample                 = 0.8068038186742492
+    colsample_bytree          = 0.62992705501847
+    min_child_weight          = 5
+    reg_alpha                 = 0.9129558361017494
+    reg_lambda                = 0.2695193190205859
+    gamma                     = 2.0430587221876295
+
+  [XGBoost]
+    max_depth                 = 10
+    learning_rate             = 0.038115546290882325
+    subsample                 = 0.9969367167344763
+    colsample_bytree          = 0.6212868912087954
+    min_child_weight          = 7
+    reg_alpha                 = 0.2506670738962993
+    reg_lambda                = 0.0015336088980101282
+    gamma                     = 2.176319215209211
+
+  [LightGBM]
+    num_leaves                = 224
+    max_depth                 = 14
+    learning_rate             = 0.018197530081943827
+    min_child_samples         = 16
+    subsample                 = 0.6223752669714424
+    colsample_bytree          = 0.934206664328793
+    reg_alpha                 = 0.7836491821199218
+    reg_lambda                = 0.12394556236589166
+    min_split_gain            = 0.10264442098060884
+
+  [ANN]
+    n_layers                  = 3
+    n_units_l0                = 128
+    n_units_l1                = 32
+    n_units_l2                = 128
+    learning_rate_init        = 0.001131750629852852
+    alpha                     = 0.0014640375861567235
+    batch_size                = 128
+
+  [RF]
+    max_depth                 = 30
+    min_samples_split         = 13
+    min_samples_leaf          = 5
+    max_features              = 0.5
+    bootstrap                 = False
+
+SECTION 3 — VAL RMSE: PHASE 7 vs PHASE 8
+  Model                            P7 val RMSE   P8 val RMSE     Delta
+  --------------------------------------------------------------------
+  ElasticNet                            12.185        12.176   -0.009 ↓
+  DT                                    11.382         9.795   -1.587 ↓
+  RF                                     9.421         8.503   -0.918 ↓
+  XGBoost                                9.462         8.340   -1.122 ↓
+  LightGBM                               9.318         8.358   -0.960 ↓
+  ANN                                   10.330         9.638   -0.692 ↓
+  XGBoost_B                              5.933         5.789   -0.144 ↓
+
+SECTION 4 — VALIDATION SET METRICS (Tuned Models)
+  Model                                        RMSE      MAE       R²    sMAPE%
+  ---------------------------------------------------------------------------
+  ElasticNet_tuned [VAL]                     12.176    7.915   0.3590    48.22%
+  DT_tuned [VAL]                              9.795    6.138   0.5851    37.35%
+  RF_tuned [VAL]                              8.511    5.230   0.6868    33.18%
+  XGBoost_tuned [VAL]                         8.340    5.282   0.6992    34.59%
+  LightGBM_tuned [VAL]                        8.358    5.351   0.6979    35.43%
+  ANN_tuned [VAL]                             9.871    6.398   0.5787    40.41%
+  XGBoost_B_tuned [VAL]                       5.789    3.901   0.8422    25.66%
+
+SECTION 5 — TEST SET METRICS (Final — run once)
+  Model                                        RMSE      MAE       R²    sMAPE%
+  ---------------------------------------------------------------------------
+  ElasticNet_tuned [TEST]                    20.401   14.217   0.1511    38.47%
+  DT_tuned [TEST]                            15.108   10.309   0.5344    28.72%
+  RF_tuned [TEST]                            12.404    8.139   0.6862    23.11%
+  XGBoost_tuned [TEST]                       12.573    8.516   0.6776    24.47%
+  LightGBM_tuned [TEST]                      12.456    8.460   0.6835    24.43%
+  ANN_tuned [TEST]                           15.563   10.820   0.5060    30.52%
+  XGBoost_B_tuned [TEST]                      9.173    6.623   0.8187    16.99%
+
+SECTION 6 — PHASE 9 READINESS CHECKLIST
+  [✓] best_params.json
+  [✓] model_xgboost_tuned.pkl
+  [✓] model_lgbm_tuned.pkl
+  [✓] model_rf_tuned.pkl
+  [✓] model_ann_tuned.pkl
+  [✓] model_elasticnet_tuned.pkl
+  [✓] model_dt_tuned.pkl
+  [✓] model_xgboost_b_tuned.pkl
+  [✓] phase8_val_predictions.parquet
+  [✓] phase8_test_predictions.parquet
+
+======================================================================
