@@ -1,0 +1,29 @@
+Dimension,Category,N_rows,N_households,Pct_rows,Mean_kWh
+HP Type,Air-Source,40146,446,53.98,41.21
+HP Type,Ground-Source,33683,374,45.29,36.56
+HP Type,Unknown,539,6,0.72,40.12
+Building Type,Apartment,630,7,0.85,23.86
+Building Type,House,73199,813,98.43,39.24
+Building Type,Unknown,539,6,0.72,37.25
+Heat Distribution,Both,7921,88,10.65,44.73
+Heat Distribution,Floor,50964,566,68.53,37.68
+Heat Distribution,Radiator,13501,150,18.15,41.82
+Heat Distribution,Unknown,1982,22,2.67,34.51
+PV System,With PV,33334,370,44.82,37.82
+PV System,Without PV,41034,456,55.18,40.13
+Living Area,100-150,18191,202,24.46,34.41
+Living Area,150-200,33492,372,45.04,37.16
+Living Area,200-300,16293,181,21.91,43.56
+Living Area,<100,1893,21,2.55,29.48
+Living Area,>300,3240,36,4.36,67.73
+Living Area,Unknown,1259,14,1.69,41.24
+Group,Control,68893,765,92.64,38.81
+Group,Treatment,5475,61,7.36,42.71
+Intervention Status,Control (no visit),68893,765,92.64,38.81
+Intervention Status,Treatment (post-visit),4638,60,6.24,42.0
+Intervention Status,Treatment (pre-visit),837,22,1.13,46.66
+EV Ownership,With EV,17369,193,23.36,43.73
+EV Ownership,Without EV,56999,633,76.64,37.69
+Test Month,Dec,25595,826,34.42,41.48
+Test Month,Feb,23175,826,31.16,30.81
+Test Month,Jan,25598,826,34.42,44.22
