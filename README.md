@@ -115,7 +115,7 @@ The pipeline runs two parallel tracks that share the same preprocessing but dive
 
 ## 4. Pipeline Architecture
 
-### Phase 1 — Data Loading (`scripts/01_data_loading.py`)
+### Phase 1 — Data Loading  
 
 Loads all five HEAPO data sources, validates schema and row counts against the paper, profiles each dataset, and saves five Parquet files to `data/processed/`.
 
@@ -129,7 +129,7 @@ Loads all five HEAPO data sources, validates schema and row counts against the p
 
 ---
 
-### Phase 2 — Data Cleaning (`scripts/02_data_cleaning.py`)
+### Phase 2 — Data Cleaning  
 
 Applies rule-based cleaning to each dataset independently:
 
@@ -147,7 +147,7 @@ Applies rule-based cleaning to each dataset independently:
 
 ---
 
-### Phase 3 — Data Merging (`scripts/03_data_merging.py`)
+### Phase 3 — Data Merging  
 
 Joins the four cleaned datasets into two analysis-track Parquets:
 
@@ -163,7 +163,7 @@ Runs 8 integrity checks (row counts, no duplicate household-days, join completen
 
 ---
 
-### Phase 4 — Feature Engineering (`scripts/04_feature_engineering.py`)
+### Phase 4 — Feature Engineering  
 
 Builds the full feature matrices on top of the merged Parquets. Feature groups:
 
@@ -185,7 +185,7 @@ Runs 6 integrity checks and writes a feature catalog report.
 
 ---
 
-### Phase 5 — Exploratory Data Analysis (`scripts/05_eda.py`)
+### Phase 5 — Exploratory Data Analysis  
 
 Eleven EDA tasks producing 35+ figures and two summary tables:
 
@@ -206,7 +206,7 @@ Eleven EDA tasks producing 35+ figures and two summary tables:
 
 ---
 
-### Phase 6 — Data Preparation (`scripts/06_data_preparation.py`)
+### Phase 6 — Data Preparation  
 
 Prepares train/validation/test splits and fitting artifacts:
 
@@ -234,7 +234,7 @@ Prepares train/validation/test splits and fitting artifacts:
 
 ---
 
-### Phase 7 — Model Training (`scripts/07_model_training.py`)
+### Phase 7 — Model Training  
 
 Trains all models with default hyperparameters on the train split and evaluates on validation:
 
@@ -263,7 +263,7 @@ All models and predictions are serialised to `outputs/models/`.
 
 ---
 
-### Phase 8 — Hyperparameter Tuning (`scripts/08_hyperparameter_tuning.py`)
+### Phase 8 — Hyperparameter Tuning  
 
 Bayesian optimisation via **Optuna** using the validation set RMSE (raw kWh) as the objective. The test set is never seen inside an Optuna trial.
 
@@ -279,13 +279,13 @@ Bayesian optimisation via **Optuna** using the validation set RMSE (raw kWh) as 
 
 Best parameters are saved to `outputs/models/best_params.json`. Optuna study databases are stored in `outputs/models/optuna_studies/`.
 
-### Phase 8b — Model Refit (`scripts/08b_refit_models.py`)
+### Phase 8b — Model Refit  
 
 Re-fits tree models (RF, XGBoost, LightGBM, DT, XGBoost B) on the current train split using the best hyperparameters from `best_params.json`. This step exists because Phase 6 was re-run after the initial Phase 7/8 training, making stored tree models incompatible with the current data splits. ANN and ElasticNet are unaffected (they use the scaler, which was already re-fitted).
 
 ---
 
-### Phase 9 — Evaluation (`scripts/09_evaluation.py`)
+### Phase 9 — Evaluation 
 
 Comprehensive evaluation across four dimensions:
 
@@ -311,7 +311,7 @@ Comprehensive evaluation across four dimensions:
 
 ---
 
-### Phase 10 — Interpretability (`scripts/10_interpretability.py`)
+### Phase 10 — Interpretability  
 
 Ten interpretability tasks:
 
@@ -332,7 +332,7 @@ Ten interpretability tasks:
 
 ---
 
-### Phase 11 — Subgroup & Bias Analysis (`scripts/11_subgroup_analysis.py`)
+### Phase 11 — Subgroup & Bias Analysis  
 
 Examines whether model errors are systematically biased across household characteristics:
 
@@ -350,30 +350,6 @@ Examines whether model errors are systematically biased across household charact
 **Statistical tests:** Mann-Whitney U (pairwise) + Kruskal-Wallis (multi-group) with Bonferroni correction.
 
 **Track B subgroup analysis:** XGBoost B residuals broken down by building age, heating curve temperature, and night setback temperature.
-
----
-
-### Phase 12 — Report Generation (`scripts/12_generate_report.py`)
-
-Generates `outputs/report/HEAPO_Predict_Report.md` — a complete academic-style Markdown report. Every number is pulled directly from phase output CSVs (no hardcoding), guaranteeing consistency between reported results and computed artefacts.
-
----
-
-### Phase 13 — Final Checks (`scripts/13_final_checks.py`)
-
-Seven automated reproducibility checks:
-
-| Check | What it verifies |
-|---|---|
-| CHECK 1 | All 30 expected output files are present |
-| CHECK 2 | Key metric values match Phase 9 CSV values to 3 decimal places |
-| CHECK 3 | All 21 report figures are present |
-| CHECK 4 | Temporal boundaries, row counts, residual sign convention, feature list completeness |
-| CHECK 5 | RF model re-prediction on 100 test rows matches stored predictions (< 1×10⁻³ kWh) |
-| CHECK 6 | All 9 required config keys present in `params.yaml` |
-| CHECK 7 | Writes `outputs/tables/phase13_final_checks_report.txt` |
-
-Exit code `0` if all pass, `1` if any fail. **All 6/6 checks currently pass.**
 
 ---
 
@@ -595,27 +571,6 @@ If you already have processed Parquets from a previous run, you can resume from 
 ```bash
 python scripts/09_evaluation.py
 ```
-
-### Approximate runtimes (Apple M1 Air, 8 GB RAM)
-
-| Phase | Runtime |
-|---|---|
-| 01 Data loading | ~2 min |
-| 02 Data cleaning | ~1 min |
-| 03 Data merging | ~1 min |
-| 04 Feature engineering | ~2 min |
-| 05 EDA | ~3 min |
-| 06 Data preparation | ~2 min |
-| 07 Model training | ~15 min |
-| 08 Hyperparameter tuning | ~3–6 hours (configurable via `n_trials_*`) |
-| 08b Model refit | ~20 min |
-| 09 Evaluation | ~5 min |
-| 10 Interpretability | ~15 min (memory-safe) / ~60 min (full fidelity) |
-| 11 Subgroup analysis | ~3 min |
-| 12 Report generation | ~1 min |
-| 13 Final checks | <1 min |
-
-> **Tuning time:** Phase 8 is the most expensive step. To reduce it, lower `n_trials_rf`, `n_trials_xgb`, and `n_trials_lgbm` in `config/params.yaml`. The stored `best_params.json` can be reused via Phase 8b without re-running Phase 8.
 
 ---
 
