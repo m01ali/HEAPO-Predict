@@ -1,0 +1,40 @@
+======================================================================
+HEAPO-Predict — Phase 13: Final Reproducibility and Consistency Checks
+Generated: 2026-04-12 22:24:30
+======================================================================
+
+SUMMARY: 6/6 checks passed, 0 failed
+
+----------------------------------------------------------------------
+[PASS]  CHECK_1: Output file existence
+        All 30 files present
+
+[PASS]  CHECK_2: Numerical consistency
+        RF RMSE: expected=11.54, actual=11.539576, diff=0.000424; XGBoost B RMSE: expected=8.419, actual=8.418812, diff=0.000...
+
+[PASS]  CHECK_3: Report figure existence
+        All 21 report figures present
+
+[PASS]  CHECK_4: Data integrity
+        4a temporal boundary: train_max=2023-05-31, test_min=2023-12-01 | 4b row count: test_full=74368 rows, predictions=743...
+
+[PASS]  CHECK_5: Model reproducibility
+        max |new − stored| = 4.26e-14 kWh (tolerance 0.001)
+
+[PASS]  CHECK_6: Config completeness
+        All 9 required keys present
+
+----------------------------------------------------------------------
+
+CHECKS LEGEND
+  CHECK_1  Output file existence         — 30 pipeline output files
+  CHECK_2  Numerical consistency         — RF RMSE, XGBoost B RMSE, ElasticNet R²
+  CHECK_3  Report figure existence       — 21 figures referenced in the report
+  CHECK_4  Data integrity                — temporal boundaries, row counts, residual
+                                           sign convention, feature list completeness
+  CHECK_5  Model reproducibility         — RF re-prediction on 100 test rows (<1e-3)
+  CHECK_6  Config completeness           — 9 required keys in config/params.yaml
+
+All checks passed. Pipeline is reproducible and publication-ready.
+
+======================================================================
