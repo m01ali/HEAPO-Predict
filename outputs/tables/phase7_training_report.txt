@@ -1,0 +1,96 @@
+========================================================================
+HEAPO-Predict Phase 7 — Model Training Report
+Generated: 2026-04-11 17:14:30
+========================================================================
+
+SECTION 1 — INPUT DATA SUMMARY
+  Track A  train :  646,258 rows, 1119 HH  (control=585,622  treatment=60,636)
+  Track A  val   :  153,594 rows,  856 HH
+  Track A  test  :   74,368 rows,  826 HH
+  Track B  train :   60,636 rows,  109 HH  (treatment only)
+  Track B  val   :   11,281 rows,   64 HH
+  Track B  test  :    5,475 rows,   61 HH
+  Target mean  train/val/test (Track A): 28.37 / 17.51 / 39.10 kWh/day
+  Target mean  train/val/test (Track B): 31.05 / 17.92 / 39.10 kWh/day (test approx)
+  Log-target mean (train A): 3.1056  std: 0.7940
+
+SECTION 2 — VALIDATION SET METRICS (Track A models, kWh space)
+  Model                                      RMSE      MAE       R²    MedAE   sMAPE%   Time(s)
+  ------------------------------------------------------------------------------
+  Baseline: overall mean                   18.683   16.011  -0.5093   16.016    75.96       0.0
+  Baseline: per-HH mean                    17.455   13.790  -0.3174   11.949    67.43       0.0
+  Baseline: HDD-linear                     14.523    9.691   0.0880    6.676    61.45       0.0
+  OLS                                      12.184    7.927   0.3581    5.521    48.28       0.5
+  Ridge                                    12.184    7.927   0.3581    5.521    48.28       0.5
+  Lasso                                    12.209    7.934   0.3555    5.561    48.34       0.5
+  ElasticNet                               12.185    7.918   0.3581    5.541    48.24       0.5
+  Decision Tree                            11.382    8.107   0.4398    6.243    49.18       3.4
+  Random Forest                             9.421    6.348   0.6162    4.456    39.88      74.3
+  XGBoost                                   9.462    6.327   0.6129    4.441    41.16       9.8
+  LightGBM                                  9.318    6.143   0.6246    4.248    40.46      11.3
+  ANN (MLP 128-64)                         10.330    6.659   0.5386    4.305    40.80     280.8
+
+SECTION 3 — TRACK B VALIDATION METRICS (protocol-enriched, 109 HH training)
+  Model                                          RMSE      MAE       R²   sMAPE%
+  ------------------------------------------------------------------------
+  Ridge_B (Track B, 109 HH)                    10.175    7.368   0.5127    44.05
+  XGBoost_B (Track B, 109 HH)                   5.933    3.973   0.8343    27.32
+  XGBoost_A applied to Track B val (comparison)   23.172   15.026  -1.5276    57.58
+  NOTE: Track B val has only 64 HH — interpret metrics with caution (high variance).
+
+SECTION 4 — 5-FOLD CV RMSE (Track A, training data only)
+  Model                    Mean RMSE    Std RMSE  Per-fold
+  ----------------------------------------------------------------------
+  OLS                         19.206       2.800  [24.598, 16.652, 18.784, 18.505, 17.489]
+  Ridge                       19.206       2.800  [24.598, 16.652, 18.784, 18.505, 17.489]
+  Lasso                       19.074       3.075  [25.063, 16.698, 17.24, 18.829, 17.539]
+  ElasticNet                  19.053       2.965  [24.855, 16.741, 17.486, 18.667, 17.517]
+  Decision Tree               20.192       2.735  [25.408, 20.089, 17.754, 19.433, 18.275]
+  Random Forest               18.634       2.750  [23.964, 18.281, 16.191, 17.603, 17.133]
+  XGBoost / LightGBM / ANN CV: deferred to Phase 8 (require in-fold eval_set).
+
+SECTION 5 — TRAINING TIMES
+  baseline_overall_mean         :      0.0s
+  baseline_hh_mean              :      0.0s
+  baseline_hdd_linear           :      0.0s
+  linear_variants               :      2.2s
+  decision_tree                 :      3.4s
+  random_forest                 :     74.3s
+  xgboost                       :      9.8s
+  lightgbm                      :     11.3s
+  ann                           :    280.8s
+  ridge_B                       :      0.0s
+  xgboost_B                     :      2.2s
+
+SECTION 6 — MODEL ARTIFACTS SAVED
+  outputs/models/baseline_hh_means.parquet
+  outputs/models/baseline_hdd_linear.pkl
+  outputs/models/model_ols.pkl
+  outputs/models/model_ridge.pkl
+  outputs/models/model_lasso.pkl
+  outputs/models/model_elasticnet.pkl
+  outputs/models/model_dt.pkl
+  outputs/models/model_rf.pkl
+  outputs/models/model_xgboost.pkl
+  outputs/models/model_xgboost.json
+  outputs/models/model_lgbm.pkl
+  outputs/models/model_lgbm.txt
+  outputs/models/model_ann_state_dict.pt
+  outputs/models/model_ann_meta.json
+  outputs/models/model_ridge_B.pkl
+  outputs/models/model_xgboost_B.pkl
+  outputs/models/model_xgboost_B.json
+  outputs/tables/phase7_val_predictions.parquet
+  outputs/figures/phase7_ann_loss_curves.png
+
+SECTION 7 — PHASE 8 READINESS CHECKLIST
+  [x] model_ridge.pkl                     — Ridge — starting alpha=1.0, needs tuning
+  [x] model_lasso.pkl                     — Lasso — starting alpha=0.01, needs tuning
+  [x] model_elasticnet.pkl                — ElasticNet — starting alpha=0.01 l1=0.5, needs tuning
+  [x] model_dt.pkl                        — DT — starting max_depth=8, needs tuning
+  [x] model_rf.pkl                        — RF — starting 300 trees, needs tuning
+  [x] model_xgboost.pkl                   — XGBoost — starting params, needs tuning
+  [x] model_lgbm.pkl                      — LightGBM — starting params, needs tuning
+  [ ] model_ann_state_dict.pt             — ANN — starting 128-64 arch, needs tuning
+
+========================================================================

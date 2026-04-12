@@ -1,0 +1,375 @@
+alii@Muhammads-MacBook-Air-2 scripts % python 07_model_training.py
+2026-04-11 17:06:44  INFO      ======================================================================
+2026-04-11 17:06:44  INFO      HEAPO-Predict  Phase 7 — Model Training
+2026-04-11 17:06:44  INFO      Started: 2026-04-11 17:06:44
+2026-04-11 17:06:44  INFO      Random seed: 42  |  XGB early stop: 50  |  ANN patience: 15
+2026-04-11 17:06:44  INFO      ======================================================================
+2026-04-11 17:06:44  INFO      
+--- Task 7.0  Load data & assertions ---
+2026-04-11 17:06:44  INFO        train_full          : (646258, 89)  ✓
+2026-04-11 17:06:44  INFO        val_full            : (153594, 88)  ✓
+2026-04-11 17:06:44  INFO        test_full           : (74368, 88)  ✓
+2026-04-11 17:06:45  INFO        train_protocol      : (60636, 180)  ✓
+2026-04-11 17:06:45  INFO        val_protocol        : (11281, 179)  ✓
+2026-04-11 17:06:45  INFO        test_protocol       : (5475, 179)  ✓
+2026-04-11 17:06:45  INFO      All pre-training assertions passed ✓
+2026-04-11 17:06:45  INFO      
+--- Building feature matrices ---
+2026-04-11 17:06:45  INFO      Track A  train: 646,258 rows  trees=45  linear=30
+2026-04-11 17:06:45  INFO      Track B  train: 60,636 rows  trees=75  linear=46
+2026-04-11 17:06:45  INFO      
+============================================================
+2026-04-11 17:06:45  INFO      Task 7.1  Baseline predictors
+2026-04-11 17:06:45  INFO      ============================================================
+2026-04-11 17:06:45  INFO      Overall-mean baseline: mean=28.3656 kWh/day
+2026-04-11 17:06:45  INFO      Baseline: overall mean              | RMSE= 18.683  MAE=16.011  R²=-0.5093  MedAE=16.016  sMAPE=75.96%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:45  INFO      Per-HH mean baseline: 1119 HH trained, 1121 cold-start rows → fallback to global mean (28.366 kWh)
+2026-04-11 17:06:45  INFO      Per-HH mean baseline: 1119 HH trained, 812 cold-start rows → fallback to global mean (28.366 kWh)
+2026-04-11 17:06:45  INFO      Baseline: per-HH mean               | RMSE= 17.455  MAE=13.790  R²=-0.3174  MedAE=11.949  sMAPE=67.43%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:45  INFO      Saved HH mean lookup: /Users/alii/HEAPO-Predict/outputs/models/baseline_hh_means.parquet
+2026-04-11 17:06:45  INFO      HDD baseline fitted on 382902 heating-season rows: α=1.9494 kWh/HDD,  β=7.5880 kWh
+2026-04-11 17:06:45  INFO      Baseline: HDD-linear                | RMSE= 14.523  MAE= 9.691  R²= 0.0880  MedAE= 6.676  sMAPE=61.45%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:45  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/baseline_hdd_linear.pkl
+2026-04-11 17:06:45  INFO      
+Baseline TEST-set metrics (for anchoring Phase 9 table):
+2026-04-11 17:06:45  INFO      [TEST] Baseline: overall mean       | RMSE= 24.606  MAE=17.015  R²=-0.2349  MedAE=12.024  sMAPE=45.74%  (excl 0.1% rows <0.5 kWh)
+2026-04-11 17:06:45  INFO      [TEST] Baseline: per-HH mean        | RMSE= 20.320  MAE=14.445  R²= 0.1578  MedAE=10.225  sMAPE=41.89%  (excl 0.1% rows <0.5 kWh)
+2026-04-11 17:06:45  INFO      [TEST] Baseline: HDD-linear         | RMSE= 21.078  MAE=15.099  R²= 0.0938  MedAE=11.441  sMAPE=39.99%  (excl 0.1% rows <0.5 kWh)
+2026-04-11 17:06:45  INFO      
+============================================================
+2026-04-11 17:06:45  INFO      Task 7.2  Linear Regression Variants (OLS / Ridge / Lasso / ElasticNet)
+2026-04-11 17:06:45  INFO      ============================================================
+2026-04-11 17:06:45  INFO      OLS fitted in 0.26s — top-10 |coef|: [('dhw_ewh', 0.27642), ('dhw_hp', 0.22571), ('temp_avg_rolling_7d', -0.19938), ('Survey_Building_LivingArea', 0.14739), ('has_pv', -0.14734), ('HDD_SIA_daily', 0.10597), ('has_dryer', 0.07836), ('HDD_SIA_rolling_7d', 0.07437), ('Survey_Building_Residents_imputed', 0.06852), ('Survey_Building_Residents', 0.06722)]
+2026-04-11 17:06:45  INFO      Ridge fitted in 0.09s — top-10 |coef|: [('dhw_ewh', 0.27641), ('dhw_hp', 0.22569), ('temp_avg_rolling_7d', -0.19938), ('Survey_Building_LivingArea', 0.14739), ('has_pv', -0.14734), ('HDD_SIA_daily', 0.10597), ('has_dryer', 0.07836), ('HDD_SIA_rolling_7d', 0.07437), ('Survey_Building_Residents_imputed', 0.06851), ('Survey_Building_Residents', 0.06722)]
+2026-04-11 17:06:46  INFO      Lasso fitted in 0.85s — top-10 |coef|: [('temp_avg_rolling_7d', -0.21714), ('Survey_Building_LivingArea', 0.13597), ('has_pv', -0.13524), ('HDD_SIA_daily', 0.10572), ('has_dryer', 0.0708), ('HDD_SIA_rolling_7d', 0.06996), ('dhw_ewh', 0.06008), ('Survey_Building_Residents', 0.05681), ('hp_type_air_source', 0.0303), ('has_reactive_energy', -0.03024)]
+2026-04-11 17:06:46  INFO      Lasso: 10 zero-coef features: ['day_of_week', 'is_weekend', 'season_encoded', 'CDD_US_daily', 'Precipitation_total_daily', 'dhw_hp', 'dhw_combined', 'heat_dist_floor', 'heat_dist_radiator', 'heat_dist_both']
+2026-04-11 17:06:47  INFO      ElasticNet fitted in 0.96s — top-10 |coef|: [('temp_avg_rolling_7d', -0.20033), ('has_pv', -0.13962), ('Survey_Building_LivingArea', 0.13938), ('HDD_SIA_daily', 0.10593), ('dhw_ewh', 0.09683), ('HDD_SIA_rolling_7d', 0.07902), ('has_dryer', 0.07456), ('Survey_Building_Residents', 0.06095), ('dhw_hp', 0.03684), ('is_heating_season', 0.03655)]
+2026-04-11 17:06:47  INFO      OLS                                 | RMSE= 12.184  MAE= 7.927  R²= 0.3581  MedAE= 5.521  sMAPE=48.28%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:47  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_ols.pkl
+2026-04-11 17:06:47  INFO      Ridge                               | RMSE= 12.184  MAE= 7.927  R²= 0.3581  MedAE= 5.521  sMAPE=48.28%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:47  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_ridge.pkl
+2026-04-11 17:06:47  INFO      Lasso                               | RMSE= 12.209  MAE= 7.934  R²= 0.3555  MedAE= 5.561  sMAPE=48.34%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:47  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_lasso.pkl
+2026-04-11 17:06:47  INFO      ElasticNet                          | RMSE= 12.185  MAE= 7.918  R²= 0.3581  MedAE= 5.541  sMAPE=48.24%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:47  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_elasticnet.pkl
+2026-04-11 17:06:47  INFO      
+Linear CV check (Ridge):
+2026-04-11 17:06:48  INFO      CV RMSE [Ridge               ]: 19.206 ± 2.800 kWh  per fold: [24.598, 16.652, 18.784, 18.505, 17.489]
+2026-04-11 17:06:48  INFO      
+============================================================
+2026-04-11 17:06:48  INFO      Task 7.3  Decision Tree
+2026-04-11 17:06:48  INFO      ============================================================
+2026-04-11 17:06:51  INFO      DecisionTree fitted in 3.4s — depth=8, leaves=247, train_R²=0.5287
+2026-04-11 17:06:51  INFO      Decision Tree                       | RMSE= 11.382  MAE= 8.107  R²= 0.4398  MedAE= 6.243  sMAPE=49.18%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:06:51  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_dt.pkl
+2026-04-11 17:06:51  INFO      
+============================================================
+2026-04-11 17:06:51  INFO      Task 7.4  Random Forest  (300 trees — this will take a few minutes)
+2026-04-11 17:06:51  INFO      ============================================================
+[Parallel(n_jobs=-1)]: Using backend ThreadingBackend with 8 concurrent workers.
+[Parallel(n_jobs=-1)]: Done  34 tasks      | elapsed:    6.8s
+[Parallel(n_jobs=-1)]: Done 184 tasks      | elapsed:   33.7s
+[Parallel(n_jobs=-1)]: Done 300 out of 300 | elapsed:   54.8s finished
+2026-04-11 17:08:05  INFO      RandomForest fitted in 74.3s — OOB R²=0.7383
+[Parallel(n_jobs=8)]: Using backend ThreadingBackend with 8 concurrent workers.
+[Parallel(n_jobs=8)]: Done  34 tasks      | elapsed:    0.3s
+[Parallel(n_jobs=8)]: Done 184 tasks      | elapsed:    1.3s
+[Parallel(n_jobs=8)]: Done 300 out of 300 | elapsed:    2.0s finished
+2026-04-11 17:08:07  INFO      Random Forest                       | RMSE=  9.421  MAE= 6.348  R²= 0.6162  MedAE= 4.456  sMAPE=39.88%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:08:10  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_rf.pkl
+2026-04-11 17:08:10  INFO      
+============================================================
+2026-04-11 17:08:10  INFO      Task 7.5  Gradient Boosted Trees (XGBoost + LightGBM)
+2026-04-11 17:08:10  INFO      ============================================================
+[0]     validation_0-rmse:17.66126
+[100]   validation_0-rmse:9.98628
+[200]   validation_0-rmse:9.71168
+[300]   validation_0-rmse:9.61700
+[400]   validation_0-rmse:9.55590
+[500]   validation_0-rmse:9.47244
+[563]   validation_0-rmse:9.46718
+2026-04-11 17:08:20  INFO      XGBoost fitted in 9.6s — best_iteration=513, best_val_RMSE=9.4645 kWh
+2026-04-11 17:08:20  INFO      XGBoost                             | RMSE=  9.462  MAE= 6.327  R²= 0.6129  MedAE= 4.441  sMAPE=41.16%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:08:20  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_xgboost.pkl + .json
+[100]   valid_0's l2: 103.256
+[200]   valid_0's l2: 97.8156
+[300]   valid_0's l2: 94.3621
+[400]   valid_0's l2: 91.5889
+[500]   valid_0's l2: 90.5123
+[600]   valid_0's l2: 89.5003
+[700]   valid_0's l2: 88.7494
+[800]   valid_0's l2: 87.6509
+[900]   valid_0's l2: 87.1327
+[1000]  valid_0's l2: 87.0036
+2026-04-11 17:08:32  INFO      LightGBM fitted in 10.8s — best_iteration=976, best_val_RMSE=9.3235 kWh
+2026-04-11 17:08:33  INFO      LightGBM                            | RMSE=  9.318  MAE= 6.143  R²= 0.6246  MedAE= 4.248  sMAPE=40.46%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:08:33  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_lgbm.pkl + .txt
+2026-04-11 17:08:33  INFO      
+============================================================
+2026-04-11 17:08:33  INFO      Task 7.6  Artificial Neural Network (2-layer MLP, PyTorch)
+2026-04-11 17:08:33  INFO      ============================================================
+2026-04-11 17:08:33  INFO      Freed RF/XGB/LGBM from RAM before ANN tensor allocation
+2026-04-11 17:08:33  INFO      ANN (sklearn MLPRegressor, no PyTorch)  train=(646258, 30)  val=(153594, 30)
+2026-04-11 17:08:33  INFO      Architecture: [128, 64]  lr=0.001  batch=256  max_epochs=200  patience=200
+2026-04-11 17:08:34  INFO        ANN Epoch   1/200: train_MSE=0.2497  val_MSE=0.4653  patience=0/200  elapsed=1s
+2026-04-11 17:08:36  INFO        ANN Epoch   2/200: train_MSE=0.2096  val_MSE=0.4237  patience=0/200  elapsed=3s
+2026-04-11 17:08:37  INFO        ANN Epoch   3/200: train_MSE=0.1938  val_MSE=0.4082  patience=0/200  elapsed=4s
+2026-04-11 17:08:38  INFO        ANN Epoch   4/200: train_MSE=0.1854  val_MSE=0.4007  patience=0/200  elapsed=5s
+2026-04-11 17:08:40  INFO        ANN Epoch   5/200: train_MSE=0.1800  val_MSE=0.3960  patience=0/200  elapsed=7s
+2026-04-11 17:08:41  INFO        ANN Epoch   6/200: train_MSE=0.1770  val_MSE=0.3954  patience=0/200  elapsed=8s
+2026-04-11 17:08:42  INFO        ANN Epoch   7/200: train_MSE=0.1745  val_MSE=0.3937  patience=0/200  elapsed=10s
+2026-04-11 17:08:44  INFO        ANN Epoch   8/200: train_MSE=0.1722  val_MSE=0.3928  patience=0/200  elapsed=11s
+2026-04-11 17:08:45  INFO        ANN Epoch   9/200: train_MSE=0.1707  val_MSE=0.3897  patience=0/200  elapsed=12s
+2026-04-11 17:08:46  INFO        ANN Epoch  10/200: train_MSE=0.1693  val_MSE=0.3875  patience=0/200  elapsed=14s
+2026-04-11 17:08:48  INFO        ANN Epoch  11/200: train_MSE=0.1683  val_MSE=0.3872  patience=0/200  elapsed=15s
+2026-04-11 17:08:49  INFO        ANN Epoch  12/200: train_MSE=0.1670  val_MSE=0.3857  patience=0/200  elapsed=16s
+2026-04-11 17:08:50  INFO        ANN Epoch  13/200: train_MSE=0.1657  val_MSE=0.3859  patience=0/200  elapsed=18s
+2026-04-11 17:08:52  INFO        ANN Epoch  14/200: train_MSE=0.1648  val_MSE=0.3859  patience=1/200  elapsed=19s
+2026-04-11 17:08:53  INFO        ANN Epoch  15/200: train_MSE=0.1639  val_MSE=0.3839  patience=2/200  elapsed=20s
+2026-04-11 17:08:54  INFO        ANN Epoch  16/200: train_MSE=0.1634  val_MSE=0.3844  patience=0/200  elapsed=21s
+2026-04-11 17:08:56  INFO        ANN Epoch  17/200: train_MSE=0.1625  val_MSE=0.3834  patience=1/200  elapsed=23s
+2026-04-11 17:08:57  INFO        ANN Epoch  18/200: train_MSE=0.1622  val_MSE=0.3841  patience=0/200  elapsed=24s
+2026-04-11 17:08:58  INFO        ANN Epoch  19/200: train_MSE=0.1616  val_MSE=0.3843  patience=1/200  elapsed=25s
+2026-04-11 17:09:00  INFO        ANN Epoch  20/200: train_MSE=0.1607  val_MSE=0.3840  patience=2/200  elapsed=27s
+2026-04-11 17:09:01  INFO        ANN Epoch  21/200: train_MSE=0.1598  val_MSE=0.3826  patience=3/200  elapsed=28s
+2026-04-11 17:09:02  INFO        ANN Epoch  22/200: train_MSE=0.1593  val_MSE=0.3821  patience=0/200  elapsed=29s
+2026-04-11 17:09:04  INFO        ANN Epoch  23/200: train_MSE=0.1588  val_MSE=0.3834  patience=0/200  elapsed=31s
+2026-04-11 17:09:05  INFO        ANN Epoch  24/200: train_MSE=0.1586  val_MSE=0.3819  patience=1/200  elapsed=32s
+2026-04-11 17:09:06  INFO        ANN Epoch  25/200: train_MSE=0.1580  val_MSE=0.3831  patience=0/200  elapsed=34s
+2026-04-11 17:09:08  INFO        ANN Epoch  26/200: train_MSE=0.1578  val_MSE=0.3835  patience=1/200  elapsed=35s
+2026-04-11 17:09:09  INFO        ANN Epoch  27/200: train_MSE=0.1572  val_MSE=0.3836  patience=2/200  elapsed=36s
+2026-04-11 17:09:10  INFO        ANN Epoch  28/200: train_MSE=0.1571  val_MSE=0.3825  patience=3/200  elapsed=37s
+2026-04-11 17:09:12  INFO        ANN Epoch  29/200: train_MSE=0.1566  val_MSE=0.3828  patience=4/200  elapsed=39s
+2026-04-11 17:09:13  INFO        ANN Epoch  30/200: train_MSE=0.1566  val_MSE=0.3834  patience=5/200  elapsed=40s
+2026-04-11 17:09:14  INFO        ANN Epoch  31/200: train_MSE=0.1559  val_MSE=0.3833  patience=6/200  elapsed=42s
+2026-04-11 17:09:16  INFO        ANN Epoch  32/200: train_MSE=0.1552  val_MSE=0.3825  patience=7/200  elapsed=43s
+2026-04-11 17:09:17  INFO        ANN Epoch  33/200: train_MSE=0.1554  val_MSE=0.3837  patience=8/200  elapsed=44s
+2026-04-11 17:09:18  INFO        ANN Epoch  34/200: train_MSE=0.1548  val_MSE=0.3819  patience=9/200  elapsed=46s
+2026-04-11 17:09:20  INFO        ANN Epoch  35/200: train_MSE=0.1543  val_MSE=0.3813  patience=0/200  elapsed=47s
+2026-04-11 17:09:21  INFO        ANN Epoch  36/200: train_MSE=0.1536  val_MSE=0.3816  patience=0/200  elapsed=48s
+2026-04-11 17:09:22  INFO        ANN Epoch  37/200: train_MSE=0.1535  val_MSE=0.3829  patience=1/200  elapsed=50s
+2026-04-11 17:09:24  INFO        ANN Epoch  38/200: train_MSE=0.1536  val_MSE=0.3821  patience=2/200  elapsed=51s
+2026-04-11 17:09:26  INFO        ANN Epoch  39/200: train_MSE=0.1532  val_MSE=0.3818  patience=3/200  elapsed=53s
+2026-04-11 17:09:27  INFO        ANN Epoch  40/200: train_MSE=0.1529  val_MSE=0.3828  patience=4/200  elapsed=54s
+2026-04-11 17:09:28  INFO        ANN Epoch  41/200: train_MSE=0.1529  val_MSE=0.3831  patience=5/200  elapsed=56s
+2026-04-11 17:09:30  INFO        ANN Epoch  42/200: train_MSE=0.1528  val_MSE=0.3824  patience=6/200  elapsed=57s
+2026-04-11 17:09:31  INFO        ANN Epoch  43/200: train_MSE=0.1524  val_MSE=0.3825  patience=7/200  elapsed=59s
+2026-04-11 17:09:33  INFO        ANN Epoch  44/200: train_MSE=0.1524  val_MSE=0.3824  patience=8/200  elapsed=60s
+2026-04-11 17:09:34  INFO        ANN Epoch  45/200: train_MSE=0.1517  val_MSE=0.3820  patience=9/200  elapsed=62s
+2026-04-11 17:09:36  INFO        ANN Epoch  46/200: train_MSE=0.1517  val_MSE=0.3824  patience=10/200  elapsed=63s
+2026-04-11 17:09:37  INFO        ANN Epoch  47/200: train_MSE=0.1513  val_MSE=0.3830  patience=11/200  elapsed=64s
+2026-04-11 17:09:39  INFO        ANN Epoch  48/200: train_MSE=0.1516  val_MSE=0.3834  patience=12/200  elapsed=66s
+2026-04-11 17:09:40  INFO        ANN Epoch  49/200: train_MSE=0.1511  val_MSE=0.3830  patience=13/200  elapsed=67s
+2026-04-11 17:09:41  INFO        ANN Epoch  50/200: train_MSE=0.1513  val_MSE=0.3835  patience=14/200  elapsed=69s
+2026-04-11 17:09:43  INFO        ANN Epoch  51/200: train_MSE=0.1510  val_MSE=0.3828  patience=15/200  elapsed=70s
+2026-04-11 17:09:44  INFO        ANN Epoch  52/200: train_MSE=0.1508  val_MSE=0.3827  patience=16/200  elapsed=71s
+2026-04-11 17:09:46  INFO        ANN Epoch  53/200: train_MSE=0.1508  val_MSE=0.3829  patience=17/200  elapsed=73s
+2026-04-11 17:09:47  INFO        ANN Epoch  54/200: train_MSE=0.1507  val_MSE=0.3839  patience=18/200  elapsed=74s
+2026-04-11 17:09:49  INFO        ANN Epoch  55/200: train_MSE=0.1503  val_MSE=0.3837  patience=19/200  elapsed=76s
+2026-04-11 17:09:50  INFO        ANN Epoch  56/200: train_MSE=0.1503  val_MSE=0.3844  patience=20/200  elapsed=77s
+2026-04-11 17:09:51  INFO        ANN Epoch  57/200: train_MSE=0.1503  val_MSE=0.3843  patience=21/200  elapsed=79s
+2026-04-11 17:09:53  INFO        ANN Epoch  58/200: train_MSE=0.1500  val_MSE=0.3835  patience=22/200  elapsed=80s
+2026-04-11 17:09:54  INFO        ANN Epoch  59/200: train_MSE=0.1497  val_MSE=0.3835  patience=23/200  elapsed=81s
+2026-04-11 17:09:56  INFO        ANN Epoch  60/200: train_MSE=0.1497  val_MSE=0.3836  patience=24/200  elapsed=83s
+2026-04-11 17:09:57  INFO        ANN Epoch  61/200: train_MSE=0.1496  val_MSE=0.3831  patience=25/200  elapsed=84s
+2026-04-11 17:09:59  INFO        ANN Epoch  62/200: train_MSE=0.1494  val_MSE=0.3830  patience=26/200  elapsed=86s
+2026-04-11 17:10:00  INFO        ANN Epoch  63/200: train_MSE=0.1492  val_MSE=0.3834  patience=27/200  elapsed=87s
+2026-04-11 17:10:01  INFO        ANN Epoch  64/200: train_MSE=0.1492  val_MSE=0.3842  patience=28/200  elapsed=89s
+2026-04-11 17:10:03  INFO        ANN Epoch  65/200: train_MSE=0.1489  val_MSE=0.3842  patience=29/200  elapsed=90s
+2026-04-11 17:10:04  INFO        ANN Epoch  66/200: train_MSE=0.1488  val_MSE=0.3830  patience=30/200  elapsed=91s
+2026-04-11 17:10:06  INFO        ANN Epoch  67/200: train_MSE=0.1486  val_MSE=0.3834  patience=31/200  elapsed=93s
+2026-04-11 17:10:07  INFO        ANN Epoch  68/200: train_MSE=0.1485  val_MSE=0.3835  patience=32/200  elapsed=94s
+2026-04-11 17:10:09  INFO        ANN Epoch  69/200: train_MSE=0.1484  val_MSE=0.3834  patience=33/200  elapsed=96s
+2026-04-11 17:10:10  INFO        ANN Epoch  70/200: train_MSE=0.1484  val_MSE=0.3841  patience=34/200  elapsed=97s
+2026-04-11 17:10:11  INFO        ANN Epoch  71/200: train_MSE=0.1483  val_MSE=0.3841  patience=35/200  elapsed=99s
+2026-04-11 17:10:13  INFO        ANN Epoch  72/200: train_MSE=0.1481  val_MSE=0.3846  patience=36/200  elapsed=100s
+2026-04-11 17:10:14  INFO        ANN Epoch  73/200: train_MSE=0.1481  val_MSE=0.3833  patience=37/200  elapsed=101s
+2026-04-11 17:10:16  INFO        ANN Epoch  74/200: train_MSE=0.1475  val_MSE=0.3837  patience=38/200  elapsed=103s
+2026-04-11 17:10:17  INFO        ANN Epoch  75/200: train_MSE=0.1477  val_MSE=0.3838  patience=39/200  elapsed=104s
+2026-04-11 17:10:18  INFO        ANN Epoch  76/200: train_MSE=0.1477  val_MSE=0.3838  patience=40/200  elapsed=106s
+2026-04-11 17:10:20  INFO        ANN Epoch  77/200: train_MSE=0.1477  val_MSE=0.3846  patience=41/200  elapsed=107s
+2026-04-11 17:10:21  INFO        ANN Epoch  78/200: train_MSE=0.1477  val_MSE=0.3844  patience=42/200  elapsed=108s
+2026-04-11 17:10:23  INFO        ANN Epoch  79/200: train_MSE=0.1475  val_MSE=0.3845  patience=43/200  elapsed=110s
+2026-04-11 17:10:24  INFO        ANN Epoch  80/200: train_MSE=0.1477  val_MSE=0.3841  patience=44/200  elapsed=111s
+2026-04-11 17:10:26  INFO        ANN Epoch  81/200: train_MSE=0.1476  val_MSE=0.3833  patience=45/200  elapsed=113s
+2026-04-11 17:10:27  INFO        ANN Epoch  82/200: train_MSE=0.1477  val_MSE=0.3840  patience=46/200  elapsed=114s
+2026-04-11 17:10:28  INFO        ANN Epoch  83/200: train_MSE=0.1475  val_MSE=0.3846  patience=47/200  elapsed=116s
+2026-04-11 17:10:30  INFO        ANN Epoch  84/200: train_MSE=0.1477  val_MSE=0.3856  patience=48/200  elapsed=117s
+2026-04-11 17:10:31  INFO        ANN Epoch  85/200: train_MSE=0.1473  val_MSE=0.3847  patience=49/200  elapsed=118s
+2026-04-11 17:10:33  INFO        ANN Epoch  86/200: train_MSE=0.1469  val_MSE=0.3838  patience=50/200  elapsed=120s
+2026-04-11 17:10:34  INFO        ANN Epoch  87/200: train_MSE=0.1471  val_MSE=0.3842  patience=51/200  elapsed=121s
+2026-04-11 17:10:35  INFO        ANN Epoch  88/200: train_MSE=0.1471  val_MSE=0.3845  patience=52/200  elapsed=123s
+2026-04-11 17:10:37  INFO        ANN Epoch  89/200: train_MSE=0.1471  val_MSE=0.3842  patience=53/200  elapsed=124s
+2026-04-11 17:10:38  INFO        ANN Epoch  90/200: train_MSE=0.1468  val_MSE=0.3839  patience=54/200  elapsed=125s
+2026-04-11 17:10:40  INFO        ANN Epoch  91/200: train_MSE=0.1467  val_MSE=0.3834  patience=55/200  elapsed=127s
+2026-04-11 17:10:41  INFO        ANN Epoch  92/200: train_MSE=0.1466  val_MSE=0.3827  patience=56/200  elapsed=128s
+2026-04-11 17:10:42  INFO        ANN Epoch  93/200: train_MSE=0.1466  val_MSE=0.3830  patience=57/200  elapsed=130s
+2026-04-11 17:10:44  INFO        ANN Epoch  94/200: train_MSE=0.1465  val_MSE=0.3831  patience=58/200  elapsed=131s
+2026-04-11 17:10:45  INFO        ANN Epoch  95/200: train_MSE=0.1465  val_MSE=0.3836  patience=59/200  elapsed=132s
+2026-04-11 17:10:47  INFO        ANN Epoch  96/200: train_MSE=0.1463  val_MSE=0.3830  patience=60/200  elapsed=134s
+2026-04-11 17:10:48  INFO        ANN Epoch  97/200: train_MSE=0.1462  val_MSE=0.3830  patience=61/200  elapsed=135s
+2026-04-11 17:10:49  INFO        ANN Epoch  98/200: train_MSE=0.1463  val_MSE=0.3827  patience=62/200  elapsed=137s
+2026-04-11 17:10:51  INFO        ANN Epoch  99/200: train_MSE=0.1460  val_MSE=0.3828  patience=63/200  elapsed=138s
+2026-04-11 17:10:52  INFO        ANN Epoch 100/200: train_MSE=0.1460  val_MSE=0.3825  patience=64/200  elapsed=139s
+2026-04-11 17:10:53  INFO        ANN Epoch 101/200: train_MSE=0.1459  val_MSE=0.3840  patience=65/200  elapsed=141s
+2026-04-11 17:10:55  INFO        ANN Epoch 102/200: train_MSE=0.1459  val_MSE=0.3836  patience=66/200  elapsed=142s
+2026-04-11 17:10:56  INFO        ANN Epoch 103/200: train_MSE=0.1458  val_MSE=0.3836  patience=67/200  elapsed=143s
+2026-04-11 17:10:58  INFO        ANN Epoch 104/200: train_MSE=0.1457  val_MSE=0.3834  patience=68/200  elapsed=145s
+2026-04-11 17:10:59  INFO        ANN Epoch 105/200: train_MSE=0.1456  val_MSE=0.3829  patience=69/200  elapsed=146s
+2026-04-11 17:11:01  INFO        ANN Epoch 106/200: train_MSE=0.1455  val_MSE=0.3837  patience=70/200  elapsed=148s
+2026-04-11 17:11:02  INFO        ANN Epoch 107/200: train_MSE=0.1455  val_MSE=0.3841  patience=71/200  elapsed=149s
+2026-04-11 17:11:03  INFO        ANN Epoch 108/200: train_MSE=0.1454  val_MSE=0.3836  patience=72/200  elapsed=151s
+2026-04-11 17:11:05  INFO        ANN Epoch 109/200: train_MSE=0.1452  val_MSE=0.3837  patience=73/200  elapsed=152s
+2026-04-11 17:11:06  INFO        ANN Epoch 110/200: train_MSE=0.1451  val_MSE=0.3848  patience=74/200  elapsed=153s
+2026-04-11 17:11:08  INFO        ANN Epoch 111/200: train_MSE=0.1452  val_MSE=0.3854  patience=75/200  elapsed=155s
+2026-04-11 17:11:09  INFO        ANN Epoch 112/200: train_MSE=0.1451  val_MSE=0.3848  patience=76/200  elapsed=156s
+2026-04-11 17:11:10  INFO        ANN Epoch 113/200: train_MSE=0.1450  val_MSE=0.3845  patience=77/200  elapsed=158s
+2026-04-11 17:11:12  INFO        ANN Epoch 114/200: train_MSE=0.1450  val_MSE=0.3849  patience=78/200  elapsed=159s
+2026-04-11 17:11:13  INFO        ANN Epoch 115/200: train_MSE=0.1448  val_MSE=0.3845  patience=79/200  elapsed=160s
+2026-04-11 17:11:15  INFO        ANN Epoch 116/200: train_MSE=0.1448  val_MSE=0.3847  patience=80/200  elapsed=162s
+2026-04-11 17:11:16  INFO        ANN Epoch 117/200: train_MSE=0.1447  val_MSE=0.3845  patience=81/200  elapsed=163s
+2026-04-11 17:11:17  INFO        ANN Epoch 118/200: train_MSE=0.1449  val_MSE=0.3849  patience=82/200  elapsed=165s
+2026-04-11 17:11:19  INFO        ANN Epoch 119/200: train_MSE=0.1446  val_MSE=0.3845  patience=83/200  elapsed=166s
+2026-04-11 17:11:20  INFO        ANN Epoch 120/200: train_MSE=0.1445  val_MSE=0.3841  patience=84/200  elapsed=167s
+2026-04-11 17:11:22  INFO        ANN Epoch 121/200: train_MSE=0.1446  val_MSE=0.3839  patience=85/200  elapsed=169s
+2026-04-11 17:11:23  INFO        ANN Epoch 122/200: train_MSE=0.1444  val_MSE=0.3832  patience=86/200  elapsed=170s
+2026-04-11 17:11:24  INFO        ANN Epoch 123/200: train_MSE=0.1443  val_MSE=0.3833  patience=87/200  elapsed=172s
+2026-04-11 17:11:26  INFO        ANN Epoch 124/200: train_MSE=0.1443  val_MSE=0.3837  patience=88/200  elapsed=173s
+2026-04-11 17:11:27  INFO        ANN Epoch 125/200: train_MSE=0.1442  val_MSE=0.3850  patience=89/200  elapsed=174s
+2026-04-11 17:11:29  INFO        ANN Epoch 126/200: train_MSE=0.1441  val_MSE=0.3844  patience=90/200  elapsed=176s
+2026-04-11 17:11:30  INFO        ANN Epoch 127/200: train_MSE=0.1441  val_MSE=0.3836  patience=91/200  elapsed=177s
+2026-04-11 17:11:31  INFO        ANN Epoch 128/200: train_MSE=0.1442  val_MSE=0.3836  patience=92/200  elapsed=179s
+2026-04-11 17:11:33  INFO        ANN Epoch 129/200: train_MSE=0.1440  val_MSE=0.3835  patience=93/200  elapsed=180s
+2026-04-11 17:11:34  INFO        ANN Epoch 130/200: train_MSE=0.1441  val_MSE=0.3833  patience=94/200  elapsed=181s
+2026-04-11 17:11:36  INFO        ANN Epoch 131/200: train_MSE=0.1437  val_MSE=0.3829  patience=95/200  elapsed=183s
+2026-04-11 17:11:37  INFO        ANN Epoch 132/200: train_MSE=0.1436  val_MSE=0.3824  patience=96/200  elapsed=184s
+2026-04-11 17:11:38  INFO        ANN Epoch 133/200: train_MSE=0.1437  val_MSE=0.3836  patience=97/200  elapsed=186s
+2026-04-11 17:11:40  INFO        ANN Epoch 134/200: train_MSE=0.1436  val_MSE=0.3838  patience=98/200  elapsed=187s
+2026-04-11 17:11:41  INFO        ANN Epoch 135/200: train_MSE=0.1436  val_MSE=0.3832  patience=99/200  elapsed=188s
+2026-04-11 17:11:43  INFO        ANN Epoch 136/200: train_MSE=0.1436  val_MSE=0.3830  patience=100/200  elapsed=190s
+2026-04-11 17:11:44  INFO        ANN Epoch 137/200: train_MSE=0.1435  val_MSE=0.3827  patience=101/200  elapsed=191s
+2026-04-11 17:11:45  INFO        ANN Epoch 138/200: train_MSE=0.1434  val_MSE=0.3835  patience=102/200  elapsed=193s
+2026-04-11 17:11:47  INFO        ANN Epoch 139/200: train_MSE=0.1434  val_MSE=0.3831  patience=103/200  elapsed=194s
+2026-04-11 17:11:48  INFO        ANN Epoch 140/200: train_MSE=0.1435  val_MSE=0.3834  patience=104/200  elapsed=195s
+2026-04-11 17:11:49  INFO        ANN Epoch 141/200: train_MSE=0.1434  val_MSE=0.3838  patience=105/200  elapsed=197s
+2026-04-11 17:11:51  INFO        ANN Epoch 142/200: train_MSE=0.1434  val_MSE=0.3840  patience=106/200  elapsed=198s
+2026-04-11 17:11:52  INFO        ANN Epoch 143/200: train_MSE=0.1433  val_MSE=0.3839  patience=107/200  elapsed=199s
+2026-04-11 17:11:54  INFO        ANN Epoch 144/200: train_MSE=0.1432  val_MSE=0.3841  patience=108/200  elapsed=201s
+2026-04-11 17:11:55  INFO        ANN Epoch 145/200: train_MSE=0.1431  val_MSE=0.3841  patience=109/200  elapsed=202s
+2026-04-11 17:11:56  INFO        ANN Epoch 146/200: train_MSE=0.1431  val_MSE=0.3847  patience=110/200  elapsed=204s
+2026-04-11 17:11:58  INFO        ANN Epoch 147/200: train_MSE=0.1430  val_MSE=0.3837  patience=111/200  elapsed=205s
+2026-04-11 17:11:59  INFO        ANN Epoch 148/200: train_MSE=0.1430  val_MSE=0.3835  patience=112/200  elapsed=206s
+2026-04-11 17:12:01  INFO        ANN Epoch 149/200: train_MSE=0.1429  val_MSE=0.3831  patience=113/200  elapsed=208s
+2026-04-11 17:12:02  INFO        ANN Epoch 150/200: train_MSE=0.1429  val_MSE=0.3832  patience=114/200  elapsed=209s
+2026-04-11 17:12:03  INFO        ANN Epoch 151/200: train_MSE=0.1427  val_MSE=0.3827  patience=115/200  elapsed=211s
+2026-04-11 17:12:05  INFO        ANN Epoch 152/200: train_MSE=0.1427  val_MSE=0.3822  patience=116/200  elapsed=212s
+2026-04-11 17:12:06  INFO        ANN Epoch 153/200: train_MSE=0.1426  val_MSE=0.3826  patience=117/200  elapsed=213s
+2026-04-11 17:12:08  INFO        ANN Epoch 154/200: train_MSE=0.1427  val_MSE=0.3828  patience=118/200  elapsed=215s
+2026-04-11 17:12:09  INFO        ANN Epoch 155/200: train_MSE=0.1425  val_MSE=0.3825  patience=119/200  elapsed=216s
+2026-04-11 17:12:10  INFO        ANN Epoch 156/200: train_MSE=0.1425  val_MSE=0.3829  patience=120/200  elapsed=218s
+2026-04-11 17:12:12  INFO        ANN Epoch 157/200: train_MSE=0.1425  val_MSE=0.3831  patience=121/200  elapsed=219s
+2026-04-11 17:12:13  INFO        ANN Epoch 158/200: train_MSE=0.1424  val_MSE=0.3829  patience=122/200  elapsed=220s
+2026-04-11 17:12:15  INFO        ANN Epoch 159/200: train_MSE=0.1423  val_MSE=0.3821  patience=123/200  elapsed=222s
+2026-04-11 17:12:16  INFO        ANN Epoch 160/200: train_MSE=0.1423  val_MSE=0.3826  patience=124/200  elapsed=223s
+2026-04-11 17:12:17  INFO        ANN Epoch 161/200: train_MSE=0.1422  val_MSE=0.3822  patience=125/200  elapsed=225s
+2026-04-11 17:12:19  INFO        ANN Epoch 162/200: train_MSE=0.1422  val_MSE=0.3821  patience=126/200  elapsed=226s
+2026-04-11 17:12:20  INFO        ANN Epoch 163/200: train_MSE=0.1423  val_MSE=0.3827  patience=127/200  elapsed=227s
+2026-04-11 17:12:22  INFO        ANN Epoch 164/200: train_MSE=0.1423  val_MSE=0.3824  patience=128/200  elapsed=229s
+2026-04-11 17:12:23  INFO        ANN Epoch 165/200: train_MSE=0.1421  val_MSE=0.3829  patience=129/200  elapsed=230s
+2026-04-11 17:12:24  INFO        ANN Epoch 166/200: train_MSE=0.1421  val_MSE=0.3822  patience=130/200  elapsed=232s
+2026-04-11 17:12:26  INFO        ANN Epoch 167/200: train_MSE=0.1419  val_MSE=0.3814  patience=131/200  elapsed=233s
+2026-04-11 17:12:27  INFO        ANN Epoch 168/200: train_MSE=0.1420  val_MSE=0.3824  patience=132/200  elapsed=234s
+2026-04-11 17:12:29  INFO        ANN Epoch 169/200: train_MSE=0.1419  val_MSE=0.3821  patience=133/200  elapsed=236s
+2026-04-11 17:12:30  INFO        ANN Epoch 170/200: train_MSE=0.1419  val_MSE=0.3821  patience=134/200  elapsed=237s
+2026-04-11 17:12:31  INFO        ANN Epoch 171/200: train_MSE=0.1418  val_MSE=0.3828  patience=135/200  elapsed=239s
+2026-04-11 17:12:33  INFO        ANN Epoch 172/200: train_MSE=0.1420  val_MSE=0.3818  patience=136/200  elapsed=240s
+2026-04-11 17:12:34  INFO        ANN Epoch 173/200: train_MSE=0.1419  val_MSE=0.3824  patience=137/200  elapsed=241s
+2026-04-11 17:12:36  INFO        ANN Epoch 174/200: train_MSE=0.1419  val_MSE=0.3826  patience=138/200  elapsed=243s
+2026-04-11 17:12:38  INFO        ANN Epoch 175/200: train_MSE=0.1418  val_MSE=0.3822  patience=139/200  elapsed=245s
+2026-04-11 17:12:39  INFO        ANN Epoch 176/200: train_MSE=0.1419  val_MSE=0.3822  patience=140/200  elapsed=246s
+2026-04-11 17:12:41  INFO        ANN Epoch 177/200: train_MSE=0.1417  val_MSE=0.3818  patience=141/200  elapsed=248s
+2026-04-11 17:12:42  INFO        ANN Epoch 178/200: train_MSE=0.1417  val_MSE=0.3824  patience=142/200  elapsed=249s
+2026-04-11 17:12:44  INFO        ANN Epoch 179/200: train_MSE=0.1419  val_MSE=0.3829  patience=143/200  elapsed=251s
+2026-04-11 17:12:45  INFO        ANN Epoch 180/200: train_MSE=0.1418  val_MSE=0.3828  patience=144/200  elapsed=252s
+2026-04-11 17:12:46  INFO        ANN Epoch 181/200: train_MSE=0.1418  val_MSE=0.3824  patience=145/200  elapsed=254s
+2026-04-11 17:12:48  INFO        ANN Epoch 182/200: train_MSE=0.1418  val_MSE=0.3823  patience=146/200  elapsed=255s
+2026-04-11 17:12:49  INFO        ANN Epoch 183/200: train_MSE=0.1418  val_MSE=0.3828  patience=147/200  elapsed=257s
+2026-04-11 17:12:51  INFO        ANN Epoch 184/200: train_MSE=0.1416  val_MSE=0.3818  patience=148/200  elapsed=258s
+2026-04-11 17:12:52  INFO        ANN Epoch 185/200: train_MSE=0.1416  val_MSE=0.3816  patience=149/200  elapsed=259s
+2026-04-11 17:12:54  INFO        ANN Epoch 186/200: train_MSE=0.1416  val_MSE=0.3816  patience=150/200  elapsed=261s
+2026-04-11 17:12:55  INFO        ANN Epoch 187/200: train_MSE=0.1414  val_MSE=0.3811  patience=151/200  elapsed=262s
+2026-04-11 17:12:57  INFO        ANN Epoch 188/200: train_MSE=0.1417  val_MSE=0.3814  patience=0/200  elapsed=264s
+2026-04-11 17:12:58  INFO        ANN Epoch 189/200: train_MSE=0.1416  val_MSE=0.3822  patience=1/200  elapsed=265s
+2026-04-11 17:13:00  INFO        ANN Epoch 190/200: train_MSE=0.1416  val_MSE=0.3819  patience=2/200  elapsed=267s
+2026-04-11 17:13:01  INFO        ANN Epoch 191/200: train_MSE=0.1415  val_MSE=0.3814  patience=3/200  elapsed=268s
+2026-04-11 17:13:03  INFO        ANN Epoch 192/200: train_MSE=0.1415  val_MSE=0.3815  patience=4/200  elapsed=270s
+2026-04-11 17:13:04  INFO        ANN Epoch 193/200: train_MSE=0.1416  val_MSE=0.3817  patience=5/200  elapsed=271s
+2026-04-11 17:13:05  INFO        ANN Epoch 194/200: train_MSE=0.1416  val_MSE=0.3817  patience=6/200  elapsed=273s
+2026-04-11 17:13:07  INFO        ANN Epoch 195/200: train_MSE=0.1415  val_MSE=0.3811  patience=7/200  elapsed=274s
+2026-04-11 17:13:08  INFO        ANN Epoch 196/200: train_MSE=0.1416  val_MSE=0.3820  patience=8/200  elapsed=275s
+2026-04-11 17:13:09  INFO        ANN Epoch 197/200: train_MSE=0.1415  val_MSE=0.3814  patience=9/200  elapsed=277s
+2026-04-11 17:13:11  INFO        ANN Epoch 198/200: train_MSE=0.1414  val_MSE=0.3811  patience=10/200  elapsed=278s
+2026-04-11 17:13:12  INFO        ANN Epoch 199/200: train_MSE=0.1413  val_MSE=0.3811  patience=11/200  elapsed=279s
+2026-04-11 17:13:14  INFO        ANN Epoch 200/200: train_MSE=0.1413  val_MSE=0.3811  patience=12/200  elapsed=281s
+2026-04-11 17:13:14  INFO      ANN reached max_epochs=200 — best val MSE(log)=0.38105
+2026-04-11 17:13:14  INFO      ANN training complete in 280.8s  (stopped epoch 200)
+2026-04-11 17:13:14  INFO      ANN (MLP 128-64)                    | RMSE= 10.330  MAE= 6.659  R²= 0.5386  MedAE= 4.305  sMAPE=40.80%  (excl 3.7% rows <0.5 kWh)
+2026-04-11 17:13:14  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_ann.pkl + model_ann_meta.json
+2026-04-11 17:13:14  INFO      Saved /Users/alii/HEAPO-Predict/outputs/figures/phase7_ann_loss_curves.png
+2026-04-11 17:13:14  INFO      
+============================================================
+2026-04-11 17:13:14  INFO      Task 7.7  Track B Models (Protocol-Enriched, 109 HH, treatment only)
+2026-04-11 17:13:14  INFO      ============================================================
+2026-04-11 17:13:14  INFO      Ridge_B (Track B, 109 HH)           | RMSE= 10.175  MAE= 7.368  R²= 0.5127  MedAE= 5.903  sMAPE=44.05%  (excl 4.1% rows <0.5 kWh)
+2026-04-11 17:13:14  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_ridge_B.pkl
+[0]     validation_0-rmse:18.18141
+[100]   validation_0-rmse:6.15639
+[200]   validation_0-rmse:5.98324
+[300]   validation_0-rmse:5.95148
+[371]   validation_0-rmse:5.94451
+2026-04-11 17:13:16  INFO      XGBoost [Track B] fitted in 2.2s — best_iteration=321, best_val_RMSE=5.9369 kWh
+2026-04-11 17:13:16  INFO      XGBoost_B (Track B, 109 HH)         | RMSE=  5.933  MAE= 3.973  R²= 0.8343  MedAE= 2.600  sMAPE=27.32%  (excl 4.1% rows <0.5 kWh)
+2026-04-11 17:13:16  INFO      Saved /Users/alii/HEAPO-Predict/outputs/models/model_xgboost_B.pkl + .json
+2026-04-11 17:13:16  INFO      XGBoost_A applied to Track B val (for comparison) | RMSE= 23.172  MAE=15.026  R²=-1.5276  MedAE= 6.798  sMAPE=57.58%  (excl 4.1% rows <0.5 kWh)
+2026-04-11 17:13:16  INFO      
+Protocol feature gain: XGBoost_B RMSE=5.933  vs  XGBoost_A (same HH)=23.172 kWh
+2026-04-11 17:13:16  INFO      
+--- Task 7.9  Save val predictions parquet ---
+2026-04-11 17:13:16  INFO      Saved /Users/alii/HEAPO-Predict/outputs/tables/phase7_val_predictions.parquet  shape=(153594, 17)
+2026-04-11 17:13:16  INFO      
+============================================================
+2026-04-11 17:13:16  INFO      Task 7.11  5-Fold CV RMSE — all Track A models
+2026-04-11 17:13:16  INFO      ============================================================
+2026-04-11 17:13:18  INFO      CV RMSE [OLS                 ]: 19.206 ± 2.800 kWh  per fold: [24.598, 16.652, 18.784, 18.505, 17.489]
+2026-04-11 17:13:18  INFO      CV RMSE [Ridge               ]: 19.206 ± 2.800 kWh  per fold: [24.598, 16.652, 18.784, 18.505, 17.489]
+2026-04-11 17:13:22  INFO      CV RMSE [Lasso               ]: 19.074 ± 3.075 kWh  per fold: [25.063, 16.698, 17.24, 18.829, 17.539]
+2026-04-11 17:13:26  INFO      CV RMSE [ElasticNet          ]: 19.053 ± 2.965 kWh  per fold: [24.855, 16.741, 17.486, 18.667, 17.517]
+2026-04-11 17:13:43  INFO      CV RMSE [Decision Tree       ]: 20.192 ± 2.735 kWh  per fold: [25.408, 20.089, 17.754, 19.433, 18.275]
+2026-04-11 17:14:30  INFO      CV RMSE [Random Forest       ]: 18.634 ± 2.750 kWh  per fold: [23.964, 18.281, 16.191, 17.603, 17.133]
+2026-04-11 17:14:30  INFO      Note: XGBoost/LightGBM/ANN CV skipped (require in-fold eval_set — done in Phase 8)
+2026-04-11 17:14:30  INFO      
+--- Task 7.10  Write training report ---
+2026-04-11 17:14:30  INFO      Training report saved → /Users/alii/HEAPO-Predict/outputs/tables/phase7_training_report.txt
+2026-04-11 17:14:30  INFO      
+============================================================
+2026-04-11 17:14:30  INFO      VALIDATION METRICS SUMMARY
+2026-04-11 17:14:30  INFO      ============================================================
+2026-04-11 17:14:30  INFO        Model                                      RMSE     MAE       R²   sMAPE%
+2026-04-11 17:14:30  INFO        ----------------------------------------------------------------------
+2026-04-11 17:14:30  INFO        Baseline: overall mean                   18.683  16.011  -0.5093    75.96%
+2026-04-11 17:14:30  INFO        Baseline: per-HH mean                    17.455  13.790  -0.3174    67.43%
+2026-04-11 17:14:30  INFO        Baseline: HDD-linear                     14.523   9.691   0.0880    61.45%
+2026-04-11 17:14:30  INFO        OLS                                      12.184   7.927   0.3581    48.28%
+2026-04-11 17:14:30  INFO        Ridge                                    12.184   7.927   0.3581    48.28%
+2026-04-11 17:14:30  INFO        Lasso                                    12.209   7.934   0.3555    48.34%
+2026-04-11 17:14:30  INFO        ElasticNet                               12.185   7.918   0.3581    48.24%
+2026-04-11 17:14:30  INFO        Decision Tree                            11.382   8.107   0.4398    49.18%
+2026-04-11 17:14:30  INFO        Random Forest                             9.421   6.348   0.6162    39.88%
+2026-04-11 17:14:30  INFO        XGBoost                                   9.462   6.327   0.6129    41.16%
+2026-04-11 17:14:30  INFO        LightGBM                                  9.318   6.143   0.6246    40.46%
+2026-04-11 17:14:30  INFO        ANN (MLP 128-64)                         10.330   6.659   0.5386    40.80%
+2026-04-11 17:14:30  INFO      
+======================================================================
+2026-04-11 17:14:30  INFO      Phase 7 complete: 2026-04-11 17:14:30
+2026-04-11 17:14:30  INFO      ======================================================================
+(.venv) alii@Muhammads-MacBook-Air-2 scripts % 
