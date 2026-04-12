@@ -1,0 +1,162 @@
+======================================================================================
+  PHASE 9 -- MODEL EVALUATION REPORT
+  HEAPO-Predict  |  Daily Household Heat Pump Electricity Consumption
+  Script : scripts/09_evaluation.py
+  Date   : 2026-04-12
+======================================================================================
+
+======================================================================================
+  1. DATASET SUMMARY
+======================================================================================
+  Test  set : 2023-12-01 -> 2024-03-21  N=74,368  HH=826
+  Val   set : 2023-06-01 -> 2023-11-30  N=153,594
+  Train set : up to 2023-05-31  N=646,258  HH=1,119
+
+  NOTE: Test set is heating season only (Dec-Mar). Target mean = 39.10 kWh/day
+        vs val mean 17.51 kWh/day. Compare R2 across seasons, not absolute RMSE.
+
+======================================================================================
+  2. TEST SET PERFORMANCE
+======================================================================================
+  Model                            RMSE      MAE       R2   sMAPE%    MedAE        N
+  ----------------------------------------------------------------------
+  RF                             11.540    7.470   0.7284    21.27    4.790    74368
+  XGBoost                        11.587    7.817   0.7262    22.38    5.317    74368
+  LightGBM                       11.653    7.811   0.7230    22.33    5.281    74368
+  DT                             14.438    9.495   0.5748    26.42    6.210    74368
+  ANN                            15.563   10.820   0.5060    30.52    7.498    74368
+  Baseline: Per-HH Mean          20.320   14.445   0.1578    41.89   10.225    74368
+  ElasticNet                     20.401   14.217   0.1511    38.47   10.041    74368
+  Baseline: HDD-Linear           21.078   15.099   0.0938    39.99   11.441    74368
+  Baseline: Global Mean          24.606   17.015  -0.2349    45.74   12.024    74368
+  XGBoost B                       8.419    6.058   0.8473    16.08    4.497     5475
+
+======================================================================================
+  3. VALIDATION SET PERFORMANCE (vs Phase 7 baseline)
+======================================================================================
+  Model                            RMSE      MAE       R2   sMAPE%    MedAE        N
+  ----------------------------------------------------------------------
+  RF                              7.808    4.988   0.7364    32.79    3.249   153594
+  XGBoost                         7.836    5.172   0.7345    34.54    3.509   153594
+  LightGBM                        7.916    5.202   0.7291    34.71    3.537   153594
+  DT                              9.234    5.899   0.6313    37.16    3.811   153594
+  ANN                             9.871    6.398   0.5787    40.41    4.177   153594
+  ElasticNet                     12.176    7.915   0.3590    48.22    5.517   153594
+  Baseline: HDD-Linear           14.523    9.691   0.0880    61.45    6.676   153594
+  Baseline: Per-HH Mean          17.455   13.790  -0.3174    67.43   11.949   153594
+  Baseline: Global Mean          18.683   16.011  -0.5093    75.96   16.016   153594
+  XGBoost B                       5.807    4.041   0.8413    27.97    2.806    11281
+
+  Improvement vs Phase 7 val RMSE:
+    RF                            Phase7=9.421  Phase9=7.808  delta=+1.613
+    XGBoost                       Phase7=9.462  Phase9=7.836  delta=+1.626
+    LightGBM                      Phase7=9.318  Phase9=7.916  delta=+1.402
+    DT                            Phase7=11.382  Phase9=9.234  delta=+2.148
+    ANN                           Phase7=10.330  Phase9=9.871  delta=+0.459
+    ElasticNet                    Phase7=12.185  Phase9=12.176  delta=+0.009
+    XGBoost B                     Phase7=5.933  Phase9=5.807  delta=+0.126
+
+======================================================================================
+  4. SEASONAL BREAKDOWN (Val Set)
+======================================================================================
+  Model                         Period                           RMSE       R2       N
+  --------------------------------------------------------------------------------
+  ElasticNet                    Non-Heating (May-Sep)          10.466   0.1855  103237
+  ElasticNet                    Transition (Oct-Nov)           15.087   0.2858   50357
+  DT                            Non-Heating (May-Sep)           7.884   0.5378  103237
+  DT                            Transition (Oct-Nov)           11.517   0.5838   50357
+  RF                            Non-Heating (May-Sep)           6.892   0.6468  103237
+  RF                            Transition (Oct-Nov)            9.410   0.7221   50357
+  XGBoost                       Non-Heating (May-Sep)           7.020   0.6335  103237
+  XGBoost                       Transition (Oct-Nov)            9.288   0.7293   50357
+  LightGBM                      Non-Heating (May-Sep)           7.056   0.6298  103237
+  LightGBM                      Transition (Oct-Nov)            9.436   0.7206   50357
+  ANN                           Non-Heating (May-Sep)           8.573   0.4536  103237
+  ANN                           Transition (Oct-Nov)           12.104   0.5403   50357
+  Baseline: Global Mean         Non-Heating (May-Sep)          19.013  -1.6879  103237
+  Baseline: Global Mean         Transition (Oct-Nov)           17.989  -0.0154   50357
+  Baseline: Per-HH Mean         Non-Heating (May-Sep)          18.789  -1.6250  103237
+  Baseline: Per-HH Mean         Transition (Oct-Nov)           14.338   0.3549   50357
+  Baseline: HDD-Linear          Non-Heating (May-Sep)          12.918  -0.2408  103237
+  Baseline: HDD-Linear          Transition (Oct-Nov)           17.356   0.0548   50357
+
+  Test Set Month-Level Breakdown:
+  Model                         Period                           RMSE       R2       N
+  --------------------------------------------------------------------------------
+  ElasticNet                    Peak Winter (Dec-Feb)          20.401   0.1511   74368
+  DT                            Peak Winter (Dec-Feb)          14.438   0.5748   74368
+  RF                            Peak Winter (Dec-Feb)          11.540   0.7284   74368
+  XGBoost                       Peak Winter (Dec-Feb)          11.587   0.7262   74368
+  LightGBM                      Peak Winter (Dec-Feb)          11.653   0.7230   74368
+  ANN                           Peak Winter (Dec-Feb)          15.563   0.5060   74368
+  Baseline: Global Mean         Peak Winter (Dec-Feb)          24.606  -0.2349   74368
+  Baseline: Per-HH Mean         Peak Winter (Dec-Feb)          20.320   0.1578   74368
+  Baseline: HDD-Linear          Peak Winter (Dec-Feb)          21.078   0.0938   74368
+
+======================================================================================
+  5. CROSS-VALIDATION ROBUSTNESS (Train Set, 5-Fold GroupKFold)
+======================================================================================
+  Model                         CV_RMSE_Mean   CV_RMSE_Std
+--------------------------------------------------------------------------------------
+  XGBoost                             16.599         1.647
+  LightGBM                            16.631         1.917
+  RF                                  16.797         1.741
+  ElasticNet                          19.101         2.853
+  DT                                  20.539         1.960
+  ANN                                 24.316         2.440
+
+======================================================================================
+  6. FEATURE-SET ABLATION
+======================================================================================
+  Config                          Model            RMSE      MAE       R2
+  -----------------------------------------------------------------
+  A: SMD+Weather                  LightGBM       17.243   12.258   0.3936
+  A: SMD+Weather                  RF             16.704   12.126   0.4309
+  B: +Metadata (Full)             LightGBM       12.206    8.465   0.6961
+  B: +Metadata (Full)             RF             11.546    7.477   0.7281
+  B-109: +Metadata (109 HH)       LightGBM        8.431    6.055   0.8471
+  C: +Protocol (Track B)          LightGBM        8.571    6.181   0.8417
+
+======================================================================================
+  7. STATISTICAL SIGNIFICANCE (Wilcoxon Signed-Rank, Test Set)
+======================================================================================
+  Bonferroni threshold: alpha=0.05/15=0.0033
+  Statistically significant pairs (15):
+  ElasticNet vs DT: p=0.0000 (sig)
+  ElasticNet vs RF: p=0.0000 (sig)
+  ElasticNet vs XGBoost: p=0.0000 (sig)
+  ElasticNet vs LightGBM: p=0.0000 (sig)
+  ElasticNet vs ANN: p=0.0000 (sig)
+  DT vs RF: p=0.0000 (sig)
+  DT vs XGBoost: p=0.0000 (sig)
+  DT vs LightGBM: p=0.0000 (sig)
+  DT vs ANN: p=0.0000 (sig)
+  RF vs XGBoost: p=0.0000 (sig)
+  RF vs LightGBM: p=0.0000 (sig)
+  RF vs ANN: p=0.0000 (sig)
+  XGBoost vs LightGBM: p=0.0000 (sig)
+  XGBoost vs ANN: p=0.0000 (sig)
+  LightGBM vs ANN: p=0.0000 (sig)
+
+======================================================================================
+  8. KEY FINDINGS
+======================================================================================
+  Best overall model : RF
+    Test  RMSE=11.540 kWh  MAE=7.470  R2=0.7284
+    Val   RMSE=7.808 kWh  R2=0.7364
+
+  Linear models plateau ~12 kWh RMSE -- confirmed by ElasticNet tuning.
+  Protocol features (Track B) provide additional signal for treatment HH.
+
+======================================================================================
+  9. LIMITATIONS AND CAVEATS
+======================================================================================
+  - Test set covers heating season only (Dec-Mar). Val set used for non-heating assessment.
+  - PV self-consumed energy is invisible in kWh_received_Total (36.65% of HH).
+  - Track B trains on 109 HH. CV is more reliable than a single test-set read-out.
+  - All households in canton Zurich (8 weather stations). Geographic scope limited.
+  - Building age available only for 214 treatment HH (protocol data).
+
+======================================================================================
+  Total elapsed: 2324 s
+======================================================================================

@@ -23,6 +23,12 @@ modeling:
 evaluation:
   mape_floor_kwh: 0.5                  # exclude days below this threshold from MAPE/sMAPE
                                        # avoids division by near-zero values inflating %error
+  cv_n_splits: 5                       # GroupKFold splits for cross-validation reporting
+  stat_test_alpha: 0.05                # Wilcoxon / Mann-Whitney significance threshold
+  ts_sample_households: 6              # households to show in time-series visualisation
+  ts_sample_seed: 42                   # seed for household sampling
+  n_bootstrap: 1000                    # bootstrap iterations for confidence intervals
+  bootstrap_seed: 42
 
 cleaning:
   smd_hard_cap_kwh: 500                # any day above this is a meter error (99th pct = 106 kWh)

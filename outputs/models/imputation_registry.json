@@ -1,0 +1,54 @@
+{
+  "Survey_Building_LivingArea": {
+    "strategy": "median",
+    "value": 180.0,
+    "fitted_on": "train_full",
+    "rows_imputed_train": 17035
+  },
+  "Survey_Building_Residents": {
+    "strategy": "median",
+    "value": 2.0,
+    "fitted_on": "train_full",
+    "rows_imputed_train": 10677
+  },
+  "power_factor_proxy": {
+    "strategy": "zero_for_all_nulls",
+    "value": 0.0,
+    "rows_imputed_train": 310055
+  },
+  "hp_age": {
+    "strategy": "median",
+    "value": 7.0,
+    "fitted_on": "train_protocol",
+    "rows_imputed_train": 21603
+  },
+  "building_age": {
+    "strategy": "median",
+    "value": 40.0,
+    "fitted_on": "train_protocol",
+    "rows_imputed_train": 3855
+  },
+  "hp_capacity_per_area": {
+    "strategy": "median",
+    "value": 0.05333333333333334,
+    "fitted_on": "train_protocol",
+    "rows_imputed_train": 2547
+  },
+  "heating_curve_gradient_cols": {
+    "strategy": "median_per_column",
+    "values": {
+      "heating_curve_gradient_upper": 0.75,
+      "heating_curve_gradient_lower": 0.625,
+      "heating_curve_gradient_full": 0.7142857142857143,
+      "heating_curve_nonlinearity": -0.07499999999999996
+    },
+    "fitted_on": "train_protocol",
+    "rows_imputed_train": 960
+  },
+  "hp_internet_connection": {
+    "strategy": "mode",
+    "value": 0.0,
+    "fitted_on": "train_protocol",
+    "rows_imputed_train": 13985
+  }
+}

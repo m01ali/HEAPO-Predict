@@ -1,0 +1,256 @@
+
+======================================================================
+HEAPO-Predict — Phase 10: Interpretability Analysis Report
+======================================================================
+Models: ElasticNet, DT, RF, XGBoost, LightGBM, ANN, XGBoost B
+Test set: Dec 2023 – Mar 2024  |  N=74,368 rows (Track A)
+
+======================================================================
+Section 1 — Permutation Importance Summary (top 10 features per model)
+======================================================================
+
+--------------------------------------------------
+ANN
+--------------------------------------------------
+  Survey_Building_LivingArea                mean RMSE↑ = +9.863 kWh  ± 0.307
+  dhw_ewh                                   mean RMSE↑ = +7.575 kWh  ± 0.128
+  Survey_Building_Residents                 mean RMSE↑ = +6.871 kWh  ± 0.146
+  dhw_hp                                    mean RMSE↑ = +5.136 kWh  ± 0.039
+  has_pv                                    mean RMSE↑ = +4.512 kWh  ± 0.035
+  hp_type_air_source                        mean RMSE↑ = +3.765 kWh  ± 0.039
+  has_ev                                    mean RMSE↑ = +3.604 kWh  ± 0.055
+  heat_dist_floor                           mean RMSE↑ = +3.517 kWh  ± 0.043
+  hp_type_unknown                           mean RMSE↑ = +3.416 kWh  ± 0.906
+  heat_dist_both                            mean RMSE↑ = +2.979 kWh  ± 0.036
+
+--------------------------------------------------
+DT
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean RMSE↑ = +13.739 kWh  ± 0.054
+  kvarh_received_capacitive_Total           mean RMSE↑ = +8.780 kWh  ± 0.083
+  Survey_Building_LivingArea                mean RMSE↑ = +6.747 kWh  ± 0.093
+  Survey_Building_Residents                 mean RMSE↑ = +3.175 kWh  ± 0.042
+  dhw_ewh                                   mean RMSE↑ = +2.226 kWh  ± 0.063
+  has_pv                                    mean RMSE↑ = +2.164 kWh  ± 0.054
+  temp_avg_rolling_3d                       mean RMSE↑ = +1.726 kWh  ± 0.047
+  hp_type_air_source                        mean RMSE↑ = +1.582 kWh  ± 0.028
+  heat_dist_radiator                        mean RMSE↑ = +1.475 kWh  ± 0.037
+  dhw_hp                                    mean RMSE↑ = +1.214 kWh  ± 0.044
+
+--------------------------------------------------
+ElasticNet
+--------------------------------------------------
+  Survey_Building_LivingArea                mean RMSE↑ = +2.222 kWh  ± 0.026
+  dhw_ewh                                   mean RMSE↑ = +1.414 kWh  ± 0.023
+  dhw_hp                                    mean RMSE↑ = +1.376 kWh  ± 0.013
+  temp_avg_rolling_7d                       mean RMSE↑ = +0.835 kWh  ± 0.013
+  HDD_SIA_daily                             mean RMSE↑ = +0.428 kWh  ± 0.009
+  has_pv                                    mean RMSE↑ = +0.339 kWh  ± 0.018
+  Survey_Building_Residents                 mean RMSE↑ = +0.296 kWh  ± 0.008
+  has_dryer                                 mean RMSE↑ = +0.262 kWh  ± 0.011
+  hp_type_air_source                        mean RMSE↑ = +0.206 kWh  ± 0.006
+  has_ev                                    mean RMSE↑ = +0.196 kWh  ± 0.006
+
+--------------------------------------------------
+LightGBM
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean RMSE↑ = +12.139 kWh  ± 0.064
+  kvarh_received_capacitive_Total           mean RMSE↑ = +5.956 kWh  ± 0.038
+  Survey_Building_LivingArea                mean RMSE↑ = +5.852 kWh  ± 0.041
+  Survey_Building_Residents                 mean RMSE↑ = +1.997 kWh  ± 0.019
+  has_ev                                    mean RMSE↑ = +1.220 kWh  ± 0.020
+  has_pv                                    mean RMSE↑ = +1.217 kWh  ± 0.023
+  heat_dist_radiator                        mean RMSE↑ = +1.112 kWh  ± 0.014
+  dhw_ewh                                   mean RMSE↑ = +0.816 kWh  ± 0.031
+  temp_avg_lag_1d                           mean RMSE↑ = +0.776 kWh  ± 0.017
+  has_dryer                                 mean RMSE↑ = +0.684 kWh  ± 0.006
+
+--------------------------------------------------
+RF
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean RMSE↑ = +9.886 kWh  ± 0.056
+  Survey_Building_LivingArea                mean RMSE↑ = +5.568 kWh  ± 0.031
+  kvarh_received_capacitive_Total           mean RMSE↑ = +3.417 kWh  ± 0.027
+  Survey_Building_Residents                 mean RMSE↑ = +1.735 kWh  ± 0.012
+  has_pv                                    mean RMSE↑ = +1.306 kWh  ± 0.023
+  has_ev                                    mean RMSE↑ = +1.011 kWh  ± 0.016
+  temp_avg_rolling_3d                       mean RMSE↑ = +0.824 kWh  ± 0.018
+  temp_avg_lag_1d                           mean RMSE↑ = +0.797 kWh  ± 0.020
+  hp_type_ground_source                     mean RMSE↑ = +0.746 kWh  ± 0.008
+  has_dryer                                 mean RMSE↑ = +0.730 kWh  ± 0.007
+
+--------------------------------------------------
+XGBoost
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean RMSE↑ = +10.764 kWh  ± 0.051
+  Survey_Building_LivingArea                mean RMSE↑ = +5.594 kWh  ± 0.046
+  kvarh_received_capacitive_Total           mean RMSE↑ = +4.800 kWh  ± 0.034
+  Survey_Building_Residents                 mean RMSE↑ = +1.692 kWh  ± 0.014
+  has_pv                                    mean RMSE↑ = +1.436 kWh  ± 0.025
+  has_ev                                    mean RMSE↑ = +1.228 kWh  ± 0.016
+  heat_dist_radiator                        mean RMSE↑ = +0.906 kWh  ± 0.011
+  temp_avg_lag_1d                           mean RMSE↑ = +0.861 kWh  ± 0.016
+  dhw_ewh                                   mean RMSE↑ = +0.724 kWh  ± 0.024
+  temp_avg_rolling_3d                       mean RMSE↑ = +0.635 kWh  ± 0.013
+
+======================================================================
+Section 2 — SHAP Global Findings (top 5 features by mean |SHAP|)
+======================================================================
+
+--------------------------------------------------
+ANN
+--------------------------------------------------
+  dhw_ewh                                   mean |SHAP| = 6.018
+  temp_avg_rolling_7d                       mean |SHAP| = 4.197
+  dhw_hp                                    mean |SHAP| = 4.189
+  Survey_Building_LivingArea                mean |SHAP| = 3.607
+  Survey_Building_Residents                 mean |SHAP| = 2.107
+
+--------------------------------------------------
+DT
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean |SHAP| = 8.659
+  temp_avg_lag_1d                           mean |SHAP| = 6.962
+  kvarh_received_capacitive_Total           mean |SHAP| = 3.938
+  Survey_Building_LivingArea                mean |SHAP| = 3.640
+  temp_avg_rolling_3d                       mean |SHAP| = 2.615
+
+--------------------------------------------------
+ElasticNet
+--------------------------------------------------
+  temp_avg_rolling_7d                       mean |SHAP| = 0.173
+  dhw_ewh                                   mean |SHAP| = 0.166
+  has_pv                                    mean |SHAP| = 0.145
+  dhw_hp                                    mean |SHAP| = 0.120
+  Survey_Building_LivingArea                mean |SHAP| = 0.099
+
+--------------------------------------------------
+LightGBM
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean |SHAP| = 8.653
+  kvarh_received_capacitive_Total           mean |SHAP| = 3.964
+  Survey_Building_LivingArea                mean |SHAP| = 3.791
+  temp_avg_lag_1d                           mean |SHAP| = 3.085
+  temp_avg_rolling_3d                       mean |SHAP| = 2.540
+
+--------------------------------------------------
+RF
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean |SHAP| = 0.258
+  Survey_Building_LivingArea                mean |SHAP| = 0.155
+  temp_avg_lag_1d                           mean |SHAP| = 0.121
+  temp_avg_rolling_3d                       mean |SHAP| = 0.082
+  kvarh_received_capacitive_Total           mean |SHAP| = 0.057
+
+--------------------------------------------------
+XGBoost
+--------------------------------------------------
+  kvarh_received_inductive_Total            mean |SHAP| = 7.743
+  Survey_Building_LivingArea                mean |SHAP| = 3.744
+  kvarh_received_capacitive_Total           mean |SHAP| = 3.409
+  temp_avg_lag_1d                           mean |SHAP| = 3.050
+  temp_avg_rolling_3d                       mean |SHAP| = 2.685
+
+======================================================================
+Section 3 — Local Prediction Explanations (RF, 4 representative cases)
+======================================================================
+
+--------------------------------------------------
+High Consumption — Accurate
+--------------------------------------------------
+  Household_ID : 102113
+  Date         : 2023-12-27 00:00:00+01:00
+  y_true       : 72.56 kWh
+  RF prediction: 71.60 kWh
+  Error (pred-actual): -0.96 kWh
+
+--------------------------------------------------
+Low Consumption — Accurate
+--------------------------------------------------
+  Household_ID : 101707
+  Date         : 2024-01-07 00:00:00+01:00
+  y_true       : 14.49 kWh
+  RF prediction: 15.80 kWh
+  Error (pred-actual): +1.31 kWh
+
+--------------------------------------------------
+Large Under-Prediction (model too low)
+--------------------------------------------------
+  Household_ID : 100721
+  Date         : 2024-01-23 00:00:00+01:00
+  y_true       : 61.83 kWh
+  RF prediction: 43.53 kWh
+  Error (pred-actual): -18.30 kWh
+
+--------------------------------------------------
+Large Over-Prediction (model too high)
+--------------------------------------------------
+  Household_ID : 1060
+  Date         : 2024-01-07 00:00:00+01:00
+  y_true       : 32.06 kWh
+  RF prediction: 48.33 kWh
+  Error (pred-actual): +16.27 kWh
+
+======================================================================
+Section 4 — Decision Tree Root Split
+======================================================================
+  Root split: temp_avg_lag_1d <= 8.7500
+  Left branch (heating off):  281,006 samples (43.5%)
+  Right branch (heating on):  280,483 samples (43.4%)
+
+  Tree structure (first 2 levels):
+  Node 0: temp_avg_lag_1d <= 8.7500
+    Node 1: kvarh_received_inductive_Total <= 86.4550
+    Node 7566: kvarh_received_inductive_Total <= 15.2850
+
+======================================================================
+Section 5 — Cross-Model Feature Ranking Consistency (Spearman ρ)
+======================================================================
+                       ANN            DT    ElasticNet      LightGBM            RF       XGBoost
+         ANN         1.000         0.902         0.620         0.788         0.767         0.869
+          DT         0.902         1.000         0.601         0.876         0.890         0.949
+  ElasticNet         0.620         0.601         1.000         0.584         0.659         0.591
+    LightGBM         0.788         0.876         0.584         1.000         0.961         0.905
+          RF         0.767         0.890         0.659         0.961         1.000         0.891
+     XGBoost         0.869         0.949         0.591         0.905         0.891         1.000
+
+  Most similar pair: LightGBM vs RF  ρ = 0.961
+
+======================================================================
+Section 6 — Track B XGBoost B SHAP (Protocol Features)
+======================================================================
+  Top 10 features by mean |SHAP| (XGBoost B, test_protocol, N=5,475):
+
+  # 1  kvarh_received_inductive_Total                      mean |SHAP| = 6.187
+  # 2  temp_avg_rolling_3d                                 mean |SHAP| = 3.709
+  # 3  temp_avg_lag_1d                                     mean |SHAP| = 3.602
+  # 4  HeatPump_Installation_HeatingCapacity               mean |SHAP| = 3.072  [P]
+  # 5  day_of_year                                         mean |SHAP| = 2.188
+  # 6  temp_avg_rolling_7d                                 mean |SHAP| = 1.954
+  # 7  hp_capacity_per_area                                mean |SHAP| = 1.286  [P]
+  # 8  Survey_Building_LivingArea                          mean |SHAP| = 1.275
+  # 9  kvarh_received_capacitive_Total                     mean |SHAP| = 1.038
+  #10  Building_FloorAreaHeated_GroundFloor                mean |SHAP| = 0.896  [P]
+
+  Protocol-specific features in top 10: 3/10
+
+======================================================================
+Section 7 — Accuracy–Interpretability Tradeoff Summary
+======================================================================
+  Test RMSE by model (Dec 2023 – Mar 2024):
+    RF         : 11.54 kWh  R²=0.728  (best Track A)
+    XGBoost    : 11.59 kWh  R²=0.726
+    LightGBM   : 11.65 kWh  R²=0.723
+    DT         : 14.44 kWh  R²=0.575  (best transparent model)
+    ANN        : 15.56 kWh  R²=0.506
+    ElasticNet : 20.40 kWh  R²=0.151  (no better than baselines)
+    XGBoost B  :  8.42 kWh  R²=0.847  (Track B, 109 HH)
+
+  Cost of choosing DT over RF: +2.90 kWh RMSE (+25.1%)
+  Cost of choosing ElasticNet over DT: +5.96 kWh RMSE (+41.3%)
+
+  Recommendation: RF with SHAP explanations provides near-optimal accuracy
+  with post-hoc interpretability for individual predictions.
+  For operational deployment at scale (utility forecasting), RF + SHAP is the
+  preferred choice. For regulatory reporting requiring full transparency,
+  the DT provides rule-based explanations at a 25% accuracy penalty.
