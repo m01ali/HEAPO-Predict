@@ -409,6 +409,80 @@ def fit_lightgbm(
 
 
 # ---------------------------------------------------------------------------
+# Track B — Decision Tree
+# ---------------------------------------------------------------------------
+
+def fit_decision_tree_b(
+    X_train: np.ndarray | pd.DataFrame,
+    y_train: np.ndarray,
+    random_state: int = 42,
+) -> DecisionTreeRegressor:
+    """Fit a Decision Tree on Track B's 75-feature protocol set (raw kWh target).
+
+    Same architecture as fit_decision_tree (Track A). max_features=None already
+    evaluates all features per split regardless of count, so no parameter change
+    is needed when moving from 45 to 75 features.
+    """
+    t0 = time.perf_counter()
+    dt = DecisionTreeRegressor(
+        max_depth=8,
+        min_samples_split=20,
+        min_samples_leaf=10,
+        max_features=None,
+        random_state=random_state,
+    )
+    dt.fit(X_train, y_train)
+    elapsed = time.perf_counter() - t0
+
+    train_r2 = float(dt.score(X_train, y_train))
+    logger.info(
+        f"DT_B fitted in {elapsed:.1f}s — "
+        f"depth={dt.get_depth()}, leaves={dt.get_n_leaves()}, "
+        f"train_R²={train_r2:.4f}  "
+        f"(high train R² on 109-HH sample is expected)"
+    )
+    return dt
+
+
+# ---------------------------------------------------------------------------
+# Track B — Random Forest
+# ---------------------------------------------------------------------------
+
+def fit_random_forest_b(
+    X_train: np.ndarray | pd.DataFrame,
+    y_train: np.ndarray,
+    random_state: int = 42,
+) -> RandomForestRegressor:
+    """Fit a Random Forest on Track B's 75-feature protocol set (raw kWh target).
+
+    max_features='sqrt' auto-adapts: sqrt(75) ≈ 9 features per split vs
+    sqrt(45) ≈ 6 for Track A. oob_score=True provides a free internal
+    validation signal useful on the small 109-household Track B sample.
+    Training on 60k rows is ~1-3 min on CPU (vs ~15 min for Track A RF).
+    """
+    t0 = time.perf_counter()
+    rf = RandomForestRegressor(
+        n_estimators=300,
+        max_depth=None,
+        min_samples_split=5,
+        min_samples_leaf=3,
+        max_features="sqrt",
+        oob_score=True,
+        n_jobs=-1,
+        verbose=1,
+        random_state=random_state,
+    )
+    rf.fit(X_train, y_train)
+    elapsed = time.perf_counter() - t0
+
+    logger.info(
+        f"RF_B fitted in {elapsed:.1f}s — "
+        f"OOB R²={rf.oob_score_:.4f}"
+    )
+    return rf
+
+
+# ---------------------------------------------------------------------------
 # Cross-validation
 # ---------------------------------------------------------------------------
 

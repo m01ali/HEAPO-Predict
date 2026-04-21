@@ -84,3 +84,4 @@ data/processed/
 # Large model files (too big for GitHub, retrain locally)
 outputs/models/model_rf.pkl
 outputs/models/model_rf_tuned.pkl
+outputs/models/*.pkl

@@ -94,3 +94,97 @@ SECTION 7 — PHASE 8 READINESS CHECKLIST
   [ ] model_ann_state_dict.pt             — ANN — starting 128-64 arch, needs tuning
 
 ========================================================================
+
+========================================================================
+HEAPO-Predict Phase 7 — Model Training Report
+Generated : 2026-04-21 14:57:39
+Tracks    : ['B']
+Track A   : none
+Track B   : ['dt_b', 'rf_b']
+========================================================================
+
+SECTION 1B — TRACK B INPUT DATA SUMMARY
+  Track B  train :   60,636 rows,  109 HH  (treatment only)
+  Track B  val   :   11,281 rows,    64 HH
+  Track B  test  :    5,475 rows,     61 HH
+  Target mean  train/val (Track B): 31.05 / 17.92 kWh/day
+
+SECTION 3 — TRACK B VALIDATION METRICS (protocol-enriched, 109 HH training, 64 HH val)
+  NOTE: Small val set (64 HH) — metric variance is ±3-6 kWh/fold. Interpret with caution.
+  Model                                            RMSE      MAE       R²   sMAPE%   Time(s)
+  ------------------------------------------------------------------------------------
+  DT_B (Track B, 109 HH)                          8.753    6.566   0.6393    39.74       0.9
+  RF_B (Track B, 109 HH)                          6.731    4.612   0.7867    28.82       9.4
+  XGBoost_A on Track B val (comparison)          23.172   15.026  -1.5276    57.58         —
+
+SECTION 5 — TRAINING TIMES
+  dt_B                          :      0.9s
+  rf_B                          :      9.4s
+
+SECTION 6 — MODEL ARTIFACTS SAVED
+  outputs/models/model_dt_B.pkl
+  outputs/models/model_rf_B.pkl
+  outputs/tables/phase7_val_predictions_B.parquet
+
+SECTION 7 — PHASE 8 READINESS CHECKLIST
+  [x] model_ridge.pkl                     — Ridge — starting alpha=1.0, needs tuning
+  [x] model_lasso.pkl                     — Lasso — starting alpha=0.01, needs tuning
+  [x] model_elasticnet.pkl                — ElasticNet — starting alpha=0.01 l1=0.5, needs tuning
+  [x] model_dt.pkl                        — DT — starting max_depth=8, needs tuning
+  [x] model_rf.pkl                        — RF — starting 300 trees, needs tuning
+  [x] model_xgboost.pkl                   — XGBoost — starting params, needs tuning
+  [x] model_lgbm.pkl                      — LightGBM — starting params, needs tuning
+  [x] model_ann.pkl                       — ANN — starting 128-64 arch, needs tuning
+  [x] model_xgboost_B.pkl                 — XGBoost_B — starting params, needs tuning
+  [x] model_ridge_B.pkl                   — Ridge_B — starting alpha=1.0, needs tuning
+  [x] model_dt_B.pkl                      — DT_B (Phase 7.1) — starting max_depth=8, needs tuning
+  [x] model_rf_B.pkl                      — RF_B (Phase 7.1) — starting 300 trees, needs tuning
+
+========================================================================
+
+========================================================================
+HEAPO-Predict Phase 7 — Model Training Report
+Generated : 2026-04-21 14:58:52
+Tracks    : ['B']
+Track A   : none
+Track B   : ['dt_b', 'rf_b']
+========================================================================
+
+SECTION 1B — TRACK B INPUT DATA SUMMARY
+  Track B  train :   60,636 rows,  109 HH  (treatment only)
+  Track B  val   :   11,281 rows,    64 HH
+  Track B  test  :    5,475 rows,     61 HH
+  Target mean  train/val (Track B): 31.05 / 17.92 kWh/day
+
+SECTION 3 — TRACK B VALIDATION METRICS (protocol-enriched, 109 HH training, 64 HH val)
+  NOTE: Small val set (64 HH) — metric variance is ±3-6 kWh/fold. Interpret with caution.
+  Model                                            RMSE      MAE       R²   sMAPE%   Time(s)
+  ------------------------------------------------------------------------------------
+  DT_B (Track B, 109 HH)                          8.753    6.566   0.6393    39.74       0.9
+  RF_B (Track B, 109 HH)                          6.731    4.612   0.7867    28.82       9.3
+  XGBoost_A on Track B val (comparison)          23.172   15.026  -1.5276    57.58         —
+
+SECTION 5 — TRAINING TIMES
+  dt_B                          :      0.9s
+  rf_B                          :      9.3s
+
+SECTION 6 — MODEL ARTIFACTS SAVED
+  outputs/models/model_dt_B.pkl
+  outputs/models/model_rf_B.pkl
+  outputs/tables/phase7_val_predictions_B.parquet
+
+SECTION 7 — PHASE 8 READINESS CHECKLIST
+  [x] model_ridge.pkl                     — Ridge — starting alpha=1.0, needs tuning
+  [x] model_lasso.pkl                     — Lasso — starting alpha=0.01, needs tuning
+  [x] model_elasticnet.pkl                — ElasticNet — starting alpha=0.01 l1=0.5, needs tuning
+  [x] model_dt.pkl                        — DT — starting max_depth=8, needs tuning
+  [x] model_rf.pkl                        — RF — starting 300 trees, needs tuning
+  [x] model_xgboost.pkl                   — XGBoost — starting params, needs tuning
+  [x] model_lgbm.pkl                      — LightGBM — starting params, needs tuning
+  [x] model_ann.pkl                       — ANN — starting 128-64 arch, needs tuning
+  [x] model_xgboost_B.pkl                 — XGBoost_B — starting params, needs tuning
+  [x] model_ridge_B.pkl                   — Ridge_B — starting alpha=1.0, needs tuning
+  [x] model_dt_B.pkl                      — DT_B (Phase 7.1) — starting max_depth=8, needs tuning
+  [x] model_rf_B.pkl                      — RF_B (Phase 7.1) — starting 300 trees, needs tuning
+
+========================================================================

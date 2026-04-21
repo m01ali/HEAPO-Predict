@@ -1,16 +1,11 @@
 ======================================================================
 HEAPO-Predict  Phase 8 — Hyperparameter Tuning Report
-Generated: 2026-04-12 01:52:41
+Generated: 2026-04-21 15:46:57
 ======================================================================
 
-SECTION 1 — TUNING BUDGET AND WALL-CLOCK TIME
-  ElasticNet  :  30 trials       0s
-  DT          :  40 trials       0s
-  XGBoost_B   :  40 trials       0s
-  XGBoost     :  80 trials       0s
-  LightGBM    :  80 trials       0s
-  ANN         :  60 trials       0s
-  RF          :  60 trials       0s
+SECTION 1 — TUNING BUDGET AND WALL-CLOCK TIME  (this session only)
+  DT_B        :  30 trials      26s
+  RF_B        :  40 trials     164s
 
 SECTION 2 — BEST HYPERPARAMETERS
 
@@ -71,16 +66,24 @@ SECTION 2 — BEST HYPERPARAMETERS
     max_features              = 0.5
     bootstrap                 = False
 
+  [DT_B]
+    max_depth                 = 15
+    min_samples_split         = 37
+    min_samples_leaf          = 5
+    max_features              = None
+
+  [RF_B]
+    max_depth                 = None
+    min_samples_split         = 16
+    min_samples_leaf          = 1
+    max_features              = 0.5
+    bootstrap                 = True
+
 SECTION 3 — VAL RMSE: PHASE 7 vs PHASE 8
   Model                            P7 val RMSE   P8 val RMSE     Delta
   --------------------------------------------------------------------
-  ElasticNet                            12.185        12.176   -0.009 ↓
-  DT                                    11.382         9.795   -1.587 ↓
-  RF                                     9.421         8.503   -0.918 ↓
-  XGBoost                                9.462         8.340   -1.122 ↓
-  LightGBM                               9.318         8.358   -0.960 ↓
-  ANN                                   10.330         9.638   -0.692 ↓
-  XGBoost_B                              5.933         5.789   -0.144 ↓
+  DT_B                                   8.753         7.237   -1.516 ↓
+  RF_B                                   6.731         6.299   -0.432 ↓
 
 SECTION 4 — VALIDATION SET METRICS (Tuned Models)
   Model                                        RMSE      MAE       R²    sMAPE%
@@ -91,7 +94,9 @@ SECTION 4 — VALIDATION SET METRICS (Tuned Models)
   XGBoost_tuned [VAL]                         8.340    5.282   0.6992    34.59%
   LightGBM_tuned [VAL]                        8.358    5.351   0.6979    35.43%
   ANN_tuned [VAL]                             9.871    6.398   0.5787    40.41%
-  XGBoost_B_tuned [VAL]                       5.789    3.901   0.8422    25.66%
+  XGBoost_B_tuned [VAL]                       5.747    3.889   0.8445    25.44%
+  DT_B_tuned [VAL]                            7.237    4.878   0.7534    30.19%
+  RF_B_tuned [VAL]                            6.267    4.146   0.8151    25.73%
 
 SECTION 5 — TEST SET METRICS (Final — run once)
   Model                                        RMSE      MAE       R²    sMAPE%
@@ -102,17 +107,21 @@ SECTION 5 — TEST SET METRICS (Final — run once)
   XGBoost_tuned [TEST]                       12.573    8.516   0.6776    24.47%
   LightGBM_tuned [TEST]                      12.456    8.460   0.6835    24.43%
   ANN_tuned [TEST]                           15.563   10.820   0.5060    30.52%
-  XGBoost_B_tuned [TEST]                      9.173    6.623   0.8187    16.99%
+  XGBoost_B_tuned [TEST]                      9.387    6.761   0.8101    17.26%
+  DT_B_tuned [TEST]                          13.052    8.798   0.6329    21.76%
+  RF_B_tuned [TEST]                           9.432    6.644   0.8083    17.16%
 
 SECTION 6 — PHASE 9 READINESS CHECKLIST
   [✓] best_params.json
-  [✓] model_xgboost_tuned.pkl
-  [✓] model_lgbm_tuned.pkl
-  [✓] model_rf_tuned.pkl
-  [✓] model_ann_tuned.pkl
   [✓] model_elasticnet_tuned.pkl
   [✓] model_dt_tuned.pkl
+  [✓] model_rf_tuned.pkl
+  [✓] model_xgboost_tuned.pkl
+  [✓] model_lgbm_tuned.pkl
+  [✓] model_ann_tuned.pkl
   [✓] model_xgboost_b_tuned.pkl
+  [✓] model_dt_B_tuned.pkl
+  [✓] model_rf_B_tuned.pkl
   [✓] phase8_val_predictions.parquet
   [✓] phase8_test_predictions.parquet
 

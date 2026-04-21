@@ -38,6 +38,8 @@ tuning:
   n_trials_lgbm:    80
   n_trials_ann:     60
   n_trials_xgb_b:   40
+  n_trials_dt_b:    30   # DT search space is narrow; 30 trials sufficient
+  n_trials_rf_b:    40   # same as xgb_b; limited by small Track B sample
   rf_n_estimators_search: 150          # capped during search; final refit uses 500
   rf_n_estimators_final:  500
   early_stopping_rounds:  50
