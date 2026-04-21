@@ -55,5 +55,18 @@
     "min_samples_leaf": 5,
     "max_features": 0.5,
     "bootstrap": false
+  },
+  "DT_B": {
+    "max_depth": 15,
+    "min_samples_split": 37,
+    "min_samples_leaf": 5,
+    "max_features": null
+  },
+  "RF_B": {
+    "max_depth": null,
+    "min_samples_split": 16,
+    "min_samples_leaf": 1,
+    "max_features": 0.5,
+    "bootstrap": true
   }
 }

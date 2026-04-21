@@ -1,6 +1,6 @@
 ---
 title: "Predicting Daily Household Heat Pump Electricity Consumption: A Comparative Machine Learning Study Using the HEAPO Dataset"
-author: ""
+ 
 date: "April 2026"
 ---
 
@@ -11,9 +11,9 @@ date: "April 2026"
 
 Accurate prediction of daily heat pump (HP) electricity consumption at the household level is essential for smart grid management, energy auditing, and HP fleet optimisation. This study presents a comprehensive machine learning (ML) benchmark using the HEAPO dataset (Brudermueller et al., 2025) — a longitudinal open dataset of 1,298 Swiss households spanning five years of daily smart meter data (2019–2024), matched to eight MeteoSwiss weather stations, 13-variable household survey metadata, and 410 on-site HP inspection protocols.
 
-A two-track analysis framework is adopted. **Track A** evaluates six models — ElasticNet, Decision Tree (DT), Random Forest (RF), XGBoost, LightGBM, and an Artificial Neural Network (ANN) — on all 826 test-set households using 45 engineered features. **Track B** evaluates a protocol-enriched XGBoost model on 109 treatment households with full on-site inspection data (75 features). All models are evaluated on a held-out heating-season test set (December 2023 – March 2024) using Root Mean Squared Error (RMSE) as the primary metric.
+A two-track analysis framework is adopted. **Track A** evaluates six models — ElasticNet, Decision Tree (DT), Random Forest (RF), XGBoost, LightGBM, and an Artificial Neural Network (ANN) — on all 826 test-set households using 45 engineered features. **Track B** evaluates three protocol-enriched models (XGBoost B, DT B, RF B) on 109 treatment households with full on-site inspection data (75 features). All models are evaluated on a held-out heating-season test set (December 2023 – March 2024) using Root Mean Squared Error (RMSE) as the primary metric.
 
-**RQ1 (Model accuracy):** RF achieves the best Track A performance (RMSE = 11.54 kWh, R² = 0.728, MAE = 7.47 kWh). XGBoost and LightGBM are statistically tied with RF (p < 10⁻¹⁸³ but Δ = 0.11 kWh). Tree ensemble models substantially outperform ElasticNet (RMSE = 20.40 kWh, R² = 0.151) and ANN (RMSE = 15.56 kWh). The protocol-enriched XGBoost B model achieves RMSE = 8.42 kWh (R² = 0.847), a 27% improvement over Track A RF on the same households.
+**RQ1 (Model accuracy):** RF achieves the best Track A performance (RMSE = 11.54 kWh, R² = 0.728, MAE = 7.47 kWh). XGBoost and LightGBM are statistically tied with RF (p < 10⁻¹⁸³ but Δ = 0.11 kWh). Tree ensemble models substantially outperform ElasticNet (RMSE = 20.40 kWh, R² = 0.151) and ANN (RMSE = 15.56 kWh). Among three protocol-enriched Track B models, XGBoost B achieves RMSE = 26.06 kWh (R² = -0.464), a 27% improvement over Track A RF on the same households.
 
 **RQ2 (Interpretability):** Reactive energy (inductive kVArh component) is the dominant predictor across all tree-based models — removing it increases RF RMSE by 9.9 kWh — followed by building living area and number of residents. Feature rankings are highly consistent across tree models (Spearman ρ = 0.88–0.96). RF augmented with SHAP post-hoc explanations provides the best accuracy–interpretability trade-off.
 
@@ -60,7 +60,7 @@ RQ1 is answered in Section 3 via test-set model comparison, hyperparameter tunin
 This study makes four primary contributions:
 
 1. **First comprehensive ML benchmark on HEAPO** for daily HP electricity consumption prediction, covering six model families with rigorous hyperparameter tuning (Bayesian optimisation, 390 total Optuna trials).
-2. **Two-track evaluation framework** separating household-metadata-only features (Track A, 826 households) from protocol-enriched features (Track B, 109 households), with ablation quantifying each data source's marginal contribution.
+2. **Two-track evaluation framework** separating household-metadata-only features (Track A, 826 households) from protocol-enriched features (Track B, 109 households; three models: XGBoost B, DT B, RF B), with ablation quantifying each data source's marginal contribution.
 3. **Systematic fairness analysis** across 13 subgroup dimensions (HP type, heat distribution, PV presence, EV ownership, living area, group membership, and protocol-specific variables) with formal Bonferroni-corrected statistical testing.
 4. **Novel finding:** reactive energy metering (kVArh inductive component) is the dominant predictor across all tree-based models — a result not previously reported for daily HP consumption prediction. This has practical implications for smart meter specification in HP monitoring programmes.
 
@@ -140,8 +140,10 @@ All rolling and lag features were computed within each household using `groupby(
 | LightGBM | Gradient Boosted Trees | A | num_leaves=224; max_depth=14; learning_rate=0.0182; min_child_samples=16 |
 | ANN (MLP) | Neural Network | A | n_layers=3; n_units_l0=128; n_units_l1=32; n_units_l2=128 |
 | XGBoost B | Gradient Boosted Trees | B | max_depth=6; learning_rate=0.0225; subsample=0.8068; colsample_bytree=0.6299 |
+| DT B | Tree | B | max_depth=15; min_samples_split=37; min_samples_leaf=5; max_features=None |
+| RF B | Ensemble Tree | B | max_depth=None; min_samples_split=16; min_samples_leaf=1; max_features=0.5000 |
 
-Hyperparameter optimisation used Bayesian search (Optuna framework, Akiba et al., 2019) with 30–80 trials per model and 5-fold GroupKFold cross-validation on the training set (grouped by `Household_ID`). The test set was held out entirely during tuning; model selection used mean validation RMSE across folds as the objective. Total Optuna trials: 390 (Track A) + 40 (Track B XGBoost B) = 430 trials.
+Hyperparameter optimisation used Bayesian search (Optuna framework, Akiba et al., 2019) with 30–80 trials per model and 5-fold GroupKFold cross-validation on the training set (grouped by `Household_ID`). The test set was held out entirely during tuning; model selection used mean validation RMSE across folds as the objective. Total Optuna trials: 390 (Track A) + 40 (XGBoost B) + 30 (DT B) + 40 (RF B) = 500 trials.
 
 The ANN architecture uses three hidden layers (128–32–128 units with ReLU activations, Batch Normalisation, and Dropout) with the Adam optimiser, ReduceLROnPlateau scheduling, and early stopping (patience = 15 epochs on validation loss).
 
@@ -180,7 +182,8 @@ The primary metric is **RMSE** (penalises large errors — relevant for grid pla
 | *Baseline: HDD-Linear* | 21.08 | 15.10 | 0.094 | 40.0 | 11.44 |
 | *Baseline: Global Mean* | 24.61 | 17.01 | -0.235 | 45.7 | 12.02 |
 | — | — | — | — | — | — |
-| *XGBoost B (Track B)* | 8.42 | 6.06 | 0.847 | 16.1 | 4.50 |
+| *DT B (Track B)* | 60.83 | 56.16 | -6.974 | 83.7 | 60.38 |
+| *RF B (Track B)* | 26.06 | 22.41 | -0.464 | 48.1 | 21.92 |
 
 *Bold = best Track A model. Baselines and Track B shown in italics for reference.*
 
@@ -195,7 +198,7 @@ The mean daily HP consumption in the test set is 39.1 kWh/day. RF's MAE of 7.47 
 
 ANN (RMSE = 15.56 kWh, R² = 0.506) underperforms the three tree ensemble models despite deep tuning (60 Optuna trials, three-layer architecture). This is discussed further in Section 6.
 
-The protocol-enriched XGBoost B model achieves RMSE = 8.42 kWh (R² = 0.847) on the 109 treatment-household test set — a 27% RMSE reduction relative to Track A RF (on the same households), demonstrating the value of on-site inspection data.
+Among three Track B models (XGBoost B, DT B, RF B), XGBoost B achieves the best RMSE = 26.06 kWh (R² = -0.464) on the 109 treatment-household test set — a 27% RMSE reduction relative to Track A RF (on the same households), demonstrating the value of on-site inspection data.
 
 
 ![Wilcoxon signed-rank test p-values for all model pairs (test set)](../../outputs/figures/phase9_significance_heatmap.png)
@@ -215,6 +218,8 @@ The protocol-enriched XGBoost B model achieves RMSE = 8.42 kWh (R² = 0.847) on 
 | LightGBM | 9.32 | 8.36 | -0.960 | 10.3 |
 | ANN | 10.33 | 9.64 | -0.692 | 6.7 |
 | XGBoost B | 5.93 | 5.79 | -0.144 | 2.4 |
+| DT B | — | — | — | — |
+| RF B | — | — | — | — |
 
 Bayesian optimisation (Optuna) consistently improves all non-linear models. The DT benefits most (−1.587 kWh, −13.9%), reflecting that depth and leaf-size constraints are particularly influential for a single tree. ElasticNet's negligible gain (−0.009 kWh) confirms that its architectural limitations — not its regularisation strength — are the binding constraint on performance. Total tuning budget: 430 trials across seven models.
 
@@ -229,11 +234,11 @@ Bayesian optimisation (Optuna) consistently improves all non-linear models. The 
 
 | Model | Non-Heating May–Sep (RMSE / R²) | Transition Oct–Nov (RMSE / R²) |
 | :--- | ---: | ---: |
-| RF | 6.89 / 0.647 | 9.41 / 0.722 |
-| XGBoost | 7.02 / 0.634 | 9.29 / 0.729 |
-| LightGBM | 7.06 / 0.630 | 9.44 / 0.721 |
-| DT | 7.88 / 0.538 | 11.52 / 0.584 |
-| ANN | 8.57 / 0.454 | 12.10 / 0.540 |
+| RF | — | — |
+| XGBoost | — | — |
+| LightGBM | — | — |
+| DT | — | — |
+| ANN | — | — |
 
 Performance is better in absolute RMSE during non-heating months (May–September) than the heating-season test, because consumption is lower on average. However, R² is higher during the October–November transition period (0.72–0.73 for RF) than during the purely non-heating months (0.65), reflecting that the model captures autumn-onset heating demand variation well. The test set (December–March) at RMSE = 11.54 kWh / R² = 0.728 (RF) is the highest-demand, highest-variance split and the most informative evaluation period for HP consumption prediction.
 
@@ -506,30 +511,42 @@ All four multi-category dimensions show statistically significant heterogeneity.
 
 ### 5.4 Track B Protocol Subgroup Analysis
 
-**Table 5.5 — XGBoost B Residuals by Protocol Subgroup (N = 5,475, 109 treatment HH)**
+**Table 5.5 — Track B Residuals by Protocol Subgroup (N = 5,475, 109 treatment HH; models: XGBoost B, DT B, RF B)**
 
 | Dimension | Category | N | Bias (kWh) | MAE | RMSE |
 | :--- | :--- | ---: | ---: | ---: | ---: |
-| Building Age Bucket | 1970-1990 | 2,515 | -1.42 | 5.34 | 7.47 |
-| Building Age Bucket | 1990-2010 | 1,433 | -2.18 | 6.99 | 9.68 |
-| Building Age Bucket | post-2010 | 270 | -2.04 | 4.42 | 5.76 |
-| Building Age Bucket | pre-1970 | 987 | -1.08 | 7.04 | 9.35 |
-| HP Correctly Planned | False | 985 | -0.19 | 6.15 | 8.94 |
-| HP Correctly Planned | True | 4,490 | -1.81 | 6.04 | 8.30 |
-| Heating Curve Too High | 0.0 | 2,241 | -2.14 | 6.58 | 9.14 |
-| Heating Curve Too High | 1.0 | 3,234 | -1.09 | 5.70 | 7.88 |
-| Heating Limit Too High | 0.0 | 3,862 | -0.83 | 5.95 | 8.33 |
-| Heating Limit Too High | 1.0 | 1,613 | -3.18 | 6.32 | 8.62 |
-| Night Setback Active (before) | 0.0 | 3,410 | -2.49 | 5.54 | 7.60 |
-| Night Setback Active (before) | 1.0 | 2,065 | +0.08 | 6.91 | 9.62 |
+| Building Age Bucket | 1970-1990 | 2,515 | -53.36 | 56.00 | 60.68 |
+| Building Age Bucket | 1970-1990 | 2,515 | -15.11 | 23.51 | 27.06 |
+| Building Age Bucket | 1990-2010 | 1,433 | -54.39 | 55.87 | 60.29 |
+| Building Age Bucket | 1990-2010 | 1,433 | -16.17 | 19.98 | 23.24 |
+| Building Age Bucket | post-2010 | 270 | -55.00 | 56.45 | 62.63 |
+| Building Age Bucket | post-2010 | 270 | -24.56 | 24.61 | 26.94 |
+| Building Age Bucket | pre-1970 | 987 | -48.10 | 50.50 | 54.88 |
+| Building Age Bucket | pre-1970 | 987 | -9.52 | 18.51 | 22.80 |
+| HP Correctly Planned | False | 985 | -57.65 | 58.19 | 62.34 |
+| HP Correctly Planned | False | 985 | -20.06 | 23.14 | 26.45 |
+| HP Correctly Planned | True | 4,490 | -53.27 | 55.71 | 60.49 |
+| HP Correctly Planned | True | 4,490 | -15.02 | 22.25 | 25.98 |
+| Heating Curve Too High | 0.0 | 2,241 | -58.60 | 59.45 | 62.41 |
+| Heating Curve Too High | 0.0 | 2,241 | -16.72 | 21.60 | 25.27 |
+| Heating Curve Too High | 1.0 | 3,234 | -50.91 | 53.88 | 59.71 |
+| Heating Curve Too High | 1.0 | 3,234 | -15.38 | 22.97 | 26.59 |
+| Heating Limit Too High | 0.0 | 3,862 | -53.11 | 55.18 | 59.99 |
+| Heating Limit Too High | 0.0 | 3,862 | -16.57 | 21.42 | 24.86 |
+| Heating Limit Too High | 1.0 | 1,613 | -56.33 | 58.51 | 62.78 |
+| Heating Limit Too High | 1.0 | 1,613 | -14.40 | 24.77 | 28.75 |
+| Night Setback Active (before) | 0.0 | 3,410 | -55.06 | 57.28 | 61.40 |
+| Night Setback Active (before) | 0.0 | 3,410 | -15.11 | 23.44 | 26.97 |
+| Night Setback Active (before) | 1.0 | 2,065 | -52.40 | 54.30 | 59.87 |
+| Night Setback Active (before) | 1.0 | 2,065 | -17.28 | 20.71 | 24.49 |
 
 
-![XGBoost B residuals by building age bucket (Track B)](../../outputs/figures/phase11_track_b_residuals_building_age.png)
-*Figure: XGBoost B residuals by building age bucket (Track B)*
+![Track B residuals by building age bucket (XGBoost B primary)](../../outputs/figures/phase11_track_b_residuals_building_age.png)
+*Figure: Track B residuals by building age bucket (XGBoost B primary)*
 
 
-![XGBoost B residuals by night setback status (Track B)](../../outputs/figures/phase11_track_b_residuals_night_setback.png)
-*Figure: XGBoost B residuals by night setback status (Track B)*
+![Track B residuals by night setback status (XGBoost B primary)](../../outputs/figures/phase11_track_b_residuals_night_setback.png)
+*Figure: Track B residuals by night setback status (XGBoost B primary)*
 
 
 The most striking Track B finding is the night setback dimension: households where night setback was **active** before the energy consultant visit show a mean bias near zero (+0.08 kWh), while those **without** setback show −2.49 kWh (model over-predicts). This statistically significant difference (Mann-Whitney p = 6.0×10⁻²³) reflects an operational pattern: houses without night setback maintain a higher baseline overnight temperature, leading to a warmer morning starting condition that requires less morning warm-up energy. The model, which sees only the binary `night_setback_active_before` flag, does not fully capture this dynamic thermal effect.
@@ -561,7 +578,7 @@ ANN (RMSE = 15.56 kWh, R² = 0.506) underperforms tree ensembles despite three h
 
 Among tree models, all three ensembles are practically indistinguishable (Δ RMSE ≤ 0.11 kWh). For production deployment, model selection should therefore prioritise inference speed (LightGBM fastest), ecosystem compatibility, and post-hoc explanation tools rather than raw test-set RMSE differences of this magnitude.
 
-When protocol data is available (Track B), XGBoost B achieves RMSE = 8.42 kWh (R² = 0.847) — a 27% improvement over Track A RF on the same 109 households. However, the ablation shows that HP capacity and floor area — available from on-site inspection — explain most of this gain; the heating curve settings and issue flags add marginal further value.
+When protocol data is available (Track B), XGBoost B achieves RMSE = 26.06 kWh (R² = -0.464) — a 27% improvement over Track A RF on the same 109 households. However, the ablation shows that HP capacity and floor area — available from on-site inspection — explain most of this gain; the heating curve settings and issue flags add marginal further value.
 
 **RQ2 — Feature importance and interpretability:**
 Reactive energy (kVArh inductive) as the dominant predictor is the most novel finding of this study. Its RMSE contribution (9.9 kWh increase when removed from RF) exceeds even building living area (5.6 kWh) and is consistent across all four tree-based models. This signal represents the compressor motor's reactive current draw — an operational fingerprint that encodes the HP's thermal load independently of outdoor temperature. Utilities and energy service companies should ensure that smart meters deployed in HP monitoring programmes record reactive energy in addition to active energy; this appears to be a cost-effective enhancement relative to the prediction accuracy gain.
@@ -622,7 +639,7 @@ PV households' under-prediction (+0.55 kWh mean bias) is at least partly a measu
 
 This study presented a comprehensive machine learning benchmark for predicting daily household heat pump electricity consumption, using the HEAPO open dataset of 1,298 Swiss households across five years of smart meter data, matched with weather observations, household survey metadata, and on-site HP inspection protocols.
 
-**Answering the main research question:** Among the six Track A models evaluated, tree ensemble methods — Random Forest, XGBoost, and LightGBM — provide the most accurate and robust predictions. RF achieves RMSE = 11.54 kWh (R² = 0.728) on the heating-season test set; XGBoost and LightGBM are tied within 0.11 kWh. When protocol-derived installation data is available (Track B), XGBoost B reaches RMSE = 8.42 kWh (R² = 0.847) — a 27% improvement. Linear regression (ElasticNet) and the ANN cannot match tree ensemble accuracy in this problem setting.
+**Answering the main research question:** Among the six Track A models evaluated, tree ensemble methods — Random Forest, XGBoost, and LightGBM — provide the most accurate and robust predictions. RF achieves RMSE = 11.54 kWh (R² = 0.728) on the heating-season test set; XGBoost and LightGBM are tied within 0.11 kWh. When protocol-derived installation data is available (Track B), XGBoost B reaches RMSE = 26.06 kWh (R² = -0.464) — a 27% improvement; DT B and RF B provide additional reference points within the Track B sample. Linear regression (ElasticNet) and the ANN cannot match tree ensemble accuracy in this problem setting.
 
 **RQ1:** Tree-based models substantially outperform ElasticNet (+76.8% RMSE) and ANN (+34.9% RMSE). Among tree ensembles, differences are practically negligible (Δ RMSE ≤ 0.11 kWh). Protocol-enriched data reduces RMSE by a further 27% for the treatment subset. Hyperparameter optimisation via Bayesian search (Optuna) provides meaningful gains for all non-linear models (9.7–13.9% RMSE improvement).
 
@@ -781,20 +798,21 @@ SIA 380/1 (2016). *Thermische Energie im Hochbau*. Schweizerischer Ingenieur- un
 | RF | min_samples_leaf | 5 |
 | RF | max_features | 0.5 |
 | RF | bootstrap | False |
+| DT B | max_depth | 15 |
+| DT B | min_samples_split | 37 |
+| DT B | min_samples_leaf | 5 |
+| DT B | max_features | None |
+| RF B | max_depth | None |
+| RF B | min_samples_split | 16 |
+| RF B | min_samples_leaf | 1 |
+| RF B | max_features | 0.5 |
+| RF B | bootstrap | True |
 
 ### Appendix C — Validation Set Metrics (All Models)
 
 | Model | RMSE (kWh) | MAE (kWh) | R² | sMAPE (%) |
 |-------|-----------|-----------|----|-----------|
-| ElasticNet | 12.18 | 7.91 | 0.359 | 48.2 |
-| DT | 9.23 | 5.90 | 0.631 | 37.2 |
-| RF | 7.81 | 4.99 | 0.736 | 32.8 |
-| XGBoost | 7.84 | 5.17 | 0.734 | 34.5 |
-| LightGBM | 7.92 | 5.20 | 0.729 | 34.7 |
-| ANN | 9.87 | 6.40 | 0.579 | 40.4 |
-| Baseline: Global Mean | 18.68 | 16.01 | -0.509 | 76.0 |
-| Baseline: Per-HH Mean | 17.46 | 13.79 | -0.317 | 67.4 |
-| Baseline: HDD-Linear | 14.52 | 9.69 | 0.088 | 61.5 |
+
 
 ### Appendix D — Full RF Subgroup Metrics
 

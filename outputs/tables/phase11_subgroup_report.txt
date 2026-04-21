@@ -1,180 +1,76 @@
 ======================================================================
 HEAPO-Predict — Phase 11: Subgroup and Bias Analysis Report
 ======================================================================
-Test set : Dec 2023 – Mar 2024  |  N=74,368 rows  |  Households=826
+Test set : Dec 2023 – Mar 2024  |  N=0 rows  |  Households=0
 Track A models : RF, XGBoost, LightGBM, DT, ANN, ElasticNet
-Track B model  : XGBoost B
+Track B models : XGBoost B, DT B, RF B
 
 ======================================================================
 Section 1 — Subgroup Composition
 ======================================================================
-
-  HP Type
-    Air-Source                           446 HH    40146 rows   54.0%
-    Ground-Source                        374 HH    33683 rows   45.3%
-    Unknown                                6 HH      539 rows    0.7%
-
-  Building Type
-    Apartment                              7 HH      630 rows    0.8%
-    House                                813 HH    73199 rows   98.4%
-    Unknown                                6 HH      539 rows    0.7%
-
-  Heat Distribution
-    Both                                  88 HH     7921 rows   10.7%
-    Floor                                566 HH    50964 rows   68.5%
-    Radiator                             150 HH    13501 rows   18.1%
-    Unknown                               22 HH     1982 rows    2.7%
-
-  PV System
-    With PV                              370 HH    33334 rows   44.8%
-    Without PV                           456 HH    41034 rows   55.2%
-
-  Living Area
-    100-150                              202 HH    18191 rows   24.5%
-    150-200                              372 HH    33492 rows   45.0%
-    200-300                              181 HH    16293 rows   21.9%
-    <100                                  21 HH     1893 rows    2.5%
-    >300                                  36 HH     3240 rows    4.4%
-    Unknown                               14 HH     1259 rows    1.7%
-
-  Group
-    Control                              765 HH    68893 rows   92.6%
-    Treatment                             61 HH     5475 rows    7.4%
-
-  Intervention Status
-    Control (no visit)                   765 HH    68893 rows   92.6%
-    Treatment (post-visit)                60 HH     4638 rows    6.2%
-    Treatment (pre-visit)                 22 HH      837 rows    1.1%
-
-  EV Ownership
-    With EV                              193 HH    17369 rows   23.4%
-    Without EV                           633 HH    56999 rows   76.6%
-
-  Test Month
-    Dec                                  826 HH    25595 rows   34.4%
-    Feb                                  826 HH    23175 rows   31.2%
-    Jan                                  826 HH    25598 rows   34.4%
+  Track A not selected — composition not computed.
 
 ======================================================================
 Section 2 — Per-Subgroup Bias (RF — focus model)
 ======================================================================
-  Overall RF MAE = 7.47 kWh  (RMSE = 11.54 kWh)
-
-  Dimension            Category                        N  Mean bias      MAE     RMSE      R²
-  -------------------- ------------------------- ------- ---------- -------- -------- -------
-  Heat Distribution    Radiator                   13,501     +1.74     7.67    12.48   0.676
-  EV Ownership         With EV                    17,369     +1.66     9.97    14.74   0.673
-  Test Month           Feb                        23,175     -1.34     6.65     9.83   0.671
-  Living Area          >300                        3,240     +1.33    12.53    17.57   0.748
-  Intervention Status  Treatment (pre-visit)         837     -1.06     6.53     8.79   0.892
-  Test Month           Jan                        25,598     +1.00     8.12    12.76   0.722
-  Heat Distribution    Both                        7,921     +0.96     8.22    13.18   0.788
-  Test Month           Dec                        25,595     +0.95     7.56    11.68   0.715
-  PV System            With PV                    33,334     +0.55     8.69    13.05   0.680
-  Living Area          100-150                    18,191     +0.54     6.21     9.58   0.723
-  HP Type              Air-Source                 40,146     +0.51     7.80    11.97   0.715
-  Living Area          200-300                    16,293     +0.45     8.39    12.63   0.699
-  Living Area          <100                        1,893     -0.41     5.69     8.85   0.640
-  Group                Control                    68,893     +0.30     7.57    11.73   0.720
-  Intervention Status  Control (no visit)         68,893     +0.30     7.57    11.73   0.720
-  Group                Treatment                   5,475     -0.27     6.26     8.77   0.834
-  Building Type        House                      73,199     +0.25     7.50    11.58   0.727
-  Heat Distribution    Floor                      50,964     -0.24     7.37    11.10   0.718
-  Building Type        Apartment                     630     +0.18     5.83     9.07   0.804
-  EV Ownership         Without EV                 56,999     -0.17     6.71    10.37   0.749
-  Intervention Status  Treatment (post-visit)      4,638     -0.12     6.21     8.77   0.815
-  HP Type              Ground-Source              33,683     -0.04     7.10    11.06   0.739
-  Living Area          150-200                    33,492     -0.02     7.37    11.45   0.669
-  PV System            Without PV                 41,034     +0.01     6.48    10.15   0.773
-
-  ◄ = |mean_bias| > 2.0 kWh (> 27% of overall RF MAE of 7.47 kWh)
+  Track A not selected — subgroup bias not computed.
 
 ======================================================================
 Section 3 — Cross-Model Bias Consistency
 ======================================================================
   Mean bias per model (all test rows combined):
 
-    RF           mean_bias= +0.25 kWh  MAE=7.47  RMSE=11.54  R²=0.728
-    XGBoost      mean_bias= -0.87 kWh  MAE=7.82  RMSE=11.59  R²=0.726
-    LightGBM     mean_bias= -0.72 kWh  MAE=7.81  RMSE=11.65  R²=0.723
-    DT           mean_bias= +0.49 kWh  MAE=9.49  RMSE=14.44  R²=0.575
-    ANN          mean_bias= +3.26 kWh  MAE=10.82  RMSE=15.56  R²=0.506
-    ElasticNet   mean_bias= +5.61 kWh  MAE=14.22  RMSE=20.40  R²=0.151
+  Track A not selected.
 
 ======================================================================
 Section 4 — Treatment Effect Analysis
 ======================================================================
-  Val set — Treatment HHs pre-visit (rows)     : 5,563  (32 HH)
-  Val set — Treatment HHs post-visit (rows)    : 5,718  (40 HH)
-  Val set — Mean consumption pre-visit (kWh)   : 16.99
-  Val set — Mean consumption post-visit (kWh)  : 18.82
-  Val set — Actual consumption change pre→post (kWh): -1.84  (NOTE: confounded by seasonality)
-  Val set — RF predicted change pre→post (kWh) : -0.40
-  Val set — XGBoost predicted change pre→post (kWh): -0.71
-  Test set — Treatment HHs pre-visit (rows)    : 837  (22 HH)
-  Test set — Treatment HHs post-visit (rows)   : 4,638  (60 HH)
-  Test set — RF mean bias pre-visit (kWh)      : -1.06
-  Test set — RF mean bias post-visit (kWh)     : -0.12
+  Track A not selected — treatment analysis not computed.
 
 ======================================================================
 Section 5 — Statistical Testing Summary
 ======================================================================
-  Mann-Whitney U tests run: 24
-  Significant (p < 0.05, uncorrected): 16
-  Significant after Bonferroni correction: 12
+  Mann-Whitney U tests run: 0
+  Significant (p < 0.05, uncorrected): 0
+  Significant after Bonferroni correction: 0
 
-  Subgroup                       A vs B                                   Model       Δmedian   p (Bonf)   Sig
+  Subgroup                       A vs B                                   Model       Dmedian   p (Bonf)   Sig
   ------------------------------ ---------------------------------------- ---------- -------- ---------- -----
-  sg_heat_dist                   Floor              vs Radiator            LightGBM     +1.34   9.014e-77      ✓
-  sg_heat_dist                   Floor              vs Radiator            RF           +1.07   1.792e-72      ✓
-  sg_heat_dist                   Floor              vs Radiator            XGBoost      +1.16   2.753e-64      ✓
-  sg_pv                          With PV            vs Without PV          XGBoost      +0.48   1.016e-11      ✓
-  sg_pv                          With PV            vs Without PV          LightGBM     +0.35   2.006e-10      ✓
-  sg_ev                          With EV            vs Without EV          XGBoost      -0.14   4.795e-07      ✓
-  sg_ev                          With EV            vs Without EV          RF           -0.08   7.873e-07      ✓
-  sg_ev                          With EV            vs Without EV          LightGBM     -0.04   4.307e-05      ✓
-  sg_hp_type                     Air-Source         vs Ground-Source       RF           -0.21   1.753e-04      ✓
-  sg_pv                          With PV            vs Without PV          RF           +0.30   6.970e-04      ✓
-  sg_group                       Treatment          vs Control             XGBoost      +0.58   1.213e-03      ✓
-  sg_group                       Treatment          vs Control             LightGBM     +0.34   2.898e-03      ✓
-  sg_intervention                Control (no visit) vs Treatment (post-vi  LightGBM     -0.33   7.116e-02       
-  sg_intervention                Treatment (pre-vis vs Treatment (post-vi  XGBoost      +0.70   7.638e-02       
-  sg_intervention                Control (no visit) vs Treatment (post-vi  XGBoost      -0.47   1.638e-01       
-  sg_building_type               House              vs Apartment           XGBoost      +0.17   4.006e-01       
-  sg_group                       Treatment          vs Control             RF           +0.11   1.000e+00       
-  sg_building_type               House              vs Apartment           LightGBM     +0.06   1.000e+00       
-  sg_building_type               House              vs Apartment           RF           -0.23   1.000e+00       
-  sg_hp_type                     Air-Source         vs Ground-Source       LightGBM     -0.01   1.000e+00       
-  sg_intervention                Treatment (pre-vis vs Treatment (post-vi  RF           -0.44   1.000e+00       
-  sg_intervention                Treatment (pre-vis vs Treatment (post-vi  LightGBM     +0.03   1.000e+00       
-  sg_intervention                Control (no visit) vs Treatment (post-vi  RF           -0.17   1.000e+00       
-  sg_hp_type                     Air-Source         vs Ground-Source       XGBoost      -0.01   1.000e+00       
 
   Kruskal-Wallis H tests (multi-category subgroups, RF residuals):
 
-    sg_hp_type                     H=20.09  p=4.334e-05  groups=[Air-Source, Ground-Source, Unknown]  ✓
-    sg_heat_dist                   H=368.42  p=1.533e-79  groups=[Both, Floor, Radiator, Unknown]  ✓
-    sg_area                        H=147.20  p=5.258e-30  groups=[100-150, 150-200, 200-300, <100, >300, Unknown]  ✓
-    sg_month                       H=660.90  p=3.066e-144  groups=[Dec, Feb, Jan]  ✓
 
 ======================================================================
-Section 6 — Track B Protocol Subgroups (XGBoost B, N≤5,475)
+Section 6 — Track B Protocol Subgroups (N<=5,475, models: XGBoost B / DT B / RF B)
 ======================================================================
-  Dimension                 Category                            N  Mean bias      MAE     RMSE
-  ------------------------- ------------------------------ ------ ---------- -------- --------
-  Building Age Bucket       1970-1990                       2,515     -1.42     5.34     7.47
-  Building Age Bucket       1990-2010                       1,433     -2.18     6.99     9.68
-  Building Age Bucket       post-2010                         270     -2.04     4.42     5.76
-  Building Age Bucket       pre-1970                          987     -1.08     7.04     9.35
-  Building Age Bucket       Unknown                           270     -0.03     5.81     8.29
-  HP Correctly Planned      False                             985     -0.19     6.15     8.94
-  HP Correctly Planned      True                            4,490     -1.81     6.04     8.30
-  Heating Curve Too High    0.0                             2,241     -2.14     6.58     9.14
-  Heating Curve Too High    1.0                             3,234     -1.09     5.70     7.88
-  Heating Limit Too High    0.0                             3,862     -0.83     5.95     8.33
-  Heating Limit Too High    1.0                             1,613     -3.18     6.32     8.62
-  Night Setback Active (before) 0.0                             3,410     -2.49     5.54     7.60
-  Night Setback Active (before) 1.0                             2,065     +0.08     6.91     9.62
+  Dimension                 Category                       Model             N  Mean bias      MAE     RMSE
+  ------------------------- ------------------------------ ------------ ------ ---------- -------- --------
+  Building Age Bucket       1970-1990                      DT B          2,515    -53.36    56.00    60.68
+  Building Age Bucket       1990-2010                      DT B          1,433    -54.39    55.87    60.29
+  Building Age Bucket       post-2010                      DT B            270    -55.00    56.45    62.63
+  Building Age Bucket       pre-1970                       DT B            987    -48.10    50.50    54.88
+  Building Age Bucket       Unknown                        DT B            270    -79.55    79.55    80.66
+  Building Age Bucket       1970-1990                      RF B          2,515    -15.11    23.51    27.06
+  Building Age Bucket       1990-2010                      RF B          1,433    -16.17    19.98    23.24
+  Building Age Bucket       post-2010                      RF B            270    -24.56    24.61    26.94
+  Building Age Bucket       pre-1970                       RF B            987     -9.52    18.51    22.80
+  Building Age Bucket       Unknown                        RF B            270    -37.05    37.12    38.25
+  HP Correctly Planned      False                          DT B            985    -57.65    58.19    62.34
+  HP Correctly Planned      True                           DT B          4,490    -53.27    55.71    60.49
+  HP Correctly Planned      False                          RF B            985    -20.06    23.14    26.45
+  HP Correctly Planned      True                           RF B          4,490    -15.02    22.25    25.98
+  Heating Curve Too High    0.0                            DT B          2,241    -58.60    59.45    62.41
+  Heating Curve Too High    1.0                            DT B          3,234    -50.91    53.88    59.71
+  Heating Curve Too High    0.0                            RF B          2,241    -16.72    21.60    25.27
+  Heating Curve Too High    1.0                            RF B          3,234    -15.38    22.97    26.59
+  Heating Limit Too High    0.0                            DT B          3,862    -53.11    55.18    59.99
+  Heating Limit Too High    1.0                            DT B          1,613    -56.33    58.51    62.78
+  Heating Limit Too High    0.0                            RF B          3,862    -16.57    21.42    24.86
+  Heating Limit Too High    1.0                            RF B          1,613    -14.40    24.77    28.75
+  Night Setback Active (before) 0.0                            DT B          3,410    -55.06    57.28    61.40
+  Night Setback Active (before) 1.0                            DT B          2,065    -52.40    54.30    59.87
+  Night Setback Active (before) 0.0                            RF B          3,410    -15.11    23.44    26.97
+  Night Setback Active (before) 1.0                            RF B          2,065    -17.28    20.71    24.49
 
 ======================================================================
 Section 7 — Recommendations

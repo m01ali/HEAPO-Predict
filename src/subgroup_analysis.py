@@ -852,126 +852,113 @@ def write_report(
         _sep(),
         f"Test set : Dec 2023 – Mar 2024  |  N={n_test_rows:,} rows  |  Households={n_test_hh}",
         f"Track A models : RF, XGBoost, LightGBM, DT, ANN, ElasticNet",
-        f"Track B model  : XGBoost B",
-        "",
-        _sep(),
-        "Section 1 — Subgroup Composition",
-        _sep(),
-    ]
-
-    for dim in composition_df["Dimension"].unique():
-        lines.append(f"\n  {dim}")
-        sub = composition_df[composition_df["Dimension"] == dim]
-        for _, row in sub.iterrows():
-            lines.append(f"    {row['Category']:<35} {row['N_households']:>4} HH  "
-                         f"{row['N_rows']:>7} rows  {row['Pct_rows']:>5.1f}%")
-
-    lines += [
-        "",
-        _sep(),
-        "Section 2 — Per-Subgroup Bias (RF — focus model)",
-        _sep(),
-        f"  Overall RF MAE = {metrics_df[(metrics_df['Model']=='RF') & (metrics_df['Dimension']=='Overall')]['MAE'].values[0]:.2f} kWh  "
-        f"(RMSE = {metrics_df[(metrics_df['Model']=='RF') & (metrics_df['Dimension']=='Overall')]['RMSE'].values[0]:.2f} kWh)"
-        if not metrics_df[(metrics_df['Model']=='RF') & (metrics_df['Dimension']=='Overall')].empty else "",
-        "",
-        f"  {'Dimension':<20} {'Category':<25} {'N':>7} {'Mean bias':>10} {'MAE':>8} {'RMSE':>8} {'R²':>7}",
-        f"  {'-'*20} {'-'*25} {'-'*7} {'-'*10} {'-'*8} {'-'*8} {'-'*7}",
-    ]
-
-    rf_df = metrics_df[
-        (metrics_df["Model"] == "RF") & (metrics_df["Dimension"] != "Overall")
-    ].copy()
-    rf_df["abs_bias"] = rf_df["mean_bias"].abs()
-    rf_df = rf_df.sort_values("abs_bias", ascending=False)
-    for _, row in rf_df.iterrows():
-        if row["Category"] in ("Unknown",):
-            continue
-        flag = " ◄" if row["abs_bias"] >= 2.0 else ""
-        lines.append(
-            f"  {row['Dimension']:<20} {row['Category']:<25} {row['N']:>7,} "
-            f"{row['mean_bias']:>+9.2f}  {row['MAE']:>7.2f}  {row['RMSE']:>7.2f}  {row['R2']:>6.3f}{flag}"
-        )
-
-    lines += [
-        "",
-        "  ◄ = |mean_bias| > 2.0 kWh (> 27% of overall RF MAE of 7.47 kWh)",
-    ]
-
-    lines += [
-        "",
-        _sep(),
-        "Section 3 — Cross-Model Bias Consistency",
-        _sep(),
-        "  Mean bias per model (all test rows combined):",
+        f"Track B models : XGBoost B, DT B, RF B",
         "",
     ]
-    overall = metrics_df[metrics_df["Dimension"] == "Overall"]
-    for _, row in overall.sort_values("RMSE").iterrows():
-        lines.append(f"    {row['Model']:<12} mean_bias={row['mean_bias']:>+6.2f} kWh  "
-                     f"MAE={row['MAE']:.2f}  RMSE={row['RMSE']:.2f}  R²={row['R2']:.3f}")
 
-    lines += [
-        "",
-        _sep(),
-        "Section 4 — Treatment Effect Analysis",
-        _sep(),
-    ]
-    for key, val in treatment_stats.items():
-        lines.append(f"  {key:<45}: {val}")
+    # ── Section 1: Composition (Track A only) ────────────────────────────────
+    lines += [_sep(), "Section 1 — Subgroup Composition", _sep()]
+    if composition_df is not None and not composition_df.empty:
+        for dim in composition_df["Dimension"].unique():
+            lines.append(f"\n  {dim}")
+            sub = composition_df[composition_df["Dimension"] == dim]
+            for _, row in sub.iterrows():
+                lines.append(f"    {row['Category']:<35} {row['N_households']:>4} HH  "
+                             f"{row['N_rows']:>7} rows  {row['Pct_rows']:>5.1f}%")
+    else:
+        lines.append("  Track A not selected — composition not computed.")
 
-    lines += [
-        "",
-        _sep(),
-        "Section 5 — Statistical Testing Summary",
-        _sep(),
-    ]
-    n_tests = len(mw_df)
-    n_sig_raw = (mw_df["p_value"] < 0.05).sum() if not mw_df.empty else 0
-    n_sig_bonf = (mw_df["p_bonferroni"] < 0.05).sum() if not mw_df.empty else 0
+    # ── Section 2: Per-subgroup bias (Track A only) ───────────────────────────
+    lines += ["", _sep(), "Section 2 — Per-Subgroup Bias (RF — focus model)", _sep()]
+    if metrics_df is not None and not metrics_df.empty:
+        rf_overall = metrics_df[(metrics_df["Model"] == "RF") & (metrics_df["Dimension"] == "Overall")]
+        if not rf_overall.empty:
+            lines.append(
+                f"  Overall RF MAE = {rf_overall['MAE'].values[0]:.2f} kWh  "
+                f"(RMSE = {rf_overall['RMSE'].values[0]:.2f} kWh)"
+            )
+        lines += [
+            "",
+            f"  {'Dimension':<20} {'Category':<25} {'N':>7} {'Mean bias':>10} {'MAE':>8} {'RMSE':>8} {'R2':>7}",
+            f"  {'-'*20} {'-'*25} {'-'*7} {'-'*10} {'-'*8} {'-'*8} {'-'*7}",
+        ]
+        rf_df = metrics_df[
+            (metrics_df["Model"] == "RF") & (metrics_df["Dimension"] != "Overall")
+        ].copy()
+        rf_df["abs_bias"] = rf_df["mean_bias"].abs()
+        rf_df = rf_df.sort_values("abs_bias", ascending=False)
+        for _, row in rf_df.iterrows():
+            if row["Category"] in ("Unknown",):
+                continue
+            flag = " ◄" if row["abs_bias"] >= 2.0 else ""
+            lines.append(
+                f"  {row['Dimension']:<20} {row['Category']:<25} {row['N']:>7,} "
+                f"{row['mean_bias']:>+9.2f}  {row['MAE']:>7.2f}  {row['RMSE']:>7.2f}  {row['R2']:>6.3f}{flag}"
+            )
+        lines += ["", "  ◄ = |mean_bias| > 2.0 kWh (> 27% of overall RF MAE of 7.47 kWh)"]
+    else:
+        lines.append("  Track A not selected — subgroup bias not computed.")
+
+    # ── Section 3: Cross-model consistency (Track A only) ────────────────────
+    lines += ["", _sep(), "Section 3 — Cross-Model Bias Consistency", _sep(),
+              "  Mean bias per model (all test rows combined):", ""]
+    if metrics_df is not None and not metrics_df.empty:
+        overall = metrics_df[metrics_df["Dimension"] == "Overall"]
+        for _, row in overall.sort_values("RMSE").iterrows():
+            lines.append(f"    {row['Model']:<12} mean_bias={row['mean_bias']:>+6.2f} kWh  "
+                         f"MAE={row['MAE']:.2f}  RMSE={row['RMSE']:.2f}  R2={row['R2']:.3f}")
+    else:
+        lines.append("  Track A not selected.")
+
+    # ── Section 4: Treatment effect (Track A only) ────────────────────────────
+    lines += ["", _sep(), "Section 4 — Treatment Effect Analysis", _sep()]
+    if treatment_stats:
+        for key, val in treatment_stats.items():
+            lines.append(f"  {key:<45}: {val}")
+    else:
+        lines.append("  Track A not selected — treatment analysis not computed.")
+
+    # ── Section 5: Statistical testing (Track A only) ────────────────────────
+    lines += ["", _sep(), "Section 5 — Statistical Testing Summary", _sep()]
+    _mw = mw_df if mw_df is not None else pd.DataFrame()
+    n_tests = len(_mw)
+    n_sig_raw  = int((_mw["p_value"]     < 0.05).sum()) if not _mw.empty else 0
+    n_sig_bonf = int((_mw["p_bonferroni"] < 0.05).sum()) if not _mw.empty else 0
     lines += [
         f"  Mann-Whitney U tests run: {n_tests}",
         f"  Significant (p < 0.05, uncorrected): {n_sig_raw}",
         f"  Significant after Bonferroni correction: {n_sig_bonf}",
         "",
-        f"  {'Subgroup':<30} {'A vs B':<40} {'Model':<10} {'Δmedian':>8} {'p (Bonf)':>10} {'Sig':>5}",
+        f"  {'Subgroup':<30} {'A vs B':<40} {'Model':<10} {'Dmedian':>8} {'p (Bonf)':>10} {'Sig':>5}",
         f"  {'-'*30} {'-'*40} {'-'*10} {'-'*8} {'-'*10} {'-'*5}",
     ]
-    if not mw_df.empty:
-        for _, row in mw_df.sort_values("p_bonferroni").iterrows():
-            sig = "✓" if row["p_bonferroni"] < 0.05 else ""
+    if not _mw.empty:
+        for _, row in _mw.sort_values("p_bonferroni").iterrows():
+            sig = "*" if row["p_bonferroni"] < 0.05 else ""
             lines.append(
                 f"  {row['sg_col']:<30} {row['cat_a'][:18]:<18} vs {row['cat_b'][:18]:<18}  "
                 f"{row['Model']:<10} {row['delta_median']:>+7.2f}  {row['p_bonferroni']:>10.3e}  {sig:>5}"
             )
-
-    lines += [
-        "",
-        "  Kruskal-Wallis H tests (multi-category subgroups, RF residuals):",
-        "",
-    ]
+    lines += ["", "  Kruskal-Wallis H tests (multi-category subgroups, RF residuals):", ""]
     for res in kw_results:
-        sig = "✓" if res["p_value"] < 0.05 else ""
+        sig = "*" if res["p_value"] < 0.05 else ""
         cats_str = ", ".join(res["categories"])
         lines.append(f"    {res['sg_col']:<30} H={res['stat']:.2f}  p={res['p_value']:.3e}  "
                      f"groups=[{cats_str}]  {sig}")
 
-    lines += [
-        "",
-        _sep(),
-        "Section 6 — Track B Protocol Subgroups (XGBoost B, N≤5,475)",
-        _sep(),
-    ]
-    if not track_b_metrics.empty:
-        lines.append(f"  {'Dimension':<25} {'Category':<30} {'N':>6} {'Mean bias':>10} {'MAE':>8} {'RMSE':>8}")
-        lines.append(f"  {'-'*25} {'-'*30} {'-'*6} {'-'*10} {'-'*8} {'-'*8}")
-        for _, row in track_b_metrics.sort_values("Dimension").iterrows():
+    # ── Section 6: Track B protocol subgroups ────────────────────────────────
+    lines += ["", _sep(), "Section 6 — Track B Protocol Subgroups (N<=5,475, models: XGBoost B / DT B / RF B)", _sep()]
+    if track_b_metrics is not None and not track_b_metrics.empty:
+        lines.append(f"  {'Dimension':<25} {'Category':<30} {'Model':<12} {'N':>6} {'Mean bias':>10} {'MAE':>8} {'RMSE':>8}")
+        lines.append(f"  {'-'*25} {'-'*30} {'-'*12} {'-'*6} {'-'*10} {'-'*8} {'-'*8}")
+        for _, row in track_b_metrics.sort_values(["Dimension", "Model"]).iterrows():
+            model_col = row["Model"] if "Model" in row.index else ""
             lines.append(
-                f"  {row['Dimension']:<25} {row['Category']:<30} {row['N']:>6,} "
+                f"  {row['Dimension']:<25} {row['Category']:<30} {model_col:<12} {row['N']:>6,} "
                 f"{row['mean_bias']:>+9.2f}  {row['MAE']:>7.2f}  {row['RMSE']:>7.2f}"
             )
     else:
-        lines.append("  No Track B metrics computed.")
+        lines.append("  Track B not selected or no metrics computed.")
 
     lines += [
         "",
